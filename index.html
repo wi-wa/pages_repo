@@ -7,12 +7,36 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <div class="container">
-        <div class="textbox">webpage</div>
-    </div>
-    <audio autoplay loop>
+    <div class="project-title">future project name</div>
+    <div class="music-credit">musica de lagoa hermeto pascoal</div>
+    <audio id="backgroundMusic" autoplay loop muted>
         <source src="./assets/background.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
+    
+    <script>
+        // Try to autoplay with sound
+        window.onload = function() {
+            const audio = document.getElementById('backgroundMusic');
+            audio.muted = false;
+            
+            // Try to play on page load
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Autoplay started successfully
+                    console.log("Audio started automatically");
+                }).catch(error => {
+                    
+                    // Add event listener to play on first user interaction with the page
+                    document.addEventListener('click', function playOnFirstClick() {
+                        audio.play();
+                        document.removeEventListener('click', playOnFirstClick);
+                    }, { once: true });
+                });
+            }
+        }
+    </script>
 </body>
 </html>
