@@ -28,3 +28,22 @@ body {
     opacity: 0.8;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
+
+/* N-Back link, same style as .project-title but 2px smaller */
+.n-back-link {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  font-size: 46px;    /* 48px (title) – 2px */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Ensure it stays white in all link states */
+.n-back-link:link,
+.n-back-link:visited,
+.n-back-link:hover,
+.n-back-link:active {
+  color: white;
+}
