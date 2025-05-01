@@ -12,6 +12,7 @@
 <body>
 
     <h1>P(Doom) in 10 Years</h1>
+    <p style="font-size: 0.8em; color: grey; margin-top: -10px; margin-bottom: 20px;">Last updated 1st May 2025</p>
 
     <!-- Container for the D3 Sankey chart -->
     <div id="sankey-chart-container">
@@ -19,167 +20,143 @@
     </div>
 
     <div id="result">
-        <h2>Final Calculated P(Bad Outcome): <span id="final-p-doom"></span>%</h2>
-        <p>(Based on Pause, AGI|NoPause, RLHF Sufficiency, Breakthrough, Dystopia chances)</p>
+        <h2>Final Calculated P(Doom): <span id="final-p-doom"></span>%</h2>
+        <p>(Based on Pause, ASI|NoPause, RLHF Sufficiency, Breakthrough, Control|NoBrkthr, Bad Despite|Alignment chances)</p>
+    </div>
+
+    <div id="notes" style="margin-top: 30px; max-width: 800px; margin-left: auto; margin-right: auto; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+        <h2>Notes</h2>
+        <p><strong>Unfaithful Discretisation:</strong> So, this model assumes a lot of non-binary things are binary. Like RLHF might not be sufficient to align ASIs, but might succeed to varying degrees, and this might influence how easy control-type schemes are to work. This model doesn't account for this.</p>
+        <p><strong>Doom After 10 Years:</strong>This model computes the probability we'll be killed by AI in the next 10 years (given my estimates for various probabilities). If AI isn't developed in the next 10 years, we might be just as screwed then as we are now, so the final doom number is substantially lower than the total p(doom) of AI.</p>
+        <p><strong>General Epistemic Uncertainty:</strong>I have some general epistemic uncertainty about how to reason about all of this. Maybe this whole model is bad. But I ended up with a final number close to 50%, and accounting for this epistemic uncertainty, would probably look like injecting more entropy into all my estimates, so it shouldn't end up making much of a difference.</p>
+        <p><strong>I've not put that much thought into this.</strong> I've just wanted to make this diagram for a while, and now its very easy to do. I might do a more serious analysis in the future.</p>
+    </div>
+
+    <div id="explanations" style="margin-top: 30px; max-width: 800px; margin-left: auto; margin-right: auto; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+        <h2>Explanations for probabilities/events</h2>
+        <p><strong>P(doom):</strong> Chance, in 10 years, we will have gotten a "bad" outcome, defined as humanity having been put in a state where we permanently lose out on most of the value in the universe. Most probability mass here lies in the human extinction spot, but some of it also comes from s-risks and e.g., China being as awful as the people who think they are the most awful think they are, and they make some eternal totalitarian hellscape from the ASI.</p>
+        <p><strong>P(survival):</strong> Probability we survive after 10 years. We might be killed off in the 11th year. This also doesn't take into account the fact that we might be killed by a meteor or something. But compared with p(doom) from AI, I think those chances don't end up making much of a difference.</p>
+        <p><strong>P(Pause):</strong> Probability we get a pause that prevents ASI from being created in the next 10 years.</p>
+        <p><strong>P(ASI | No Pause):</strong> Probability we get ASI in the next 10 years if we don't enact a pause.</p>
+        <p><strong>P(RLHF Sufficient | ASI):</strong> Probability RLHF, or other similar methods like deliberative alignment, end up working to align superhuman ASIs.</p>
+        <p><strong>P(Breakthrough | RLHF insufficient):</strong> Probability that we (in the next 10 years) make a breakthrough in alignment research and manage to align ASIs using something other than RL-based methods.</p>
+        <p><strong>P(Control Succeeds | No Breakthrough):</strong> Given ASI exists, RLHF failed, and no major alignment breakthrough occurred, this is the probability that control/monitoring/automated alignment methods work well enough that we can extract useful work from the misaligned ASI, and that we can bootstrap the development of actual alignment methods from there. Without getting killed in the process.</p>
     </div>
 
     <script>
-        // --- INPUT VARIABLES ---
-        const p_pause = 0.05; // Probability of a significant pause/slowdown
-        const p_agi_given_no_pause = 0.84; // P(AGI in 10 years | No Pause)
-        const p_rlhf_suffices_given_agi = 0.33; // P(RLHF is enough | AGI developed)
-        const p_breakthrough_given_rlhf_insufficient = 0.15; // P(Alignment Breakthrough | RLHF insufficient)
-        const p_dystopia_given_alignment = 0.3; // P(Dystopia | Alignment 'solved' via RLHF or Breakthrough)
-        // --- END INPUT VARIABLES ---
+        // Input Probabilities
+        const p_pause = 0.04;
+        const p_asi_given_no_pause = 0.85;
+        const p_rlhf_suffices_given_asi = 0.3;
+        const p_breakthrough_given_rlhf_insufficient = 0.1;
+        const p_bad_despite_alignment = 0.3;
+        const p_control_monitor_automated_alignment_works_conditional_no_breakthrough = 0.2;
 
-        // --- CALCULATIONS ---
-        // Stage 1 Split
+        // Calculations (kept separate for clarity)
         const p_no_pause = 1 - p_pause;
-
-        // Stage 2 Split (Conditional on No Pause)
-        const p_agi_no_pause = p_no_pause * p_agi_given_no_pause;
-        const p_no_agi_no_pause = p_no_pause * (1 - p_agi_given_no_pause);
-
-        // Stage 3 Split (Conditional on AGI No Pause)
-        const p_rlhf_sufficient = p_agi_no_pause * p_rlhf_suffices_given_agi;
-        const p_rlhf_insufficient = p_agi_no_pause * (1 - p_rlhf_suffices_given_agi);
-
-        // Stage 4 Split (Conditional on RLHF Insufficient)
+        const p_asi_no_pause = p_no_pause * p_asi_given_no_pause;
+        const p_no_asi_no_pause = p_no_pause * (1 - p_asi_given_no_pause);
+        const p_rlhf_sufficient = p_asi_no_pause * p_rlhf_suffices_given_asi;
+        const p_rlhf_insufficient = p_asi_no_pause * (1 - p_rlhf_suffices_given_asi);
         const p_breakthrough = p_rlhf_insufficient * p_breakthrough_given_rlhf_insufficient;
-        const p_no_breakthrough_doom = p_rlhf_insufficient * (1 - p_breakthrough_given_rlhf_insufficient); // Path to direct doom
+        const p_no_breakthrough = p_rlhf_insufficient * (1 - p_breakthrough_given_rlhf_insufficient);
+        const p_control_succeeds_initially = p_no_breakthrough * p_control_monitor_automated_alignment_works_conditional_no_breakthrough;
+        const p_ai_takeover = p_no_breakthrough * (1 - p_control_monitor_automated_alignment_works_conditional_no_breakthrough);
+        const p_bad_despite_control_abs = p_control_succeeds_initially * p_bad_despite_alignment;
+        const p_survival_control_abs = p_control_succeeds_initially * (1 - p_bad_despite_alignment);
+        const p_survive_rlhf_good = p_rlhf_sufficient * (1 - p_bad_despite_alignment);
+        const p_bad_despite_rlhf = p_rlhf_sufficient * p_bad_despite_alignment;
+        const p_survive_breakthrough_good = p_breakthrough * (1 - p_bad_despite_alignment);
+        const p_bad_despite_breakthrough = p_breakthrough * p_bad_despite_alignment;
+        const p_bad_outcome_total = p_ai_takeover + p_bad_despite_rlhf + p_bad_despite_breakthrough + p_bad_despite_control_abs;
+        const p_survive_pause = p_pause;
+        const p_survive_no_asi = p_no_asi_no_pause;
+        const p_survive_good_total = p_survive_pause + p_survive_no_asi + p_survive_rlhf_good + p_survive_breakthrough_good + p_survival_control_abs;
 
-        // Stage 5 Splits (Conditional on Alignment Success)
-        const p_survive_rlhf_good = p_rlhf_sufficient * (1 - p_dystopia_given_alignment);
-        const p_dystopia_rlhf = p_rlhf_sufficient * p_dystopia_given_alignment;
-
-        const p_survive_breakthrough_good = p_breakthrough * (1 - p_dystopia_given_alignment);
-        const p_dystopia_breakthrough = p_breakthrough * p_dystopia_given_alignment;
-
-        // Final Outcome Aggregation
-        const p_bad_outcome_total = p_no_breakthrough_doom + p_dystopia_rlhf + p_dystopia_breakthrough;
-
-        // Survival Probabilities (for verification)
-        const p_survive_pause = p_pause; // Direct survival path
-        const p_survive_no_agi = p_no_agi_no_pause; // Direct survival path
-        const p_survive_good_total = p_survive_pause + p_survive_no_agi + p_survive_rlhf_good + p_survive_breakthrough_good;
-
-        // --- D3 SANKEY SETUP ---
-
-        // 1. Define Data Structure for Sankey (Reordered Nodes)
+        // D3 Sankey Setup
         const graph = {
             nodes: [
-                // Stage 0
-                { nodeId: 0, name: "Initial Worlds" }, // Layer 0
-                // Stage 1: Pause/No Pause
-                { nodeId: 1, name: "Pause Occurs" },         // Layer 1
-                { nodeId: 2, name: "No Pause" },             // Layer 1
-                // Stage 2: AGI/No AGI (given No Pause)
-                { nodeId: 4, name: "No AGI (No Pause)" },     // Layer 2 (Good path first)
-                { nodeId: 3, name: "AGI Develops (No Pause)" }, // Layer 2
-                // Stage 3: RLHF Sufficiency (given AGI)
-                { nodeId: 5, name: "RLHF Sufficient" },       // Layer 3 (Good path first)
-                { nodeId: 6, name: "RLHF Insufficient" },     // Layer 3
-                // Stage 4: Breakthrough (given RLHF Insufficient)
-                // Try placing Breakthrough (7) *after* No Breakthrough (12) in definition
-                // to encourage it to be lower, closer to other bad paths.
-                { nodeId: 12, name: "No Breakthrough" },        // Layer 4
-                { nodeId: 7, name: "Alignment Breakthrough" },  // Layer 4
-                // Stage 5: Alignment Outcome (Good vs Bad)
-                // Group good outcomes first, then dystopia outcomes
-                { nodeId: 8, name: "Survival" },                  // Layer 5 (was "Survive (RLHF Good)")
-                { nodeId: 9, name: "Bad Outcome despite Alignment" },  // Layer 5 (was "Dystopia")
-                { nodeId: 10, name: "Survive" },                        // was "Survive (Breakthrough Good)"
-                { nodeId: 11, name: "Bad Outcome despite Alignment" },  // was "Dystopia (Breakthrough Bad)"
-                // Final Outcomes (Merged)
-                // Group good outcomes first, then the bad outcome
-                { nodeId: 14, name: "Survive (Pause)" },          // Layer 6
-                { nodeId: 15, name: "Survive (No AGI)" },         // Layer 6
-                { nodeId: 13, name: "Bad Outcome (Doom/Dystopia)" } // Layer 6
+                { nodeId: 0, name: "Initial Worlds" },
+                { nodeId: 1, name: "Pause Occurs" },
+                { nodeId: 2, name: "No Pause" },
+                { nodeId: 4, name: "No ASI (No Pause)" },
+                { nodeId: 3, name: "ASI Develops (No Pause)" },
+                { nodeId: 5, name: "RLHF Sufficient" },
+                { nodeId: 6, name: "RLHF Insufficient" },
+                { nodeId: 12, name: "No Breakthrough" },
+                { nodeId: 7, name: "Alignment Breakthrough" },
+                { nodeId: 8, name: "Survive (RLHF)" },
+                { nodeId: 9, name: "Bad Despite RLHF" },
+                { nodeId: 10, name: "Survive (Breakthrough)" },
+                { nodeId: 11, name: "Bad Despite Breakthrough" },
+                { nodeId: 14, name: "Survive (Pause)" },
+                { nodeId: 15, name: "Survive (No ASI)" },
+                { nodeId: 16, name: "Control Succeeds Initially" },
+                { nodeId: 17, name: "AI Takeover" },
+                { nodeId: 18, name: "Bad Despite Control" },
+                { nodeId: 19, name: "Survival (Control)" },
+                { nodeId: 13, name: "Doom" }
             ],
             links: [
-                // Initial -> Pause/No Pause
                 { source: 0, target: 1, value: p_pause },
                 { source: 0, target: 2, value: p_no_pause },
-
-                // Pause -> Final Survival Outcome (Node 14)
                 { source: 1, target: 14, value: p_survive_pause },
-
-                // No Pause -> AGI/No AGI
-                { source: 2, target: 3, value: p_agi_no_pause },
-                { source: 2, target: 4, value: p_no_agi_no_pause },
-
-                // No AGI -> Final Survival Outcome (Node 15)
-                { source: 4, target: 15, value: p_survive_no_agi },
-
-                // AGI -> RLHF Sufficient/Insufficient
+                { source: 2, target: 3, value: p_asi_no_pause },
+                { source: 2, target: 4, value: p_no_asi_no_pause },
+                { source: 4, target: 15, value: p_survive_no_asi },
                 { source: 3, target: 5, value: p_rlhf_sufficient },
                 { source: 3, target: 6, value: p_rlhf_insufficient },
-
-                // RLHF Sufficient -> Good Survival / Dystopia
-                { source: 5, target: 8, value: p_survive_rlhf_good }, // To Survive RLHF Good
-                { source: 5, target: 9, value: p_dystopia_rlhf },     // To Dystopia RLHF Bad
-
-                // RLHF Insufficient -> Breakthrough / No Breakthrough
-                { source: 6, target: 12, value: p_no_breakthrough_doom }, // To No Breakthrough
-                { source: 6, target: 7, value: p_breakthrough },         // To Alignment Breakthrough
-
-                // Breakthrough -> Good Survival / Dystopia
-                { source: 7, target: 10, value: p_survive_breakthrough_good }, // To Survive Breakthrough Good
-                { source: 7, target: 11, value: p_dystopia_breakthrough },    // To Dystopia Breakthrough Bad
-
-                // --- Flows to Final Bad Outcome (Node 13) ---
-                // Dystopia (RLHF) -> Final Bad Outcome
-                { source: 9, target: 13, value: p_dystopia_rlhf },
-                // Dystopia (Breakthrough) -> Final Bad Outcome
-                { source: 11, target: 13, value: p_dystopia_breakthrough },
-                // No Breakthrough -> Final Bad Outcome
-                { source: 12, target: 13, value: p_no_breakthrough_doom }
-
+                { source: 5, target: 8, value: p_survive_rlhf_good },
+                { source: 5, target: 9, value: p_bad_despite_rlhf },
+                { source: 6, target: 7, value: p_breakthrough },
+                { source: 6, target: 12, value: p_no_breakthrough },
+                { source: 7, target: 10, value: p_survive_breakthrough_good },
+                { source: 7, target: 11, value: p_bad_despite_breakthrough },
+                { source: 9, target: 13, value: p_bad_despite_rlhf },
+                { source: 11, target: 13, value: p_bad_despite_breakthrough },
+                { source: 12, target: 16, value: p_control_succeeds_initially },
+                { source: 12, target: 17, value: p_ai_takeover },
+                { source: 16, target: 18, value: p_bad_despite_control_abs },
+                { source: 16, target: 19, value: p_survival_control_abs },
+                { source: 17, target: 13, value: p_ai_takeover },
+                { source: 18, target: 13, value: p_bad_despite_control_abs }
             ]
         };
 
-        // Filter out links with zero value
+        // Filter out zero-value links
         graph.links = graph.links.filter(link => link.value > 1e-9);
 
-        // 2. Setup SVG Dimensions and Margins - INCREASE HEIGHT
+        // SVG Dimensions and Margins
         const container = document.getElementById('sankey-chart-container');
         const margin = { top: 30, right: 280, bottom: 30, left: 150 };
-        let width = container.clientWidth - margin.left - margin.right;
-        width = Math.max(width, 1000);
-        const height = 800 - margin.top - margin.bottom; // Increased height from 700 to 800
+        let width = Math.max(container.clientWidth - margin.left - margin.right, 1200);
+        const height = 800 - margin.top - margin.bottom;
 
-        // 3. Create SVG element
+        // Create SVG element
         const svg = d3.select("#sankey-chart")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // 4. Setup Sankey Layout Generator
+        // Sankey Layout Generator
         const sankey = d3.sankey()
             .nodeId(d => d.nodeId)
             .nodeWidth(30)
             .nodePadding(15)
             .nodeAlign(d3.sankeyLeft)
-            .nodeSort((a, b) => {
+            .nodeSort((a, b) => { // Custom sort for potentially better layout
+              // Updated column orders based on the comment block description
               const columnOrders = [
-                /* col0 */ ["Initial Worlds"],
-                /* col1 */ ["No Pause", "Pause Occurs"],
-                /* col2 */ ["AGI Develops (No Pause)", "No AGI (No Pause)", "Survive (Pause)"],
-                /* col3 */ ["RLHF Insufficient", "RLHF Sufficient", "Survive (No AGI)"],
-                /* col4 */ [  // RLHF outcomes
-                  "No Breakthrough",
-                  "Alignment Breakthrough",
-                  "Survival",
-                  "Bad Outcome despite Alignment"
-                ],
-                /* col5 */ [  // Breakthrough outcomes
-                  "Bad Outcome despite Alignment",
-                  "Survive"
-                ],
-                /* col6 */ ["Bad Outcome (Doom/Dystopia)"]
+                ["Initial Worlds"], // Layer 1
+                ["No Pause", "Pause Occurs"], // Layer 2
+                ["ASI Develops (No Pause)", "No ASI (No Pause)", "Survive (Pause)"], // Layer 3 - Renamed
+                ["RLHF Insufficient", "RLHF Sufficient", "Survive (No ASI)"], // Layer 4 - Renamed
+                ["No Breakthrough", "Alignment Breakthrough", "Survive (RLHF)", "Bad Despite RLHF"], // Layer 5 - Renamed
+                ["AI Takeover", "Control Succeeds Initially", "Survive (Breakthrough)", "Bad Despite Breakthrough"], // Layer 6 - Renamed
+                ["Survival (Control)", "Bad Despite Control"], // Layer 7 - Updated Order
+                ["Doom"] // Layer 8
               ];
-
               let arrA, arrB;
               for (const arr of columnOrders) {
                 if (arr.includes(a.name)) arrA = arr;
@@ -188,70 +165,95 @@
               if (arrA && arrA === arrB) {
                 return arrA.indexOf(a.name) - arrB.indexOf(b.name);
               }
-              return d3.ascending(a.y0, b.y0);
+              // Fallback layer calculation (might not be strictly necessary with explicit orders)
+              if (a.layer !== undefined && b.layer !== undefined) {
+                  return a.layer - b.layer;
+              }
+              // Fallback sort if layers or names don't match expected structure
+              return a.y0 - b.y0;
             })
             .extent([[1, 1], [width - 1, height - 1]]);
 
-        // 5. Compute the Sankey layout
+        // Compute the Sankey layout
         const { nodes, links } = sankey(graph);
 
-        // First fix the connections as we did before
+        // Manual adjustments for specific node/link positions (for visual clarity)
         const nodeBreakthrough = nodes.find(n => n.nodeId === 7);
-        const targetDystopia = nodes.find(n => n.nodeId === 11);
+        const targetBadDespiteBreakthrough = nodes.find(n => n.nodeId === 11);
         const targetSurvive = nodes.find(n => n.nodeId === 10);
 
-        if (nodeBreakthrough && targetDystopia && targetSurvive) {
-          // Find the two links we need to adjust
-          const linkToDystopia = links.find(l => 
-            l.source.nodeId === 7 && l.target.nodeId === 11);
-          const linkToSurvive = links.find(l => 
-            l.source.nodeId === 7 && l.target.nodeId === 10);
-          
-          if (linkToDystopia && linkToSurvive) {
-            // Set connection points as before
-            linkToDystopia.y0 = nodeBreakthrough.y0 + (nodeBreakthrough.y1 - nodeBreakthrough.y0) * 0.25;
+        if (nodeBreakthrough && targetBadDespiteBreakthrough && targetSurvive) {
+          const linkToBadDespite = links.find(l => l.source.nodeId === 7 && l.target.nodeId === 11);
+          const linkToSurvive = links.find(l => l.source.nodeId === 7 && l.target.nodeId === 10);
+
+          if (linkToBadDespite && linkToSurvive) {
+            // --- Adjust Vertical Positions ---
+            const badDespiteHeight = targetBadDespiteBreakthrough.y1 - targetBadDespiteBreakthrough.y0;
+            const surviveHeight = targetSurvive.y1 - targetSurvive.y0;
+            const desiredSeparation = 30;
+
+            // Calculate a midpoint and push nodes away from it
+            const midpoint = (targetBadDespiteBreakthrough.y0 + targetSurvive.y1) / 2;
+
+            // Move Bad Despite node up slightly
+            targetBadDespiteBreakthrough.y0 = midpoint - desiredSeparation / 2 - badDespiteHeight;
+            targetBadDespiteBreakthrough.y1 = targetBadDespiteBreakthrough.y0 + badDespiteHeight;
+
+            // Move Survive node down significantly
+            targetSurvive.y0 = midpoint + desiredSeparation / 2;
+            targetSurvive.y1 = targetSurvive.y0 + surviveHeight;
+
+
+            // --- Update Link Connection Points ---
+            // Adjust link connection points on the source node (Breakthrough)
+            linkToBadDespite.y0 = nodeBreakthrough.y0 + (nodeBreakthrough.y1 - nodeBreakthrough.y0) * 0.25;
             linkToSurvive.y0 = nodeBreakthrough.y0 + (nodeBreakthrough.y1 - nodeBreakthrough.y0) * 0.75;
-            linkToDystopia.y1 = targetDystopia.y0 + (targetDystopia.y1 - targetDystopia.y0) * 0.5;
-            linkToSurvive.y1 = targetSurvive.y0 + (targetSurvive.y1 - targetSurvive.y0) * 0.5;
-            
-            // NEW: Move "Survive (Breakthrough Good)" node even lower
-            // Store the original height of the node
-            const nodeHeight = targetSurvive.y1 - targetSurvive.y0;
-            
-            // Move it down by 40 pixels
-            targetSurvive.y0 += 40;
-            targetSurvive.y1 = targetSurvive.y0 + nodeHeight;
-            
-            // Update the entry point for the link to this node
-            linkToSurvive.y1 = targetSurvive.y0 + nodeHeight/2;
-            
-            // Find any links from this node to final outcomes and update them
+
+            // Update link connection points on the target nodes (Bad Despite and Survive)
+            linkToBadDespite.y1 = targetBadDespiteBreakthrough.y0 + badDespiteHeight / 2;
+            linkToSurvive.y1 = targetSurvive.y0 + surviveHeight / 2;
+
+            // Update outgoing links from the moved nodes (if any)
             links.forEach(link => {
               if (link.source.nodeId === 10) {
-                link.y0 = targetSurvive.y0 + nodeHeight/2;
+                link.y0 = targetSurvive.y0 + surviveHeight / 2;
+              }
+              if (link.source.nodeId === 11) {
+                 link.y0 = targetBadDespiteBreakthrough.y0 + badDespiteHeight / 2;
               }
             });
           }
         }
 
-        // 6. Define Color Scale
+        // Node Color Scale (using object lookup)
+        const nodeColorMap = {
+            "Doom": "#dc3545",
+            "Bad Despite": "#ff8c00",
+            "AI Takeover": "#ff6347",
+            "No Breakthrough": "#ffc107",
+            "Survive": "#28a745",
+            "Survival (Control)": "#28a745",
+            "Control Succeeds Initially": "#5cb85c",
+            "ASI Develops": "#007bff",
+            "RLHF Insufficient": "#6f42c1",
+            "RLHF Sufficient": "#17a2b8",
+            "Breakthrough": "#fd7e14",
+            "Pause": "#6c757d",
+            "No ASI": "#adb5bd",
+            "default": "#6c757d"
+        };
+
         const outcomeColor = (nodeName) => {
-            if (nodeName === "Bad Outcome despite Alignment")            return "#ff8c00"; // alignment-fail paths
-            if (nodeName.includes("Bad Outcome") 
-                && nodeName !== "Bad Outcome despite Alignment")         return "#dc3545"; // final doom
-            if (nodeName.includes("No Breakthrough"))                    return "#ffc107";
-            if (nodeName.includes("Survive") || nodeName.includes("Survival")) return "#28a745";
-            if (nodeName.includes("AGI Develops"))                       return "#007bff";
-            if (nodeName.includes("RLHF Insufficient"))                  return "#6f42c1";
-            if (nodeName.includes("RLHF Sufficient"))                    return "#17a2b8";
-            if (nodeName.includes("Breakthrough"))                       return "#fd7e14";
-            if (nodeName.includes("Pause"))                              return "#6c757d";
-            if (nodeName.includes("No AGI"))                             return "#adb5bd";
-            return "#6c757d";
+            for (const key in nodeColorMap) {
+                if (nodeName.includes(key)) {
+                    return nodeColorMap[key];
+                }
+            }
+            return nodeColorMap["default"];
         };
 
 
-        // 7. Draw the Links (Flows)
+        // Draw Links
         svg.append("g")
             .attr("fill", "none")
             .attr("stroke-opacity", 0.5)
@@ -261,13 +263,12 @@
             .style("mix-blend-mode", "multiply")
           .append("path")
             .attr("d", d3.sankeyLinkHorizontal())
-            .attr("stroke", d => outcomeColor(d.target.name)) // Color link based on target node
+            .attr("stroke", d => outcomeColor(d.target.name))
             .attr("stroke-width", d => Math.max(1, d.width))
-          .append("title") // Tooltip for links
+          .append("title")
             .text(d => `${d.source.name} → ${d.target.name}\n${(d.value * 100).toFixed(1)}%`);
 
-
-        // 8. Draw the Nodes (Rectangles)
+        // Draw Nodes
         svg.append("g")
             .attr("stroke", "#000")
             .attr("stroke-width", 0.5)
@@ -276,14 +277,13 @@
           .join("rect")
             .attr("x", d => d.x0)
             .attr("y", d => d.y0)
-            .attr("height", d => Math.max(0.5, d.y1 - d.y0)) // Ensure min height for visibility
+            .attr("height", d => Math.max(0.5, d.y1 - d.y0))
             .attr("width", d => d.x1 - d.x0)
             .attr("fill", d => outcomeColor(d.name))
-          .append("title") // Tooltip for nodes
+          .append("title")
             .text(d => `${d.name}\n${(d.value * 100).toFixed(1)}%`);
 
-
-        // 9. Add Node Labels (Using the corrected logic)
+        // Add Node Labels
         svg.append("g")
             .attr("font-family", "sans-serif")
             .attr("font-size", 11)
@@ -291,37 +291,78 @@
           .selectAll("text")
           .data(nodes)
           .join("text")
-            .attr("x", d => {
-                const startOffset = 12;
-                const defaultOffset = 15;
-                if (d.layer === 0) {
-                    return d.x0 - startOffset;
-                } else {
-                    return d.x1 + defaultOffset;
-                }
-            })
+            .attr("x", d => d.x1 + 5)
             .attr("y", d => (d.y1 + d.y0) / 2)
             .attr("dy", "0.35em")
-            .attr("text-anchor", d => {
-                 if (d.layer === 0) {
-                     return "end";
-                 } else {
-                     return "start";
-                 }
-            })
+            .attr("text-anchor", "start")
             .text(d => `${d.name} (${(d.value * 100).toFixed(1)}%)`)
             .attr("fill", d => d.value < 0.005 ? "#aaa" : "#000");
 
+        // Add Probability Info Box in bottom right corner
+        const infoBoxX = width + margin.right - 310;
+        const infoBoxY = height - 180;
+        const infoBox = svg.append("g")
+            .attr("transform", `translate(${infoBoxX}, ${infoBoxY})`);
 
-        // --- Update Final Result Display ---
-        document.getElementById('result').querySelector('h2').innerHTML = `Final Calculated P(Bad Outcome): <span id="final-p-doom"></span>%`;
-        document.getElementById('final-p-doom').textContent = (p_bad_outcome_total * 100).toFixed(1);
-        document.getElementById('result').querySelector('p').textContent = `(Based on Pause, AGI|NoPause, RLHF Sufficiency, Breakthrough, Dystopia chances)`;
+        infoBox.append("rect")
+            .attr("width", 250)
+            .attr("height", 170)
+            .attr("fill", "#f8f9fa")
+            .attr("stroke", "#dee2e6")
+            .attr("stroke-width", 1)
+            .attr("rx", 5)
+            .attr("ry", 5);
 
-        // Optional: Verify sum
-        console.log("P(Bad Outcome Total):", p_bad_outcome_total);
-        console.log("P(Survive Good Total):", p_survive_good_total);
-        console.log("Sum Check (should be 1):", p_bad_outcome_total + p_survive_good_total);
+        infoBox.append("text")
+            .attr("x", 10)
+            .attr("y", 20)
+            .attr("font-weight", "bold")
+            .attr("font-size", 14)
+            .text("Input Probabilities");
+
+        // Add probability values
+        const probabilities = [
+            { name: "P(Pause)", value: p_pause },
+            { name: "P(ASI | No Pause)", value: p_asi_given_no_pause },
+            { name: "P(RLHF Suffices | ASI)", value: p_rlhf_suffices_given_asi },
+            { name: "P(Breakthrough | RLHF Insuff.)", value: p_breakthrough_given_rlhf_insufficient },
+            { name: "P(Bad Despite | Alignment)", value: p_bad_despite_alignment },
+            { name: "P(Control OK | No Brkthr.)", value: p_control_monitor_automated_alignment_works_conditional_no_breakthrough },
+        ];
+
+        infoBox.selectAll(".prob-text")
+            .data(probabilities)
+            .join("text")
+            .attr("class", "prob-text")
+            .attr("x", 10)
+            .attr("y", (d, i) => 45 + i * 20)
+            .attr("font-size", 12)
+            .text(d => `${d.name}: ${(d.value * 100).toFixed(0)}%`);
+
+        // Update Final Result Display
+        const pDoomPercent = (p_bad_outcome_total * 100).toFixed(1);
+        const resultBox = document.getElementById('result');
+        const resultHeader = resultBox.querySelector('h2');
+        const resultExplanation = resultBox.querySelector('p');
+
+        let bgColor, borderColor, emoji;
+        if (pDoomPercent > 50) {
+            bgColor = '#ffdddd'; borderColor = '#dc3545'; emoji = '💀';
+        } else if (pDoomPercent >= 10) {
+            bgColor = '#fff3cd'; borderColor = '#ffc107'; emoji = '⚠️';
+        } else {
+            bgColor = '#d4edda'; borderColor = '#28a745'; emoji = '🌳';
+        }
+
+        resultBox.style.backgroundColor = bgColor;
+        resultBox.style.borderLeft = `5px solid ${borderColor}`;
+        resultBox.style.padding = '15px';
+        resultBox.style.borderRadius = '5px';
+        resultHeader.innerHTML = `Final Calculated P(Doom): <span id="final-p-doom">${pDoomPercent}</span>% ${emoji}`;
+        resultExplanation.textContent = `(Based on Pause, ASI|NoPause, RLHF Sufficiency, Breakthrough, Control|NoBrkthr, Bad Despite|Alignment chances)`;
+
+        // Verification (Console Logs)
+        // console.log("Total Probability Check:", p_bad_outcome_total + p_survive_good_total);
 
     </script>
 
