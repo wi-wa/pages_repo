@@ -12,7 +12,7 @@
 <body>
 
     <h1>P(Doom) in 10 Years</h1>
-    <p style="font-size: 0.8em; color: grey; margin-top: -10px; margin-bottom: 20px;">Last updated 1st May 2025</p>
+    <p style="font-size: 0.8em; color: grey; margin-top: -10px; margin-bottom: 20px;">Last updated 2nd May 2025</p>
 
     <!-- Container for the D3 Sankey chart -->
     <div id="sankey-chart-container">
@@ -47,10 +47,10 @@
         // Input Probabilities
         const p_pause = 0.04;
         const p_asi_given_no_pause = 0.85;
-        const p_rlhf_suffices_given_asi = 0.3;
+        const p_rlhf_suffices_given_asi = 0.25;
         const p_breakthrough_given_rlhf_insufficient = 0.1;
         const p_bad_despite_alignment = 0.3;
-        const p_control_monitor_automated_alignment_works_conditional_no_breakthrough = 0.2;
+        const p_control_monitor_automated_alignment_works_conditional_no_breakthrough = 0.15;
 
         // Calculations (kept separate for clarity)
         const p_no_pause = 1 - p_pause;

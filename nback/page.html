@@ -4,491 +4,491 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N-Back Practice</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f0f0f0;
-            padding: 20px;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .controls {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-        
-        .stats {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .stat {
-            background-color: white;
-            border-radius: 5px;
-            padding: 10px;
-            min-width: 100px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 10px;
-            width: 300px;
-            height: 300px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        
-        .cell {
-            background-color: white;
-            border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .circle {
-            width: 70%;
-            height: 70%;
-            background-color: #4CAF50;
-            border-radius: 50%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .instructions {
-            background-color: white;
-            border-radius: 5px;
-            padding: 15px;
-            max-width: 600px;
-            margin-top: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .key-guide {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .key {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .key-box {
-            background-color: #eee;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 2px 8px;
-            font-family: monospace;
-        }
-        
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        
-        button:hover {
-            background-color: #45a049;
-        }
-        
-        select, input {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        
-        .game-over {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: white;
-            z-index: 100;
-        }
-        
-        .game-over h2 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-        
-        .feedback-indicator {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            border-radius: 5px;
-            pointer-events: none;
-            z-index: 10;
-        }
-        
-        .correct-indicator {
-            background-color: rgba(76, 175, 80, 0.3);
-            border: 2px solid #4CAF50;
-        }
-        
-        .incorrect-indicator {
-            background-color: rgba(244, 67, 54, 0.3);
-            border: 2px solid #F44336;
-        }
-        
-        .game-area {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .timer-container {
-            width: 20px;
-            height: 300px;
-            background-color: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .timer-bar {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, #ff5252, #4CAF50);
-            transform-origin: bottom;
-            transition-property: transform;
-            transition-timing-function: linear;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>N-Back Practice</h1>
     
-    <div class="controls">
-        <div>
-            <label for="n-back">N-Back Level:</label>
-            <select id="n-back">
-                <option value="1">1-Back</option>
-                <option value="2" selected>2-Back</option>
-                <option value="3">3-Back</option>
-                <option value="4">4-Back</option>
-                <option value="5">5-Back</option>
-                <option value="6">6-Back</option>
-                <option value="7">7-Back</option>
-                <option value="8">8-Back</option>
-                <option value="9">9-Back</option>
-                <option value="10">10-Back</option>
-            </select>
-        </div>
-        <div>
-            <label for="interval">Interval (ms):</label>
-            <input type="number" id="interval" min="500" max="5000" step="100" value="2000">
-        </div>
-        <button id="start-btn">Start Game</button>
-    </div>
-    
-    <div class="stats">
-        <div class="stat">
-            <div>Correct</div>
-            <div id="correct-count">0</div>
-        </div>
-        <div class="stat">
-            <div>Mistakes</div>
-            <div id="mistake-count">0/3</div>
-        </div>
-        <div class="stat">
-            <div>Score</div>
-            <div id="score">0</div>
-        </div>
-    </div>
-    
-    <div class="game-area">
-        <div class="grid-container">
-            <div class="cell" data-index="0"><div class="circle"></div></div>
-            <div class="cell" data-index="1"><div class="circle"></div></div>
-            <div class="cell" data-index="2"><div class="circle"></div></div>
-            <div class="cell" data-index="3"><div class="circle"></div></div>
-            <div class="cell" data-index="4"><div class="circle"></div></div>
-            <div class="cell" data-index="5"><div class="circle"></div></div>
-            <div class="cell" data-index="6"><div class="circle"></div></div>
-            <div class="cell" data-index="7"><div class="circle"></div></div>
-            <div class="cell" data-index="8"><div class="circle"></div></div>
-            <div class="feedback-indicator correct-indicator" id="correct-indicator"></div>
-            <div class="feedback-indicator incorrect-indicator" id="incorrect-indicator"></div>
+    <div class="main-content-wrapper">
+        <div class="best-scores-container">
+            <h3>Best Scores</h3>
+            <table id="best-scores-table">
+                <thead>
+                    <tr>
+                        <th>N-Level</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Scores will be populated by JS -->
+                </tbody>
+            </table>
         </div>
         
-        <div class="timer-container">
-            <div class="timer-bar" id="timer-bar"></div>
-        </div>
-    </div>
-    
-    <div class="instructions">
-        <h3>How to Play:</h3>
-        <p>In this N-Back task, colored circles with letters will appear in different positions on the grid.</p>
-        <p>You need to compare the current position and letter with what appeared N steps ago:</p>
-        
-        <div class="key-guide">
-            <div class="key"><span class="key-box">N</span> Press if <strong>Neither</strong> position nor letter matches</div>
-            <div class="key"><span class="key-box">L</span> Press if only the <strong>Letter</strong> matches</div>
-            <div class="key"><span class="key-box">P</span> Press if only the <strong>Position</strong> matches</div>
-            <div class="key"><span class="key-box">B</span> Press if <strong>Both</strong> position and letter match</div>
-        </div>
-        
-        <p>For example, with 2-Back, compare with what you saw 2 trials ago.</p>
-        <p>You lose after making 3 mistakes (pressing the wrong key or not pressing when you should).</p>
-    </div>
-    
-    <div class="game-over">
-        <h2>Game Over!</h2>
-        <p id="final-score">Your score: 0</p>
-        <button id="restart-btn">Play Again</button>
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cells = document.querySelectorAll('.cell');
-            const circles = document.querySelectorAll('.circle');
-            const startBtn = document.getElementById('start-btn');
-            const restartBtn = document.getElementById('restart-btn');
-            const nBackSelect = document.getElementById('n-back');
-            const intervalInput = document.getElementById('interval');
-            const correctCount = document.getElementById('correct-count');
-            const mistakeCount = document.getElementById('mistake-count');
-            const scoreDisplay = document.getElementById('score');
-            const finalScore = document.getElementById('final-score');
-            const gameOverScreen = document.querySelector('.game-over');
-            const correctIndicator = document.getElementById('correct-indicator');
-            const incorrectIndicator = document.getElementById('incorrect-indicator');
-            const timerBar = document.getElementById('timer-bar');
+        <div class="game-content">
+            <div class="controls">
+                <div>
+                    <label for="n-back">N-Back Level:</label>
+                    <select id="n-back">
+                        <option value="1">1-Back</option>
+                        <option value="2" selected>2-Back</option>
+                        <option value="3">3-Back</option>
+                        <option value="4">4-Back</option>
+                        <option value="5">5-Back</option>
+                        <option value="6">6-Back</option>
+                        <option value="7">7-Back</option>
+                        <option value="8">8-Back</option>
+                        <option value="9">9-Back</option>
+                        <option value="10">10-Back</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="interval">Interval (ms):</label>
+                    <input type="number" id="interval" min="500" max="5000" step="100" value="2000">
+                </div>
+                <div>
+                    <label for="rounds-to-win">Rounds to Win:</label>
+                    <input type="number" id="rounds-to-win" min="10" max="1000" step="10" value="50">
+                </div>
+                <button id="start-btn">Start Game</button>
+            </div>
             
-            let gameRunning = false;
-            let timer = null;
-            let positionHistory = [];
-            let letterHistory = [];
-            let currentPosition = -1;
-            let currentLetter = '';
-            let mistakes = 0;
-            let correct = 0;
-            let score = 0;
-            let currentTrial = 0;
-            let expectedKey = '';
-            let hasResponded = false;
+            <div class="stats">
+                <div class="stat">
+                    <div>Correct</div>
+                    <div id="correct-count">0</div>
+                </div>
+                <div class="stat">
+                    <div>Mistakes</div>
+                    <div id="mistake-count">0/3</div>
+                </div>
+                <div class="stat">
+                    <div>Score</div>
+                    <div id="score">0</div>
+                </div>
+            </div>
             
-            // Set of letters to use (excluding similar looking ones)
-            const letters = ['A', 'C', 'D', 'E', 'G', 'R', 'S'];
+            <div class="game-area">
+                <div class="grid-container">
+                    <div class="cell" data-index="0"><div class="circle"></div></div>
+                    <div class="cell" data-index="1"><div class="circle"></div></div>
+                    <div class="cell" data-index="2"><div class="circle"></div></div>
+                    <div class="cell" data-index="3"><div class="circle"></div></div>
+                    <div class="cell" data-index="4"><div class="circle"></div></div>
+                    <div class="cell" data-index="5"><div class="circle"></div></div>
+                    <div class="cell" data-index="6"><div class="circle"></div></div>
+                    <div class="cell" data-index="7"><div class="circle"></div></div>
+                    <div class="cell" data-index="8"><div class="circle"></div></div>
+                    <div class="feedback-indicator correct-indicator" id="correct-indicator"></div>
+                    <div class="feedback-indicator incorrect-indicator" id="incorrect-indicator"></div>
+                </div>
+                
+                <div class="timer-container">
+                    <div class="timer-bar" id="timer-bar"></div>
+                </div>
+            </div>
             
-            function startGame() {
-                if (gameRunning) return;
+            <div class="instructions">
+                <h3>How to Play:</h3>
+                <p>In this N-Back task, colored circles with letters will appear in different positions on the grid.</p>
                 
-                // Reset game state
-                gameRunning = true;
-                positionHistory = [];
-                letterHistory = [];
-                currentPosition = -1;
-                currentLetter = '';
-                mistakes = 0;
-                correct = 0;
-                score = 0;
-                currentTrial = 0;
-                expectedKey = '';
+                <div class="key-requirement" style="background-color: #ffe6e6; border: 2px solid #ff6666; padding: 8px; margin: 10px 0; border-radius: 5px;">
+                    <strong>IMPORTANT RULE:</strong> After the first N trials, you MUST press a key for EVERY stimulus. 
+                    Not pressing any key will count as a mistake, just like pressing the wrong key.
+                </div>
                 
-                // Update displays
-                correctCount.textContent = '0';
-                mistakeCount.textContent = '0/3';
-                scoreDisplay.textContent = '0';
-                gameOverScreen.style.display = 'none';
+                <p>Compare the current position and letter with what appeared N steps ago:</p>
                 
-                // Disable settings during game
-                startBtn.disabled = true;
-                nBackSelect.disabled = true;
-                intervalInput.disabled = true;
+                <div class="key-guide">
+                    <div class="key"><span class="key-box">N</span> Press if <strong>Neither</strong> position nor letter matches</div>
+                    <div class="key"><span class="key-box">L</span> Press if only the <strong>Letter</strong> matches</div>
+                    <div class="key"><span class="key-box">P</span> Press if only the <strong>Position</strong> matches</div>
+                    <div class="key"><span class="key-box">B</span> Press if <strong>Both</strong> position and letter match</div>
+                </div>
                 
-                // Start the sequence
-                showNextStimulus();
-            }
+                <p>For example, with 2-Back, compare with what you saw 2 trials ago.</p>
+                <p>For the first N trials only, the correct action is to press 'N' (or nothing).</p>
+                <p>You lose after making 3 mistakes (pressing the wrong key or failing to press a key when required).</p>
+                <p>Your best score for each N-Back level is saved and displayed on the left.</p>
+            </div>
             
-            function showNextStimulus() {
-                // Clear previous position
-                if (currentPosition >= 0) {
-                    circles[currentPosition].style.display = 'none';
-                }
-                
-                // Hide feedback indicators
-                correctIndicator.style.display = 'none';
-                incorrectIndicator.style.display = 'none';
-                
-                // Check if user missed a response before moving to next trial
-                if (currentTrial > 0 && !hasResponded) {
-                    registerMistake();
-                }
-                
-                // Reset for next trial
-                hasResponded = false;
-                currentTrial++;
-                
-                // Generate new position (ensuring it's not the same as the current position)
-                let newPosition;
-                do {
-                    newPosition = Math.floor(Math.random() * 9);
-                } while (newPosition === currentPosition && currentPosition !== -1);
-                
-                // Generate new letter
-                const newLetter = letters[Math.floor(Math.random() * letters.length)];
-                
-                currentPosition = newPosition;
-                currentLetter = newLetter;
-                positionHistory.push(newPosition);
-                letterHistory.push(newLetter);
-                
-                // Display the circle with letter
-                circles[newPosition].textContent = newLetter;
-                circles[newPosition].style.display = 'flex';
-                
-                // Determine what key should be pressed
-                const nBack = parseInt(nBackSelect.value);
-                if (positionHistory.length > nBack) {
-                    const positionMatch = positionHistory[positionHistory.length - 1] === 
-                                          positionHistory[positionHistory.length - 1 - nBack];
-                    const letterMatch = letterHistory[letterHistory.length - 1] === 
-                                        letterHistory[letterHistory.length - 1 - nBack];
-                    
-                    if (positionMatch && letterMatch) {
-                        expectedKey = 'b';
-                    } else if (positionMatch) {
-                        expectedKey = 'p';
-                    } else if (letterMatch) {
-                        expectedKey = 'l';
-                    } else {
-                        expectedKey = 'n';
+            <div class="game-over">
+                <h2>Game Over!</h2>
+                <p id="final-score">Your score: 0</p>
+                <button id="restart-btn">Play Again</button>
+            </div>
+            
+            <div class="win-screen">
+                <h2>You Win!!!</h2>
+                <p id="win-score">Your score: 0</p>
+                <button id="win-restart-btn">Play Again</button>
+            </div>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    // --- Constants ---
+                    const MAX_MISTAKES = 3;
+                    const LETTERS = ['A', 'C', 'D', 'E', 'G', 'R', 'S']; // Exclude similar looking letters
+                    const KEYS = ['n', 'l', 'p', 'b']; // Valid response keys
+
+                    // --- DOM Element References ---
+                    const cells = document.querySelectorAll('.cell');
+                    const circles = document.querySelectorAll('.circle');
+                    const startBtn = document.getElementById('start-btn');
+                    const restartBtn = document.getElementById('restart-btn');
+                    const winRestartBtn = document.getElementById('win-restart-btn');
+                    const nBackSelect = document.getElementById('n-back');
+                    const intervalInput = document.getElementById('interval');
+                    const roundsToWinInput = document.getElementById('rounds-to-win');
+                    const correctCountEl = document.getElementById('correct-count'); // Renamed for clarity
+                    const mistakeCountEl = document.getElementById('mistake-count'); // Renamed for clarity
+                    const scoreDisplayEl = document.getElementById('score');       // Renamed for clarity
+                    const finalScoreEl = document.getElementById('final-score');     // Renamed for clarity
+                    const winScoreEl = document.getElementById('win-score');         // Renamed for clarity
+                    const gameOverScreen = document.querySelector('.game-over');
+                    const winScreen = document.querySelector('.win-screen');
+                    const correctIndicator = document.getElementById('correct-indicator');
+                    const incorrectIndicator = document.getElementById('incorrect-indicator');
+                    const timerBar = document.getElementById('timer-bar');
+                    const bestScoresTableBody = document.querySelector('#best-scores-table tbody'); // Added
+
+                    // --- Game State Variables ---
+                    let gameRunning = false;
+                    let gameTimer = null; // Renamed from timer for clarity
+                    let positionHistory = [];
+                    let letterHistory = [];
+                    let currentPosition = -1; // Index of the currently displayed cell, -1 if none
+                    let currentLetter = '';   // Letter currently displayed
+                    let mistakes = 0;
+                    let correct = 0;
+                    let score = 0;
+                    let currentTrial = 0; // How many stimuli have been shown
+                    let expectedKey = ''; // The key expected for the current trial ('n', 'l', 'p', 'b')
+                    let hasResponded = false; // Flag if user responded in the current trial interval
+                    let nBackLevel = parseInt(nBackSelect.value, 10);
+                    let intervalDuration = parseInt(intervalInput.value, 10);
+                    let roundsToWin = parseInt(roundsToWinInput.value, 10);
+                    let bestScores = {}; // Added: To store best scores in memory { nLevel: score }
+
+                    // --- Persistence Functions ---
+                    function loadData() { // Renamed from loadSettings
+                        // Load Settings
+                        const savedNBack = localStorage.getItem('nBackLevel');
+                        const savedInterval = localStorage.getItem('nBackInterval');
+                        const savedRounds = localStorage.getItem('nBackRoundsToWin');
+
+                        if (savedNBack) nBackSelect.value = savedNBack;
+                        if (savedInterval) intervalInput.value = savedInterval;
+                        if (savedRounds) roundsToWinInput.value = savedRounds;
+
+                        // Update state variables from potentially loaded settings
+                        nBackLevel = parseInt(nBackSelect.value, 10);
+                        intervalDuration = parseInt(intervalInput.value, 10);
+                        roundsToWin = parseInt(roundsToWinInput.value, 10);
+
+                        // Load Best Scores
+                        const savedBestScores = localStorage.getItem('nBackBestScores');
+                        bestScores = savedBestScores ? JSON.parse(savedBestScores) : {};
+
+                        updateBestScoresDisplay(); // Display loaded scores
                     }
-                } else {
-                    // Not enough trials yet, so no match possible
-                    expectedKey = 'n';
-                }
-                
-                // Reset and start the timer
-                const interval = parseInt(intervalInput.value);
-                startTimer(interval);
-                
-                // Schedule next position if game is still running
-                if (gameRunning) {
-                    timer = setTimeout(showNextStimulus, interval);
-                }
-            }
-            
-            function startTimer(duration) {
-                // Reset the timer bar to full height
-                timerBar.style.transition = 'none';
-                timerBar.style.transform = 'scaleY(1)';
-                
-                // Force a reflow to make sure the reset is applied before starting animation
-                void timerBar.offsetWidth;
-                
-                // Start the animation
-                timerBar.style.transition = `transform ${duration}ms linear`;
-                timerBar.style.transform = 'scaleY(0)';
-            }
-            
-            function handleKeyPress(e) {
-                if (!gameRunning) return;
-                
-                // Convert to lowercase for easier comparison
-                const key = e.key.toLowerCase();
-                
-                // Only accept n, l, p, b keys
-                if (['n', 'l', 'p', 'b'].includes(key)) {
-                    e.preventDefault();
-                    
-                    // Prevent multiple responses for the same trial
-                    if (hasResponded) return;
-                    hasResponded = true;
-                    
-                    if (key === expectedKey) {
-                        // Correct match
-                        correct++;
-                        score += 10;
-                        correctCount.textContent = correct;
-                        scoreDisplay.textContent = score;
-                        correctIndicator.style.display = 'block';
-                    } else {
-                        // Incorrect press
-                        registerMistake();
-                        incorrectIndicator.style.display = 'block';
+
+                    function saveSettings() {
+                        localStorage.setItem('nBackLevel', nBackSelect.value);
+                        localStorage.setItem('nBackInterval', intervalInput.value);
+                        localStorage.setItem('nBackRoundsToWin', roundsToWinInput.value);
                     }
-                }
-            }
-            
-            function registerMistake() {
-                mistakes++;
-                mistakeCount.textContent = `${mistakes}/3`;
-                
-                if (mistakes >= 3) {
-                    endGame();
-                }
-            }
-            
-            function endGame() {
-                gameRunning = false;
-                clearTimeout(timer);
-                
-                // Reset timer
-                timerBar.style.transition = 'none';
-                timerBar.style.transform = 'scaleY(1)';
-                
-                // Show game over screen
-                finalScore.textContent = `Your score: ${score}`;
-                gameOverScreen.style.display = 'flex';
-                
-                // Clear the grid
-                circles.forEach(circle => {
-                    circle.style.display = 'none';
-                    circle.textContent = '';
+
+                    function saveBestScores() { // Added
+                        localStorage.setItem('nBackBestScores', JSON.stringify(bestScores));
+                    }
+                    // --- End Persistence ---
+
+                    // --- UI Update Functions ---
+                    function updateStatsDisplay() {
+                        correctCountEl.textContent = correct;
+                        mistakeCountEl.textContent = `${mistakes}/${MAX_MISTAKES}`;
+                        scoreDisplayEl.textContent = score;
+                    }
+
+                    function updateBestScoresDisplay() { // Added
+                        if (!bestScoresTableBody) return; // Guard against missing element
+                        bestScoresTableBody.innerHTML = ''; // Clear existing rows
+
+                        const maxN = parseInt(nBackSelect.options[nBackSelect.options.length - 1].value, 10); // Get max N from options
+
+                        for (let n = 1; n <= maxN; n++) {
+                            const scoreForN = bestScores[n] || '-'; // Get score or show '-'
+                            const row = document.createElement('tr');
+                            row.innerHTML = `<td>N=${n}</td><td>${scoreForN}</td>`;
+                            bestScoresTableBody.appendChild(row);
+                        }
+                    }
+
+                    function enableSettings(enable = true) {
+                        const disabled = !enable;
+                        startBtn.disabled = disabled;
+                        nBackSelect.disabled = disabled;
+                        intervalInput.disabled = disabled;
+                        roundsToWinInput.disabled = disabled;
+                    }
+
+                    function clearGrid() {
+                        circles.forEach(circle => {
+                            circle.style.display = 'none';
+                            circle.textContent = '';
+                        });
+                        correctIndicator.style.display = 'none';
+                        incorrectIndicator.style.display = 'none';
+                    }
+
+                    function showFeedback(isCorrect) {
+                        correctIndicator.style.display = isCorrect ? 'block' : 'none';
+                        incorrectIndicator.style.display = !isCorrect ? 'block' : 'none';
+                        
+                        // Hide feedback after exactly 300ms
+                        setTimeout(() => {
+                            correctIndicator.style.display = 'none';
+                            incorrectIndicator.style.display = 'none';
+                        }, 300);
+                    }
+
+                    function resetTimerBar() {
+                        timerBar.style.transition = 'none';
+                        timerBar.style.transform = 'scaleY(1)';
+                    }
+
+                    // --- Game Logic Functions ---
+                    function startGame() {
+                        if (gameRunning) return;
+
+                        gameRunning = true;
+                        positionHistory = [];
+                        letterHistory = [];
+                        currentPosition = -1;
+                        currentLetter = '';
+                        mistakes = 0;
+                        correct = 0;
+                        score = 0;
+                        currentTrial = 0;
+                        expectedKey = ''; // Reset expected key
+                        hasResponded = false; // Reset response flag
+
+                        // Read settings for this game instance
+                        nBackLevel = parseInt(nBackSelect.value, 10);
+                        intervalDuration = parseInt(intervalInput.value, 10);
+                        roundsToWin = parseInt(roundsToWinInput.value, 10);
+
+                        updateStatsDisplay();
+                        gameOverScreen.style.display = 'none';
+                        winScreen.style.display = 'none';
+                        clearGrid(); // Ensure grid is clear before starting
+                        enableSettings(false); // Disable settings during game
+
+                        showNextStimulus();
+                    }
+
+                    function showNextStimulus() {
+                        // --- Win Condition Check ---
+                        if (currentTrial >= roundsToWin && gameRunning) {
+                             winGame();
+                             return; // Stop the sequence
+                        }
+                        // --- End Win Condition Check ---
+
+                        // Clear previous stimulus display
+                        if (currentPosition >= 0) {
+                            circles[currentPosition].style.display = 'none';
+                        }
+                        correctIndicator.style.display = 'none';
+                        incorrectIndicator.style.display = 'none';
+
+                        // --- Check for Missed Response from Previous Trial ---
+                        // After the initial N trials, player MUST press a key for each stimulus
+                        // Not pressing any key always counts as a mistake after the initial N trials
+                        const isPastInitialTrials = currentTrial > nBackLevel;
+                        if (currentTrial > 0 && isPastInitialTrials && !hasResponded) {
+                            // Player didn't press any key when they should have
+                            registerMistake();
+                            // If the mistake ended the game, stop here
+                            if (!gameRunning) return;
+                        }
+                        // --- End Missed Response Check ---
+
+                        // Reset for the new trial
+                        hasResponded = false;
+                        currentTrial++;
+
+                        // Generate new stimulus
+                        let newPosition;
+                        do {
+                            newPosition = Math.floor(Math.random() * cells.length);
+                        } while (newPosition === currentPosition && currentPosition !== -1); // Avoid immediate repetition of position
+
+                        const newLetter = LETTERS[Math.floor(Math.random() * LETTERS.length)];
+
+                        // Update state
+                        currentPosition = newPosition;
+                        currentLetter = newLetter;
+                        positionHistory.push(newPosition);
+                        letterHistory.push(newLetter);
+
+                        // Display the new stimulus
+                        circles[newPosition].textContent = newLetter;
+                        circles[newPosition].style.display = 'flex'; // Make circle visible
+
+                        // Determine the expected key for this new trial
+                        if (positionHistory.length > nBackLevel) {
+                            const nBackIndex = positionHistory.length - 1 - nBackLevel;
+                            const positionMatch = positionHistory[positionHistory.length - 1] === positionHistory[nBackIndex];
+                            const letterMatch = letterHistory[letterHistory.length - 1] === letterHistory[nBackIndex];
+
+                            if (positionMatch && letterMatch) expectedKey = 'b';
+                            else if (positionMatch) expectedKey = 'p';
+                            else if (letterMatch) expectedKey = 'l';
+                            else expectedKey = 'n';
+                        } else {
+                            // Not enough history for comparison yet
+                            expectedKey = 'n';
+                        }
+
+                        // Start the timer for this trial
+                        startTimer(intervalDuration);
+
+                        // Schedule the next stimulus presentation
+                        if (gameRunning) {
+                            clearTimeout(gameTimer); // Clear any existing timer just in case
+                            gameTimer = setTimeout(showNextStimulus, intervalDuration);
+                        }
+                    }
+
+                    function startTimer(duration) {
+                        resetTimerBar();
+                        // Force a reflow to apply the reset before starting the animation
+                        void timerBar.offsetWidth;
+                        // Start the animation
+                        timerBar.style.transition = `transform ${duration}ms linear`;
+                        timerBar.style.transform = 'scaleY(0)';
+                    }
+
+                    function handleKeyPress(e) {
+                        if (!gameRunning || hasResponded) return; // Ignore if game not running or already responded
+
+                        const key = e.key.toLowerCase();
+
+                        if (KEYS.includes(key)) {
+                            e.preventDefault(); // Prevent default browser action for keys like 'L' (find)
+
+                            const isComparisonTrial = currentTrial > nBackLevel;
+                            let isCorrectResponse = false;
+
+                            if (isComparisonTrial) {
+                                // After the initial N trials, compare pressed key with expected key
+                                isCorrectResponse = (key === expectedKey);
+                            } else {
+                                // During the first N trials, only 'n' (or no key press) is correct.
+                                // Pressing L, P, or B is incorrect.
+                                isCorrectResponse = (key === 'n');
+                            }
+
+                            hasResponded = true; // Mark that a response was made
+
+                            if (isCorrectResponse) {
+                                correct++;
+                                score += 10;
+                                showFeedback(true);
+                            } else {
+                                registerMistake(); // This also shows feedback via showFeedback(false)
+                                // No need to call showFeedback(false) again here
+                            }
+                            updateStatsDisplay(); // Update score/correct count immediately
+
+                             // If a mistake ended the game, stop processing
+                            if (!gameRunning) return;
+                        }
+                    }
+
+                    function registerMistake() {
+                        if (!gameRunning) return; // Don't register mistakes if game already ended
+
+                        mistakes++;
+                        updateStatsDisplay(); // Update mistake count display
+                        showFeedback(false); // Show incorrect feedback
+
+                        if (mistakes >= MAX_MISTAKES) {
+                            endGame(false); // Pass false to indicate it's not a win
+                        }
+                    }
+
+                    function endGame(isWin) {
+                        if (!gameRunning) return; // Prevent running multiple times
+                        gameRunning = false;
+                        clearTimeout(gameTimer);
+                        resetTimerBar();
+
+                        // --- Best Score Update --- Added section
+                        const currentBest = bestScores[nBackLevel] || 0;
+                        if (score > currentBest) {
+                            bestScores[nBackLevel] = score;
+                            saveBestScores(); // Save the updated best scores
+                            updateBestScoresDisplay(); // Update the table display
+                        }
+                        // --- End Best Score Update ---
+
+                        if (isWin) {
+                            // Show win screen
+                            winScoreEl.textContent = `Your score: ${score}`;
+                            winScreen.style.display = 'flex';
+                            // Trigger confetti
+                            confetti({
+                                particleCount: 150,
+                                spread: 90,
+                                origin: { y: 0.6 }
+                            });
+                        } else {
+                            // Show game over screen
+                            finalScoreEl.textContent = `Your score: ${score}`;
+                            gameOverScreen.style.display = 'flex';
+                        }
+
+                        clearGrid();
+                        enableSettings(true); // Re-enable settings controls
+                    }
+
+                    // Specific function for winning to call endGame
+                    function winGame() {
+                        endGame(true);
+                    }
+
+
+                    // --- Event Listeners ---
+                    startBtn.addEventListener('click', startGame);
+                    restartBtn.addEventListener('click', startGame); // Game over restart
+                    winRestartBtn.addEventListener('click', startGame); // Win screen restart
+                    document.addEventListener('keydown', handleKeyPress);
+
+                    // Save settings on change and update state variables
+                    nBackSelect.addEventListener('change', () => {
+                        nBackLevel = parseInt(nBackSelect.value, 10);
+                        saveSettings();
+                    });
+                    intervalInput.addEventListener('change', () => {
+                        intervalDuration = parseInt(intervalInput.value, 10);
+                        saveSettings();
+                    });
+                    roundsToWinInput.addEventListener('change', () => {
+                         roundsToWin = parseInt(roundsToWinInput.value, 10);
+                         saveSettings();
+                    });
+
+                    // --- Initial Setup ---
+                    loadData(); // Changed from loadSettings()
+                    updateStatsDisplay(); // Initialize stats display
+                    enableSettings(true); // Ensure settings are enabled initially
                 });
-                
-                // Re-enable settings
-                startBtn.disabled = false;
-                nBackSelect.disabled = false;
-                intervalInput.disabled = false;
-            }
-            
-            // Event listeners
-            startBtn.addEventListener('click', startGame);
-            restartBtn.addEventListener('click', startGame);
-            document.addEventListener('keydown', handleKeyPress);
-        });
-    </script>
+            </script>
+        </div>
+    </div>
 </body>
 </html>
