@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculation Dependency Graph</title>
+    <link rel="stylesheet" href="calculation_graph.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <h1>Calculation Dependency Graph</h1>
+    <a href="page.html" class="back-link">Back to Sankey Diagram</a>
+    <div id="graph-container">
+        <svg id="calculation-graph"></svg>
+    </div>
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color input"></div>
+            <div class="legend-label">Input Parameters</div>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color derived"></div>
+            <div class="legend-label">Derived Values</div>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color output"></div>
+            <div class="legend-label">Final Outputs</div>
+        </div>
+    </div>
+
+    <script>
+        // Input Probabilities
+        const p_pause = 0.04;
+        const p_asi_given_no_pause = 0.85;
+        const p_rlhf_suffices_given_asi = 0.25;
+        const p_breakthrough_given_rlhf_insufficient = 0.1;
+        const p_bad_despite_alignment = 0.3;
+        const p_control_monitor_automated_alignment_works_conditional_no_breakthrough = 0.15;
+
+        // Calculations (kept separate for clarity)
+        const p_no_pause = 1 - p_pause;
+        const p_asi_no_pause = p_no_pause * p_asi_given_no_pause;
+        const p_no_asi_no_pause = p_no_pause * (1 - p_asi_given_no_pause);
+        const p_rlhf_sufficient = p_asi_no_pause * p_rlhf_suffices_given_asi;
+        const p_rlhf_insufficient = p_asi_no_pause * (1 - p_rlhf_suffices_given_asi);
+        const p_breakthrough = p_rlhf_insufficient * p_breakthrough_given_rlhf_insufficient;
+        const p_no_breakthrough = p_rlhf_insufficient * (1 - p_breakthrough_given_rlhf_insufficient);
+        const p_control_succeeds_initially = p_no_breakthrough * p_control_monitor_automated_alignment_works_conditional_no_breakthrough;
+        const p_ai_takeover = p_no_breakthrough * (1 - p_control_monitor_automated_alignment_works_conditional_no_breakthrough);
+        const p_bad_despite_control_abs = p_control_succeeds_initially * p_bad_despite_alignment;
+        const p_survival_control_abs = p_control_succeeds_initially * (1 - p_bad_despite_alignment);
+        const p_survive_rlhf_good = p_rlhf_sufficient * (1 - p_bad_despite_alignment);
+        const p_bad_despite_rlhf = p_rlhf_sufficient * p_bad_despite_alignment;
+        const p_survive_breakthrough_good = p_breakthrough * (1 - p_bad_despite_alignment);
+        const p_bad_despite_breakthrough = p_breakthrough * p_bad_despite_alignment;
+        const p_bad_outcome_total = p_ai_takeover + p_bad_despite_rlhf + p_bad_despite_breakthrough + p_bad_despite_control_abs;
+        const p_survive_pause = p_pause;
+        const p_survive_no_asi = p_no_asi_no_pause;
+        const p_survive_good_total = p_survive_pause + p_survive_no_asi + p_survive_rlhf_good + p_survive_breakthrough_good + p_survival_control_abs;
+
+        const graphData = {
+            nodes: [
+                // Inputs (Layer 0)
+                { id: 'p_pause', type: 'input', layer: 0, probability: p_pause, description: "Probability of a significant pause in AI development." },
+                { id: 'p_asi_given_no_pause', type: 'input', layer: 0, probability: p_asi_given_no_pause, description: "Probability of achieving AGI/ASI given no pause." },
+                { id: 'p_rlhf_suffices_given_asi', type: 'input', layer: 0, probability: p_rlhf_suffices_given_asi, description: "Probability that current RLHF techniques are sufficient for aligning ASI." },
+                { id: 'p_breakthrough_given_rlhf_insufficient', type: 'input', layer: 0, probability: p_breakthrough_given_rlhf_insufficient, description: "Probability of an alignment breakthrough if RLHF is insufficient." },
+                { id: 'p_bad_despite_alignment', type: 'input', layer: 0, probability: p_bad_despite_alignment, description: "Probability of a bad outcome even if alignment methods *seem* successful." },
+                { id: 'p_control_monitor_automated_alignment_works_conditional_no_breakthrough', type: 'input', layer: 0, probability: p_control_monitor_automated_alignment_works_conditional_no_breakthrough, description: "Probability that control/monitoring/automated methods work if there's no breakthrough and RLHF failed." },
+
+                // Derived (Layer 1)
+                { id: 'p_no_pause', type: 'derived', layer: 1, probability: p_no_pause, description: "1 - p_pause = 1 - 0.04 = 0.96" },
+                { id: 'p_survive_pause', type: 'derived', layer: 1, probability: p_survive_pause, description: "p_pause = 0.04 (assuming survival if pause occurs)" },
+
+                // Derived (Layer 2)
+                { id: 'p_asi_no_pause', type: 'derived', layer: 2, probability: p_asi_no_pause, description: "p_no_pause * p_asi_given_no_pause = 0.96 * 0.85 = 0.816" },
+                { id: 'p_no_asi_no_pause', type: 'derived', layer: 2, probability: p_no_asi_no_pause, description: "p_no_pause * (1 - p_asi_given_no_pause) = 0.96 * (1 - 0.85) = 0.144" },
+
+                // Derived (Layer 3)
+                { id: 'p_rlhf_sufficient', type: 'derived', layer: 3, probability: p_rlhf_sufficient, description: "p_asi_no_pause * p_rlhf_suffices_given_asi = 0.816 * 0.25 = 0.204" },
+                { id: 'p_rlhf_insufficient', type: 'derived', layer: 3, probability: p_rlhf_insufficient, description: "p_asi_no_pause * (1 - p_rlhf_suffices_given_asi) = 0.816 * (1 - 0.25) = 0.612" },
+                { id: 'p_survive_no_asi', type: 'derived', layer: 3, probability: p_survive_no_asi, description: "p_no_asi_no_pause = 0.144 (assuming survival if no ASI)" },
+
+                // Derived (Layer 4)
+                { id: 'p_breakthrough', type: 'derived', layer: 4, probability: p_breakthrough, description: "p_rlhf_insufficient * p_breakthrough_given_rlhf_insufficient = 0.612 * 0.1 = 0.0612" },
+                { id: 'p_no_breakthrough', type: 'derived', layer: 4, probability: p_no_breakthrough, description: "p_rlhf_insufficient * (1 - p_breakthrough_given_rlhf_insufficient) = 0.612 * (1 - 0.1) = 0.5508" },
+                { id: 'p_survive_rlhf_good', type: 'derived', layer: 4, probability: p_survive_rlhf_good, description: "p_rlhf_sufficient * (1 - p_bad_despite_alignment) = 0.204 * (1 - 0.3) = 0.1428" },
+                { id: 'p_bad_despite_rlhf', type: 'derived', layer: 4, probability: p_bad_despite_rlhf, description: "p_rlhf_sufficient * p_bad_despite_alignment = 0.204 * 0.3 = 0.0612" },
+
+                // Derived (Layer 5)
+                { id: 'p_control_succeeds_initially', type: 'derived', layer: 5, probability: p_control_succeeds_initially, description: "p_no_breakthrough * p_control_monitor_automated_alignment_works_conditional_no_breakthrough = 0.5508 * 0.15 = 0.08262" },
+                { id: 'p_ai_takeover', type: 'derived', layer: 5, probability: p_ai_takeover, description: "p_no_breakthrough * (1 - p_control_monitor_automated_alignment_works_conditional_no_breakthrough) = 0.5508 * (1 - 0.15) = 0.46818" },
+                { id: 'p_survive_breakthrough_good', type: 'derived', layer: 5, probability: p_survive_breakthrough_good, description: "p_breakthrough * (1 - p_bad_despite_alignment) = 0.0612 * (1 - 0.3) = 0.04284" },
+                { id: 'p_bad_despite_breakthrough', type: 'derived', layer: 5, probability: p_bad_despite_breakthrough, description: "p_breakthrough * p_bad_despite_alignment = 0.0612 * 0.3 = 0.01836" },
+
+                // Derived (Layer 6)
+                { id: 'p_bad_despite_control_abs', type: 'derived', layer: 6, probability: p_bad_despite_control_abs, description: "p_control_succeeds_initially * p_bad_despite_alignment = 0.08262 * 0.3 = 0.024786" },
+                { id: 'p_survival_control_abs', type: 'derived', layer: 6, probability: p_survival_control_abs, description: "p_control_succeeds_initially * (1 - p_bad_despite_alignment) = 0.08262 * (1 - 0.3) = 0.057834" },
+
+                // Outputs (Layer 7)
+                { id: 'p_bad_outcome_total', type: 'output', layer: 7, probability: p_bad_outcome_total, description: "Sum of bad outcomes: p_ai_takeover + p_bad_despite_rlhf + p_bad_despite_breakthrough + p_bad_despite_control_abs = 0.46818 + 0.0612 + 0.01836 + 0.024786 = 0.572526" },
+                { id: 'p_survive_good_total', type: 'output', layer: 7, probability: p_survive_good_total, description: "Sum of good outcomes: p_survive_pause + p_survive_no_asi + p_survive_rlhf_good + p_survive_breakthrough_good + p_survival_control_abs = 0.04 + 0.144 + 0.1428 + 0.04284 + 0.057834 = 0.427474" }
+            ],
+            links: [
+                { source: 'p_pause', target: 'p_no_pause' },
+                { source: 'p_pause', target: 'p_survive_pause' },
+                { source: 'p_no_pause', target: 'p_asi_no_pause' },
+                { source: 'p_asi_given_no_pause', target: 'p_asi_no_pause' },
+                { source: 'p_no_pause', target: 'p_no_asi_no_pause' },
+                { source: 'p_asi_given_no_pause', target: 'p_no_asi_no_pause' }, // Used via (1 - p_asi_given_no_pause)
+                { source: 'p_no_asi_no_pause', target: 'p_survive_no_asi' },
+                { source: 'p_asi_no_pause', target: 'p_rlhf_sufficient' },
+                { source: 'p_rlhf_suffices_given_asi', target: 'p_rlhf_sufficient' },
+                { source: 'p_asi_no_pause', target: 'p_rlhf_insufficient' },
+                { source: 'p_rlhf_suffices_given_asi', target: 'p_rlhf_insufficient' }, // Used via (1 - p_rlhf_suffices_given_asi)
+                { source: 'p_rlhf_insufficient', target: 'p_breakthrough' },
+                { source: 'p_breakthrough_given_rlhf_insufficient', target: 'p_breakthrough' },
+                { source: 'p_rlhf_insufficient', target: 'p_no_breakthrough' },
+                { source: 'p_breakthrough_given_rlhf_insufficient', target: 'p_no_breakthrough' }, // Used via (1 - p_breakthrough...)
+                { source: 'p_no_breakthrough', target: 'p_control_succeeds_initially' },
+                { source: 'p_control_monitor_automated_alignment_works_conditional_no_breakthrough', target: 'p_control_succeeds_initially' },
+                { source: 'p_no_breakthrough', target: 'p_ai_takeover' },
+                { source: 'p_control_monitor_automated_alignment_works_conditional_no_breakthrough', target: 'p_ai_takeover' }, // Used via (1 - p_control...)
+                { source: 'p_control_succeeds_initially', target: 'p_bad_despite_control_abs' },
+                { source: 'p_bad_despite_alignment', target: 'p_bad_despite_control_abs' },
+                { source: 'p_control_succeeds_initially', target: 'p_survival_control_abs' },
+                { source: 'p_bad_despite_alignment', target: 'p_survival_control_abs' }, // Used via (1 - p_bad_despite_alignment)
+                { source: 'p_rlhf_sufficient', target: 'p_survive_rlhf_good' },
+                { source: 'p_bad_despite_alignment', target: 'p_survive_rlhf_good' }, // Used via (1 - p_bad_despite_alignment)
+                { source: 'p_rlhf_sufficient', target: 'p_bad_despite_rlhf' },
+                { source: 'p_bad_despite_alignment', target: 'p_bad_despite_rlhf' },
+                { source: 'p_breakthrough', target: 'p_survive_breakthrough_good' },
+                { source: 'p_bad_despite_alignment', target: 'p_survive_breakthrough_good' }, // Used via (1 - p_bad_despite_alignment)
+                { source: 'p_breakthrough', target: 'p_bad_despite_breakthrough' },
+                { source: 'p_bad_despite_alignment', target: 'p_bad_despite_breakthrough' },
+                { source: 'p_ai_takeover', target: 'p_bad_outcome_total' },
+                { source: 'p_bad_despite_rlhf', target: 'p_bad_outcome_total' },
+                { source: 'p_bad_despite_breakthrough', target: 'p_bad_outcome_total' },
+                { source: 'p_bad_despite_control_abs', target: 'p_bad_outcome_total' },
+                { source: 'p_survive_pause', target: 'p_survive_good_total' },
+                { source: 'p_survive_no_asi', target: 'p_survive_good_total' },
+                { source: 'p_survive_rlhf_good', target: 'p_survive_good_total' },
+                { source: 'p_survive_breakthrough_good', target: 'p_survive_good_total' },
+                { source: 'p_survival_control_abs', target: 'p_survive_good_total' }
+            ]
+        };
+
+        const container = document.getElementById('graph-container');
+        // Make width slightly smaller to give padding effect within the container
+        const width = container.clientWidth * 0.98;
+        const height = container.clientHeight;
+        const numLayers = 8; // 0 to 7
+        const layerWidth = width / numLayers;
+
+        const svg = d3.select("#calculation-graph")
+            .attr("viewBox", [0, 0, container.clientWidth, height]) // Use container width for viewBox
+            .attr("preserveAspectRatio", "xMidYMid meet");
+
+        // Add arrowhead marker definition
+        svg.append('defs').append('marker')
+            .attr('id', 'arrowhead')
+            .attr('viewBox', '-0 -5 10 10')
+            .attr('refX', 15) // How far the arrow is from the node
+            .attr('refY', 0)
+            .attr('orient', 'auto')
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 6)
+            .attr('xoverflow', 'visible')
+            .append('svg:path')
+            .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+            .attr('fill', '#999')
+            .style('stroke','none');
+
+        const simulation = d3.forceSimulation(graphData.nodes)
+            .force("link", d3.forceLink(graphData.links).id(d => d.id).distance(100)) // Maintain link distance
+            .force("charge", d3.forceManyBody().strength(-300)) // Increase repulsion to spread nodes vertically
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            // Force nodes towards their layer's X position (left-to-right)
+            .force("x", d3.forceX(d => {
+                // Position layers from left (layer 0) to right (layer 7)
+                return layerWidth * (d.layer + 0.5); // Center node in its layer band
+            }).strength(1.0)) // Strong horizontal positioning
+            .force("y", d3.forceY(d => {
+                // Add some randomness to Y positioning within each layer to avoid clutter
+                // This will be biased by node ID to keep positions consistent
+                const hash = d.id.split('').reduce((a, b) => {
+                    a = ((a << 5) - a) + b.charCodeAt(0);
+                    return a & a;
+                }, 0);
+                // Use the hash to determine a position within the middle 70% of the height
+                return height * (0.15 + (Math.abs(hash) % 1000) / 1000 * 0.7);
+            }).strength(0.2)); // Gentle vertical positioning
+
+        const link = svg.append("g")
+            .attr("class", "links")
+            .selectAll("line")
+            .data(graphData.links)
+            .join("line")
+            .attr("class", "link")
+            .attr('marker-end','url(#arrowhead)'); // Add arrowhead
+
+        const node = svg.append("g")
+            .attr("class", "nodes")
+            .selectAll("g")
+            .data(graphData.nodes)
+            .join("g")
+            .attr("class", d => `node ${d.type}`)
+            .call(drag(simulation));
+
+        node.append("circle");
+
+        node.append("text")
+            .text(d => d.id);
+
+        // Add custom tooltip div
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "node-tooltip")
+            .style("opacity", 0);
+
+        // Add hover behavior for custom tooltip
+        node.on("mouseover", function(event, d) {
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.95);
+            tooltip.html(`
+                <strong>${d.id}</strong><br/>
+                <span class="tooltip-prob">P = ${d.probability}</span><br/>
+                <span class="tooltip-calc">${d.description}</span>
+            `)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", function() {
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+
+        simulation.on("tick", () => {
+            // Add bounds to prevent nodes escaping container
+            graphData.nodes.forEach(d => {
+                d.x = Math.max(20, Math.min(width - 20, d.x));
+                d.y = Math.max(20, Math.min(height - 20, d.y));
+            });
+
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        // Drag functionality - modified to fix position permanently
+        function drag(simulation) {
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                // No longer reset fx, fy to null - keep them fixed where user placed them
+                // d.fx = null;
+                // d.fy = null;
+            }
+
+            return d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+        }
+
+        // Add button to reset positions if needed
+        d3.select("#graph-container")
+            .append("button")
+            .attr("class", "reset-button")
+            .text("Reset Positions")
+            .on("click", function() {
+                // Reset all fixed positions
+                graphData.nodes.forEach(d => {
+                    d.fx = null;
+                    d.fy = null;
+                });
+                // Restart simulation
+                simulation.alpha(1).restart();
+            });
+    </script>
+</body>
+</html> 

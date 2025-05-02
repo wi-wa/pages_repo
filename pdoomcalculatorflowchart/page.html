@@ -11,6 +11,8 @@
 </head>
 <body>
 
+    <a href="calculation_graph.html" style="position: absolute; top: 20px; right: 20px; font-size: 0.9em; color: #007bff; text-decoration: none;">View Calculation Graph</a>
+
     <h1>P(Doom) in 10 Years</h1>
     <p style="font-size: 0.8em; color: grey; margin-top: -10px; margin-bottom: 20px;">Last updated 2nd May 2025</p>
 
@@ -252,23 +254,25 @@
             return nodeColorMap["default"];
         };
 
-
-        // Draw Links
+        // Draw Links with solid color and hover effect
         svg.append("g")
             .attr("fill", "none")
-            .attr("stroke-opacity", 0.5)
+            .attr("stroke-opacity", 0.7)
           .selectAll("g")
           .data(links)
           .join("g")
             .style("mix-blend-mode", "multiply")
           .append("path")
+            .attr("class", "sankey-link")
             .attr("d", d3.sankeyLinkHorizontal())
-            .attr("stroke", d => outcomeColor(d.target.name))
+            .attr("stroke", d => outcomeColor(d.target.name)) // Use solid color
             .attr("stroke-width", d => Math.max(1, d.width))
+            .on("mouseover", function() { d3.select(this).attr("stroke-opacity", 1); })
+            .on("mouseout", function() { d3.select(this).attr("stroke-opacity", 0.7); })
           .append("title")
             .text(d => `${d.source.name} → ${d.target.name}\n${(d.value * 100).toFixed(1)}%`);
 
-        // Draw Nodes
+        // Draw Nodes (add cursor pointer for interactivity)
         svg.append("g")
             .attr("stroke", "#000")
             .attr("stroke-width", 0.5)
@@ -280,23 +284,27 @@
             .attr("height", d => Math.max(0.5, d.y1 - d.y0))
             .attr("width", d => d.x1 - d.x0)
             .attr("fill", d => outcomeColor(d.name))
+            .style("cursor", "pointer")
+            .on("mouseover", function() { d3.select(this).attr("stroke-width", 2).attr("stroke", "#007bff"); })
+            .on("mouseout", function() { d3.select(this).attr("stroke-width", 0.5).attr("stroke", "#000"); })
           .append("title")
             .text(d => `${d.name}\n${(d.value * 100).toFixed(1)}%`);
 
-        // Add Node Labels
+        // Add Node Labels (improved style)
         svg.append("g")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", 11)
+            .attr("font-family", "Segoe UI, Tahoma, Geneva, Verdana, sans-serif")
+            .attr("font-size", 13)
             .attr("font-weight", "bold")
           .selectAll("text")
           .data(nodes)
           .join("text")
-            .attr("x", d => d.x1 + 5)
+            .attr("x", d => d.x1 + 8)
             .attr("y", d => (d.y1 + d.y0) / 2)
             .attr("dy", "0.35em")
             .attr("text-anchor", "start")
             .text(d => `${d.name} (${(d.value * 100).toFixed(1)}%)`)
-            .attr("fill", d => d.value < 0.005 ? "#aaa" : "#000");
+            .attr("fill", d => d.value < 0.005 ? "#aaa" : "#222")
+            .style("pointer-events", "none");
 
         // Add Probability Info Box in bottom right corner
         const infoBoxX = width + margin.right - 310;

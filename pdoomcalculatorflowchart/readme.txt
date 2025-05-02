@@ -1,81 +1,67 @@
 ========================================================================
-P(Doom) Sankey Diagram Visualization Script
+P(Doom) Sankey Diagram Visualization
 ========================================================================
 
-Purpose:
+Overview
 --------
-This script calculates the probability of various future scenarios
-related to Artificial General Intelligence (AGI) development over the
-next 10 years, focusing on the potential for existential risk ("doom").
-It takes several key probability estimates as inputs and uses them to
-compute the flow of possibilities through different stages. The results
-are then visualized as an interactive Sankey diagram using the D3.js
-library and the d3-sankey plugin.
+This project visualizes the probability flow of existential risk ("doom") from advanced AI over the next 10 years, using a Sankey diagram. The model is based on a series of conditional probabilities representing key events and alignment challenges in AI development.
 
-Dependencies:
+The visualization is interactive and built with D3.js and d3-sankey, and is fully client-side (HTML+JS+CSS).
+
+Key Features
+------------
+- **Sankey Diagram**: Clearly shows how probability mass flows from initial uncertainty through various AI development and alignment scenarios to final outcomes (survival or doom).
+- **Customizable Probabilities**: All key probabilities are defined at the top of the script for easy adjustment and scenario analysis.
+- **Responsive Design**: The diagram and page layout adapt to different screen sizes.
+- **Clear Outcome Display**: The final calculated probability of doom is prominently displayed, with contextual color and emoji.
+
+How the Model Works
+-------------------
+The model is a sequence of conditional events, each with a user-defined probability:
+
+1. **Pause**: Probability that a significant pause in AI development prevents ASI (Artificial Superintelligence) in the next 10 years.
+2. **ASI Development**: If no pause, probability that ASI is developed within 10 years.
+3. **RLHF Sufficiency**: If ASI is developed, probability that RLHF (Reinforcement Learning from Human Feedback) or similar methods are sufficient to align ASI.
+4. **Alignment Breakthrough**: If RLHF is insufficient, probability of a major breakthrough in alignment research.
+5. **Control/Monitoring**: If no breakthrough, probability that control/monitoring/automated alignment methods work well enough to prevent doom.
+6. **Bad Outcomes Despite Alignment**: For each alignment path, probability that things go badly even if alignment appears to succeed.
+
+Each branch in the Sankey diagram represents one of these events, and the width of each flow is proportional to the probability of that path.
+
+How to Use
+----------
+1. **Open `page.html` in your browser.**
+2. **Adjust probabilities** at the top of the `<script>` section in `page.html` to explore different scenarios.
+3. **View the Sankey diagram** and the final calculated P(Doom) on the page.
+
+File Structure
+--------------
+- `page.html`   : Main HTML file, includes all logic and visualization.
+- `page.css`    : Styles for the page and diagram.
+- `readme.txt`  : This documentation.
+
+Customization
 -------------
-- D3.js (v7): Core data visualization library.
-- d3-sankey (v0.12.3): D3 plugin for creating Sankey diagrams.
-  (Included via CDN in the <head> section of the HTML)
+- To change the probabilities, edit the constants at the top of the `<script>` in `page.html`.
+- To change colors or layout, edit `page.css` and the color map in the JS.
 
-Probability Model Stages:
--------------------------
-The calculation follows a branching path based on conditional probabilities:
-1. Initial State: Represents the total probability space (100%).
-2. Pause/Slowdown: Splits based on the chance of a significant pause
-   in AI development.
-3. AGI Development (Given No Pause): If there's no pause, what's the
-   chance AGI is developed within 10 years?
-4. RLHF Sufficiency (Given AGI): If AGI is developed, is Reinforcement
-   Learning from Human Feedback (RLHF) sufficient for alignment?
-5. Alignment Breakthrough (Given RLHF Insufficient): If RLHF isn't
-   enough, is there a breakthrough in alignment techniques?
-6. Final Outcome (Given Alignment Method): Based on whether alignment
-   was achieved via RLHF or a breakthrough (or not at all), what is
-   the final outcome (Survival vs. Bad Outcome - Doom/Dystopia)?
-   -> NEW: If no breakthrough, considers if control methods suffice.
-   -> NEWER: If control initially suffices, considers if it holds.
+Dependencies
+------------
+- [D3.js v7](https://d3js.org/)
+- [d3-sankey v0.12.3](https://github.com/d3/d3-sankey)
 
-Code Structure:
----------------
-1. INPUT VARIABLES: Defines the core probabilities used in the model.
-   -> Modify these constants to explore different scenarios:
-      - p_pause
-      - p_agi_given_no_pause
-      - p_rlhf_suffices_given_agi
-      - p_breakthrough_given_rlhf_insufficient
-      - p_dystopia_given_alignment (also used for P(Bad | Control OK))
-      - p_control_monitor_automated_alignment_works_conditional_no_breakthrough
-2. CALCULATIONS: Computes the probabilities for each node and link
-   in the Sankey diagram based on the input variables.
-3. D3 SANKEY SETUP: Configures and renders the Sankey diagram.
-   - Define Data Structure: Creates the `nodes` and `links` arrays
-     required by d3-sankey, mapping calculated probabilities to link values.
-   - Setup SVG Dimensions: Configures the size and margins for the SVG
-     container (`#sankey-chart`).
-   - Create SVG Element: Appends the main SVG and group elements to the DOM.
-   - Setup Sankey Layout Generator: Initializes `d3.sankey()` with
-     specific configurations (node width, padding, alignment, sorting).
-     Includes custom sorting logic to attempt a more intuitive layout.
-   - Compute Layout: Calculates the positions (x, y coordinates) and
-     sizes for nodes and links. Includes manual adjustments for specific
-     node/link positions for better visual clarity.
-   - Define Color Scale: Sets up a function to color nodes based on their name/type.
-   - Draw Links: Renders the paths representing the probability flows.
-   - Draw Nodes: Renders the rectangles representing the stages/outcomes.
-   - Add Node Labels: Adds text labels next to the nodes, showing names
-     and calculated percentages.
-4. Update Final Result Display: Populates the `<h2>` tag within the
-   `#result` div with the final calculated P(Bad Outcome).
-5. Verification (Console Logs): Outputs key calculated probabilities
-   to the browser's developer console for debugging and verification.
+Both are included via CDN in the HTML.
 
-HTML Interaction:
------------------
-- Reads input variables defined directly in the script.
-- Renders the Sankey diagram into the `<svg id="sankey-chart">` element.
-- Displays the final calculated P(Bad Outcome) in the
-  `<span id="final-p-doom">` element within the `<div id="result">`.
+Limitations & Notes
+-------------------
+- The model assumes binary outcomes at each stage, which is a simplification.
+- The probabilities are illustrative and should be set according to your own beliefs or scenario analysis.
+- The diagram is not intended as a precise forecast, but as a tool for visualizing and reasoning about risk flows.
+
+Credits
+-------
+- Diagram and model by [Your Name or Handle]
+- Built with D3.js and d3-sankey
 
 ========================================================================
 STRUCTURE OF SNAKEY DIAGRAM (IN THE ORDER THEY HAVE TOP TO BOTTOM IN DIAGRAM)
