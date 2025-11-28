@@ -10,6 +10,20 @@
 <body>
     <a href="../index.html" class="back-link">← back</a>
     
+    <div class="music-widget" id="musicWidget">
+        <div class="music-controls">
+            <button class="music-btn" id="playPauseBtn">▶</button>
+            <button class="music-btn" id="skipBtn">⏭</button>
+            <button class="music-btn" id="muteBtn">🔊</button>
+        </div>
+        <div class="music-progress">
+            <div class="music-progress-fill" id="progressFill"></div>
+        </div>
+        <div class="music-title" id="musicTitle">Loading...</div>
+    </div>
+    
+    <div id="ytPlayer" style="display:none;"></div>
+    
     <div class="game-box">
         <div class="level-bar" id="levelTower"></div>
         
@@ -397,6 +411,98 @@
         }
         
         updateMenuScores();
+        
+        let ytPlayer = null;
+        let isMuted = false;
+        let isPlaying = false;
+        let progressInterval = null;
+        
+        const playlistId = 'PLgoWWRwmkHt3kCuafDGlhQLdAAh-mApvy';
+        const playlistLength = 50;
+        
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('ytPlayer', {
+                height: '0',
+                width: '0',
+                playerVars: {
+                    listType: 'playlist',
+                    list: playlistId,
+                    autoplay: 1,
+                    loop: 1
+                },
+                events: {
+                    onReady: onPlayerReady,
+                    onStateChange: onPlayerStateChange
+                }
+            });
+        }
+        
+        function onPlayerReady(event) {
+            event.target.setVolume(30);
+            event.target.playVideo();
+            startProgressUpdate();
+        }
+        
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                isPlaying = true;
+                document.getElementById('playPauseBtn').textContent = '⏸';
+            } else if (event.data === YT.PlayerState.PAUSED) {
+                isPlaying = false;
+                document.getElementById('playPauseBtn').textContent = '▶';
+            }
+        }
+        
+        function updateSongTitle() {
+            if (ytPlayer && ytPlayer.getVideoData) {
+                const data = ytPlayer.getVideoData();
+                if (data && data.title) {
+                    document.getElementById('musicTitle').textContent = data.title;
+                }
+            }
+        }
+        
+        function startProgressUpdate() {
+            progressInterval = setInterval(() => {
+                if (ytPlayer && ytPlayer.getCurrentTime && ytPlayer.getDuration) {
+                    const current = ytPlayer.getCurrentTime();
+                    const duration = ytPlayer.getDuration();
+                    if (duration > 0) {
+                        const percent = (current / duration) * 100;
+                        document.getElementById('progressFill').style.width = percent + '%';
+                    }
+                    updateSongTitle();
+                }
+            }, 500);
+        }
+        
+        document.getElementById('playPauseBtn').addEventListener('click', () => {
+            if (!ytPlayer) return;
+            if (isPlaying) {
+                ytPlayer.pauseVideo();
+            } else {
+                ytPlayer.playVideo();
+            }
+        });
+        
+        document.getElementById('skipBtn').addEventListener('click', () => {
+            if (!ytPlayer) return;
+            const randomIndex = Math.floor(Math.random() * playlistLength);
+            ytPlayer.playVideoAt(randomIndex);
+        });
+        
+        document.getElementById('muteBtn').addEventListener('click', () => {
+            if (!ytPlayer) return;
+            if (isMuted) {
+                ytPlayer.unMute();
+                document.getElementById('muteBtn').textContent = '🔊';
+            } else {
+                ytPlayer.mute();
+                document.getElementById('muteBtn').textContent = '🔇';
+            }
+            isMuted = !isMuted;
+        });
     </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
