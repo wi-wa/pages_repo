@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Trainer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.cdnfonts.com/css/fixedsys-excelsior-301" rel="stylesheet">
+</head>
+<body>
+    <a href="../index.html" class="back-link">← back</a>
+    
+    <div class="game-box">
+        <div class="level-bar" id="levelTower"></div>
+        
+        <div class="game-main">
+            <div class="mode-select" id="modeSelect">
+                <button class="mode-btn" data-mode="1x1">
+                    <div class="mode-info">
+                        <span class="mode-name">1 × 1</span>
+                        <span class="mode-desc">Single digits. Quick mental math warmup.</span>
+                    </div>
+                    <div class="mode-score-wrap">
+                        <span class="mode-score-label">personal best</span>
+                        <span class="mode-score" id="score-1x1">0</span>
+                    </div>
+                </button>
+                <button class="mode-btn" data-mode="2x1">
+                    <div class="mode-info">
+                        <span class="mode-name">2 × 1</span>
+                        <span class="mode-desc">Two digits times one. Building speed.</span>
+                    </div>
+                    <div class="mode-score-wrap">
+                        <span class="mode-score-label">personal best</span>
+                        <span class="mode-score" id="score-2x1">0</span>
+                    </div>
+                </button>
+                <button class="mode-btn" data-mode="2x2">
+                    <div class="mode-info">
+                        <span class="mode-name">2 × 2</span>
+                        <span class="mode-desc">Full two-digit multiplication. The real challenge.</span>
+                    </div>
+                    <div class="mode-score-wrap">
+                        <span class="mode-score-label">personal best</span>
+                        <span class="mode-score" id="score-2x2">0</span>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="stats-row hidden" id="statsRow">
+                <div class="stat">
+                    <span class="stat-label">solved</span>
+                    <span class="stat-value" id="score">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">best</span>
+                    <span class="stat-value best" id="highScore">0</span>
+                </div>
+            </div>
+            
+            <div class="game-area hidden" id="gameArea">
+                <div class="problem-stack">
+                    <div class="input-row">
+                        <span class="problem-text" id="problemText">12 × 8 =</span>
+                        <input type="text" class="answer-input" id="answerInput" autocomplete="off" inputmode="numeric">
+                    </div>
+                    <div class="queue-list" id="queueList"></div>
+                </div>
+            </div>
+            
+            <div class="game-over hidden" id="gameOver">
+                <div class="game-over-title" id="gameOverTitle">game over</div>
+                <div class="final-score">solved <span id="finalScore">0</span> problems</div>
+                <button class="restart-btn" id="restartBtn">try again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modeSelect = document.getElementById('modeSelect');
+        const gameArea = document.getElementById('gameArea');
+        const gameOver = document.getElementById('gameOver');
+        const gameOverTitle = document.getElementById('gameOverTitle');
+        const problemText = document.getElementById('problemText');
+        const answerInput = document.getElementById('answerInput');
+        const scoreEl = document.getElementById('score');
+        const highScoreEl = document.getElementById('highScore');
+        const finalScoreEl = document.getElementById('finalScore');
+        const queueList = document.getElementById('queueList');
+        const restartBtn = document.getElementById('restartBtn');
+        const answerInputEl = document.getElementById('answerInput');
+        const modeBtns = document.querySelectorAll('.mode-btn');
+        const levelTower = document.getElementById('levelTower');
+        const gameBox = document.querySelector('.game-box');
+        
+        let queue = [];
+        let currentProblem = null;
+        let score = 0;
+        let level = 0;
+        let gameActive = false;
+        let spawnInterval = null;
+        let speedInterval = null;
+        let currentMode = '2x2';
+        let baseDelay = 1500;
+        let currentDelay = 1500;
+        let lastSpawnTime = 0;
+        let dangerAnimationFrame = null;
+        
+        const MAX_QUEUE = 6;
+        const MAX_LEVEL = 30;
+        
+        function initLevelTower() {
+            levelTower.innerHTML = '';
+            for (let i = MAX_LEVEL - 1; i >= 0; i--) {
+                const square = document.createElement('div');
+                square.className = 'level-square';
+                square.dataset.level = i;
+                levelTower.appendChild(square);
+            }
+        }
+        
+        function updateLevelDisplay(animate) {
+            const squares = levelTower.querySelectorAll('.level-square');
+            squares.forEach(sq => {
+                const sqLevel = parseInt(sq.dataset.level, 10);
+                if (sqLevel < level) {
+                    if (animate && sqLevel === level - 1) {
+                        sq.classList.add('just-activated');
+                        setTimeout(() => sq.classList.remove('just-activated'), 400);
+                    }
+                    sq.classList.add('active');
+                } else {
+                    sq.classList.remove('active');
+                }
+            });
+        }
+        
+        function loadHighScore() {
+            const stored = localStorage.getItem('mathtrainer_highscore_' + currentMode);
+            return stored ? parseInt(stored, 10) : 0;
+        }
+        
+        function saveHighScore(score) {
+            const current = loadHighScore();
+            if (score > current) {
+                localStorage.setItem('mathtrainer_highscore_' + currentMode, score);
+                return true;
+            }
+            return false;
+        }
+        
+        function randRange(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        function generateProblem() {
+            let a, b;
+            if (currentMode === '1x1') {
+                a = randRange(2, 9);
+                b = randRange(2, 9);
+            } else if (currentMode === '2x1') {
+                if (Math.random() < 0.5) {
+                    a = randRange(10, 99);
+                    b = randRange(2, 9);
+                } else {
+                    a = randRange(2, 9);
+                    b = randRange(10, 99);
+                }
+            } else {
+                a = randRange(10, 99);
+                b = randRange(10, 99);
+            }
+            return { a, b, answer: a * b, text: `${a} × ${b} =` };
+        }
+        
+        function updateQueueDisplay() {
+            queueList.innerHTML = '';
+            queue.forEach((p, i) => {
+                const div = document.createElement('div');
+                div.className = 'queue-item';
+                div.textContent = p.text;
+                div.style.opacity = 1 - (i * 0.15);
+                queueList.appendChild(div);
+            });
+        }
+        
+        function updateDangerColor() {
+            if (!gameActive) {
+                answerInputEl.style.borderColor = '';
+                answerInputEl.style.boxShadow = '';
+                return;
+            }
+            
+            const timeSinceSpawn = Date.now() - lastSpawnTime;
+            const timeProgress = Math.min(timeSinceSpawn / currentDelay, 1);
+            const slotsUsed = queue.length + timeProgress;
+            const rawDanger = slotsUsed / MAX_QUEUE;
+            
+            let adjustedDanger;
+            if (rawDanger < 0.33) {
+                adjustedDanger = rawDanger * 0.3;
+            } else {
+                adjustedDanger = 0.1 + ((rawDanger - 0.33) / 0.67) * 0.9;
+            }
+            
+            let r, g, b;
+            if (adjustedDanger < 0.5) {
+                const t = adjustedDanger * 2;
+                r = Math.round(80 + t * 120);
+                g = Math.round(80 + t * 60);
+                b = Math.round(90 - t * 40);
+            } else {
+                const t = (adjustedDanger - 0.5) * 2;
+                r = Math.round(200 + t * 55);
+                g = Math.round(140 - t * 110);
+                b = Math.round(50 - t * 40);
+            }
+            
+            const color = `rgb(${r}, ${g}, ${b})`;
+            answerInputEl.style.borderColor = color;
+            answerInputEl.style.boxShadow = `0 0 ${Math.round(adjustedDanger * 20)}px rgba(${r}, ${g}, ${b}, ${0.3 + adjustedDanger * 0.5})`;
+            
+            dangerAnimationFrame = requestAnimationFrame(updateDangerColor);
+        }
+        
+        function startDangerAnimation() {
+            if (dangerAnimationFrame) cancelAnimationFrame(dangerAnimationFrame);
+            updateDangerColor();
+        }
+        
+        function stopDangerAnimation() {
+            if (dangerAnimationFrame) {
+                cancelAnimationFrame(dangerAnimationFrame);
+                dangerAnimationFrame = null;
+            }
+            answerInputEl.style.borderColor = '';
+            answerInputEl.style.boxShadow = '';
+        }
+        
+        function showCurrentProblem() {
+            if (currentProblem) {
+                problemText.textContent = currentProblem.text;
+            }
+        }
+        
+        function nextProblem() {
+            if (queue.length > 0) {
+                currentProblem = queue.shift();
+                showCurrentProblem();
+                updateQueueDisplay();
+            }
+        }
+        
+        function spawnProblem() {
+            if (!gameActive) return;
+            
+            lastSpawnTime = Date.now();
+            const problem = generateProblem();
+            
+            if (!currentProblem) {
+                currentProblem = problem;
+                showCurrentProblem();
+            } else {
+                queue.push(problem);
+                updateQueueDisplay();
+                
+                if (queue.length >= MAX_QUEUE) {
+                    endGame(false);
+                }
+            }
+        }
+        
+        function startSpawning() {
+            spawnInterval = setInterval(spawnProblem, currentDelay);
+        }
+        
+        function flashBox() {
+            gameBox.classList.add('level-flash');
+            setTimeout(() => gameBox.classList.remove('level-flash'), 200);
+        }
+        
+        function increaseSpeed() {
+            if (!gameActive) return;
+            level++;
+            updateLevelDisplay(true);
+            flashBox();
+            
+            if (level >= MAX_LEVEL) {
+                endGame(true);
+                return;
+            }
+            
+            currentDelay = currentDelay * 0.95;
+            clearInterval(spawnInterval);
+            startSpawning();
+        }
+        
+        function startGame(mode) {
+            currentMode = mode;
+            score = 0;
+            level = 0;
+            queue = [];
+            currentProblem = null;
+            baseDelay = 1500;
+            currentDelay = 1500;
+            gameActive = true;
+            
+            scoreEl.textContent = '0';
+            highScoreEl.textContent = loadHighScore();
+            
+            initLevelTower();
+            updateLevelDisplay(false);
+            
+            modeSelect.classList.add('hidden');
+            gameOver.classList.add('hidden');
+            gameArea.classList.remove('hidden');
+            document.getElementById('statsRow').classList.remove('hidden');
+            
+            updateQueueDisplay();
+            lastSpawnTime = Date.now();
+            spawnProblem();
+            startSpawning();
+            startDangerAnimation();
+            
+            speedInterval = setInterval(increaseSpeed, 30000);
+            
+            answerInput.value = '';
+            answerInput.focus();
+        }
+        
+        function endGame(won) {
+            gameActive = false;
+            clearInterval(spawnInterval);
+            clearInterval(speedInterval);
+            stopDangerAnimation();
+            
+            saveHighScore(score);
+            highScoreEl.textContent = loadHighScore();
+            finalScoreEl.textContent = score;
+            
+            if (won) {
+                gameOverTitle.textContent = 'mode complete!';
+                gameOverTitle.classList.add('won');
+            } else {
+                gameOverTitle.textContent = 'game over';
+                gameOverTitle.classList.remove('won');
+            }
+            
+            gameArea.classList.add('hidden');
+            gameOver.classList.remove('hidden');
+        }
+        
+        function showModeSelect() {
+            gameOver.classList.add('hidden');
+            gameArea.classList.add('hidden');
+            document.getElementById('statsRow').classList.add('hidden');
+            modeSelect.classList.remove('hidden');
+            updateMenuScores();
+        }
+        
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                startGame(btn.dataset.mode);
+            });
+        });
+        
+        restartBtn.addEventListener('click', showModeSelect);
+        
+        answerInput.addEventListener('input', () => {
+            if (!gameActive || !currentProblem) return;
+            
+            const userAnswer = parseInt(answerInput.value, 10);
+            if (userAnswer === currentProblem.answer) {
+                score++;
+                scoreEl.textContent = score;
+                answerInput.value = '';
+                
+                if (queue.length > 0) {
+                    nextProblem();
+                } else {
+                    currentProblem = null;
+                    problemText.textContent = '...';
+                }
+            }
+        });
+        
+        answerInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                endGame(false);
+            }
+        });
+        
+        function updateMenuScores() {
+            document.getElementById('score-1x1').textContent = localStorage.getItem('mathtrainer_highscore_1x1') || '0';
+            document.getElementById('score-2x1').textContent = localStorage.getItem('mathtrainer_highscore_2x1') || '0';
+            document.getElementById('score-2x2').textContent = localStorage.getItem('mathtrainer_highscore_2x2') || '0';
+        }
+        
+        updateMenuScores();
+    </script>
+</body>
+</html>
