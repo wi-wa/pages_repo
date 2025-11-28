@@ -1,0 +1,181 @@
+{
+  "queue": {
+    "maxSize": 3
+  },
+  
+  "stageUnlock": {
+    "baseProblems": 100,
+    "growthRate": 1.05
+  },
+  
+  "categories": [
+    { "id": "add1d", "name": "1+1 Add" },
+    { "id": "sub1d", "name": "1-1 Sub" },
+    { "id": "mul1d", "name": "1×1 Mul" },
+    { "id": "add2d", "name": "2+2 Add" },
+    { "id": "mix1d3t_as", "name": "1d±1d±1d" },
+    { "id": "mul1d2d", "name": "1×2 Mul" },
+    { "id": "div2d1d", "name": "2÷1 Div" },
+    { "id": "mix1d3t_mas", "name": "1d op 1d" },
+    { "id": "add3d", "name": "3+3 Add" },
+    { "id": "mul1d3d", "name": "1×3 Mul" },
+    { "id": "sub3d", "name": "3-3 Sub" },
+    { "id": "div3d1d", "name": "3÷1 Div" },
+    { "id": "mix_complex", "name": "Complex" },
+    { "id": "mul2d", "name": "2×2 Mul" },
+    { "id": "mix2d3t", "name": "Adv. Mix" },
+    { "id": "add4d", "name": "4+4 Add" }
+  ],
+  
+  "facilities": {
+    "tallySticks": {
+      "name": "Tally Sticks",
+      "desc": "Primitive counting",
+      "basePrice": 15,
+      "baseRate": 0.05,
+      "priceMultiplier": 1.12,
+      "unlockStage": 1
+    },
+    "pencilPaper": {
+      "name": "Pencil & Paper",
+      "desc": "Basic notation",
+      "basePrice": 80,
+      "baseRate": 0.3,
+      "priceMultiplier": 1.11,
+      "unlockStage": 1
+    },
+    "abacus": {
+      "name": "Abacus",
+      "desc": "Ancient calculator",
+      "basePrice": 500,
+      "baseRate": 1.5,
+      "priceMultiplier": 1.10,
+      "unlockStage": 2
+    },
+    "slideRule": {
+      "name": "Slide Rule",
+      "desc": "Analog precision",
+      "basePrice": 3000,
+      "baseRate": 6,
+      "priceMultiplier": 1.10,
+      "unlockStage": 3
+    },
+    "monkeyTypist": {
+      "name": "Monkey Typist",
+      "desc": "Infinite patience",
+      "basePrice": 15000,
+      "baseRate": 25,
+      "priceMultiplier": 1.09,
+      "unlockStage": 4
+    },
+    "spreadsheet": {
+      "name": "Spreadsheet",
+      "desc": "Cells of power",
+      "basePrice": 80000,
+      "baseRate": 100,
+      "priceMultiplier": 1.09,
+      "unlockStage": 5
+    }
+  },
+  
+  "upgrades": {
+    "eraser": {
+      "name": "Eraser",
+      "desc": "Undo mistakes",
+      "basePrice": 50,
+      "priceMultiplier": 2.2,
+      "effect": 0.1,
+      "maxLevel": 10,
+      "unlockStage": 1
+    },
+    "pen": {
+      "name": "Ballpoint Pen",
+      "desc": "Smoother writing",
+      "basePrice": 150,
+      "priceMultiplier": 2.5,
+      "effect": 0.15,
+      "maxLevel": 8,
+      "unlockStage": 1
+    },
+    "mentalTraining": {
+      "name": "Mental Training",
+      "desc": "Brain exercise",
+      "basePrice": 500,
+      "priceMultiplier": 3.0,
+      "effect": 0.25,
+      "maxLevel": 12,
+      "unlockStage": 2
+    },
+    "flashcards": {
+      "name": "Flashcards",
+      "desc": "Memorization aid",
+      "basePrice": 2000,
+      "priceMultiplier": 2.8,
+      "effect": 0.2,
+      "maxLevel": 10,
+      "unlockStage": 3
+    },
+    "caffeine": {
+      "name": "Caffeine",
+      "desc": "Stay alert",
+      "basePrice": 8000,
+      "priceMultiplier": 3.2,
+      "effect": 0.3,
+      "maxLevel": 8,
+      "unlockStage": 4
+    },
+    "focusMusic": {
+      "name": "Focus Music",
+      "desc": "Lo-fi beats",
+      "basePrice": 30000,
+      "priceMultiplier": 3.5,
+      "effect": 0.35,
+      "maxLevel": 6,
+      "unlockStage": 5
+    },
+    "ergonomics": {
+      "name": "Ergonomics",
+      "desc": "Optimal setup",
+      "basePrice": 100000,
+      "priceMultiplier": 4.0,
+      "effect": 0.4,
+      "maxLevel": 5,
+      "unlockStage": 6
+    }
+  },
+  
+  "bonusProblem": {
+    "averageIntervalMs": 300000,
+    "minIntervalMs": 120000,
+    "durationMs": 20000,
+    "effects": {
+      "doubleComps": { "weight": 1 },
+      "facilityBoost": { "multiplier": 5, "durationMs": 120000, "weight": 1 },
+      "solveBoost": { "multiplier": 10, "durationMs": 60000, "weight": 1 }
+    }
+  },
+  
+  "offline": {
+    "maxOfflineMinutes": 480,
+    "offlineEfficiency": 0.5
+  },
+  
+  "problemRanges": {
+    "1d": { "min": 1, "max": 9 },
+    "2d": { "min": 10, "max": 99 },
+    "3d": { "min": 100, "max": 999 },
+    "4d": { "min": 1000, "max": 9999 }
+  },
+  
+  "audio": {
+    "beepFrequency": 520,
+    "beepDuration": 0.06,
+    "bonusBeepFrequency": 700,
+    "bonusBeepDuration": 0.12,
+    "stageUpFrequency": 440,
+    "stageUpDuration": 0.2
+  },
+  
+  "saveIntervalMs": 5000,
+  "tickIntervalMs": 100
+}

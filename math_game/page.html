@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computation Factory</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.cdnfonts.com/css/fixedsys-excelsior-301" rel="stylesheet">
+</head>
+<body>
+    <a href="../index.html" class="back-link">← back</a>
+    
+    <div class="stage-flash hidden" id="stageFlash"></div>
+    
+    <div class="bonus-problem-popup hidden" id="bonusProblem">
+        <div class="bonus-header">⚡ BONUS ⚡</div>
+        <div class="bonus-timer" id="bonusTimer">20s</div>
+        <div class="bonus-reward" id="bonusReward">???</div>
+        <div class="bonus-input-row">
+            <span class="bonus-text" id="bonusProblemText">99 × 99 =</span>
+            <input type="text" class="bonus-input" id="bonusInput" autocomplete="off" inputmode="numeric">
+        </div>
+    </div>
+    
+    <div class="active-effects" id="activeEffects"></div>
+    
+    <div class="game-container">
+        <div class="left-panel">
+            <div class="stage-display">
+                <div class="stage-label">MENTAL STAGE</div>
+                <div class="stage-number" id="stageNumber">1</div>
+                <div class="stage-progress">
+                    <div class="stage-fill" id="stageFill"></div>
+                </div>
+                <div class="stage-next" id="stageNext">next: 100</div>
+            </div>
+            
+            <div class="stats-section">
+                <div class="stat-row">
+                    <span class="stat-name">solved</span>
+                    <span class="stat-val" id="totalSolved">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">opm</span>
+                    <span class="stat-val" id="opmDisplay">0.0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">bonus</span>
+                    <span class="stat-val" id="bonusSolved">0</span>
+                </div>
+            </div>
+            
+            <div class="complexity-section">
+                <div class="symbol-flicker" id="symbolFlicker">01</div>
+                <div class="bit-display" id="bitDisplay">1-bit</div>
+            </div>
+            
+            <div class="next-bonus">
+                <span class="bonus-label">bonus in</span>
+                <span class="bonus-countdown" id="bonusCountdown">~5:00</span>
+            </div>
+        </div>
+        
+        <div class="game-box" id="gameBox">
+            <div class="computations-display">
+                <span class="comp-value" id="computations">0</span>
+                <span class="comp-label">computations</span>
+                <span class="comp-rate" id="compRate">+0.0/sec</span>
+            </div>
+            
+            <div class="problem-area">
+                <div class="problem-stack">
+                    <div class="input-row">
+                        <span class="problem-text" id="problemText">1 + 1 =</span>
+                        <input type="text" class="answer-input" id="answerInput" autocomplete="off" inputmode="numeric">
+                    </div>
+                    <div class="queue-list" id="queueList"></div>
+                </div>
+            </div>
+            
+            <div class="streak-bar">
+                <div class="streak-fill" id="streakFill"></div>
+            </div>
+        </div>
+        
+        <div class="shop-box">
+            <div class="shop-tabs">
+                <button class="tab-btn active" data-tab="facilities">Facilities</button>
+                <button class="tab-btn" data-tab="upgrades">Upgrades</button>
+            </div>
+            
+            <div class="tab-content" id="facilitiesTab"></div>
+            <div class="tab-content hidden" id="upgradesTab"></div>
+        </div>
+    </div>
+
+    <script>
+        let CONFIG = {};
+        
+        async function loadConfig() {
+            const response = await fetch('config.json');
+            CONFIG = await response.json();
+            initGame();
+        }
+        
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playBeep(freq, dur) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = freq;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+            osc.start();
+            osc.stop(audioCtx.currentTime + dur);
+        }
+        
+        function playCorrect() { playBeep(CONFIG.audio.beepFrequency, CONFIG.audio.beepDuration); }
+        function playBonus() { 
+            playBeep(CONFIG.audio.bonusBeepFrequency, CONFIG.audio.bonusBeepDuration);
+            setTimeout(() => playBeep(CONFIG.audio.bonusBeepFrequency * 1.5, CONFIG.audio.bonusBeepDuration), 100);
+        }
+        function playStageUp() {
+            playBeep(CONFIG.audio.stageUpFrequency, CONFIG.audio.stageUpDuration);
+            setTimeout(() => playBeep(CONFIG.audio.stageUpFrequency * 1.25, CONFIG.audio.stageUpDuration), 150);
+            setTimeout(() => playBeep(CONFIG.audio.stageUpFrequency * 1.5, CONFIG.audio.stageUpDuration * 1.5), 300);
+        }
+        
+        let queue = [], currentProblem = null;
+        let computations = 0, totalSolved = 0, bonusSolved = 0;
+        let currentStage = 1, unlockedCategories = 1;
+        let lastSaveTime = Date.now();
+        let facilities = {}, upgrades = {};
+        
+        let facilityBoostActive = false, facilityBoostEnd = 0;
+        let solveBoostActive = false, solveBoostEnd = 0;
+        let nextBonusTime = 0, bonusProblemData = null, bonusEndTime = 0;
+        
+        let solveTimestamps = [];
+        
+        const categoryNames = [
+            '1+1 add', '1-1 sub', '1×1 mul', '2+2 add', '1d mix', '1×2 mul', '2÷1 div', 'mix ops',
+            '3+3 add', '1×3 mul', '3-3 sub', '3÷1 div', 'cplx mix', '2×2 mul', 'adv mix', '4+4 add'
+        ];
+        const symbols = '01∑∏∫√πΔ∂λ∞≈≠±×÷αβγθΩ∇';
+        
+        function getStageThreshold(stage) {
+            if (stage <= 1) return 0;
+            let total = 0;
+            let increment = CONFIG.stageUnlock.baseProblems;
+            for (let i = 2; i <= stage; i++) {
+                total += Math.floor(increment);
+                increment *= CONFIG.stageUnlock.growthRate;
+            }
+            return total;
+        }
+        
+        function initGame() {
+            Object.keys(CONFIG.facilities).forEach(k => { facilities[k] = { owned: 0 }; });
+            Object.keys(CONFIG.upgrades).forEach(k => { upgrades[k] = { level: 0 }; });
+            
+            buildShopUI();
+            loadGame();
+            scheduleNextBonus();
+            fillQueue();
+            updateDisplay();
+            document.getElementById('answerInput').focus();
+            
+            setInterval(gameTick, CONFIG.tickIntervalMs);
+            setInterval(saveGame, CONFIG.saveIntervalMs);
+            setInterval(flickerSymbols, 50);
+            
+            setupTabs();
+        }
+        
+        function buildShopUI() {
+            const facTab = document.getElementById('facilitiesTab');
+            const upgTab = document.getElementById('upgradesTab');
+            facTab.innerHTML = '';
+            upgTab.innerHTML = '';
+            
+            Object.entries(CONFIG.facilities).forEach(([k, v]) => {
+                const btn = document.createElement('button');
+                btn.className = 'shop-item facility';
+                btn.id = 'buy_' + k;
+                btn.disabled = true;
+                btn.innerHTML = `
+                    <div class="item-info">
+                        <span class="item-name">${v.name}</span>
+                        <span class="item-desc" id="desc_${k}">${v.desc}</span>
+                        <span class="item-owned">×<span id="owned_${k}">0</span></span>
+                    </div>
+                    <span class="item-cost" id="cost_${k}">${v.basePrice}</span>
+                `;
+                btn.addEventListener('click', () => buyFacility(k));
+                facTab.appendChild(btn);
+            });
+            
+            Object.entries(CONFIG.upgrades).forEach(([k, v]) => {
+                const btn = document.createElement('button');
+                btn.className = 'shop-item upgrade';
+                btn.id = 'buy_' + k;
+                btn.disabled = true;
+                btn.innerHTML = `
+                    <div class="item-info">
+                        <span class="item-name">${v.name}</span>
+                        <span class="item-desc">${v.desc}</span>
+                        <span class="item-owned">Lv.<span id="level_${k}">0</span>/${v.maxLevel}</span>
+                    </div>
+                    <span class="item-cost" id="cost_${k}">${v.basePrice}</span>
+                `;
+                btn.addEventListener('click', () => buyUpgrade(k));
+                upgTab.appendChild(btn);
+            });
+        }
+        
+        function setupTabs() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.getElementById('facilitiesTab').classList.toggle('hidden', btn.dataset.tab !== 'facilities');
+                    document.getElementById('upgradesTab').classList.toggle('hidden', btn.dataset.tab !== 'upgrades');
+                });
+            });
+        }
+        
+        function gameTick() {
+            computations += getComputationsPerSecond() / 10;
+            
+            if (facilityBoostActive && Date.now() > facilityBoostEnd) {
+                facilityBoostActive = false;
+            }
+            if (solveBoostActive && Date.now() > solveBoostEnd) {
+                solveBoostActive = false;
+            }
+            
+            if (bonusProblemData && Date.now() > bonusEndTime) {
+                hideBonusProblem();
+            }
+            
+            if (!bonusProblemData && Date.now() > nextBonusTime) {
+                showBonusProblem();
+            }
+            
+            updateDisplay();
+        }
+        
+        function getUpgradeMultiplier() {
+            let mult = 1;
+            Object.entries(upgrades).forEach(([k, v]) => {
+                mult += v.level * CONFIG.upgrades[k].effect;
+            });
+            return mult;
+        }
+        
+        function getComputationsPerSecond() {
+            let base = 0;
+            Object.entries(facilities).forEach(([k, v]) => {
+                base += v.owned * CONFIG.facilities[k].baseRate;
+            });
+            let mult = getUpgradeMultiplier();
+            if (facilityBoostActive) mult *= CONFIG.bonusProblem.effects.facilityBoost.multiplier;
+            return base * mult;
+        }
+        
+        function getSolveValue() {
+            let base = getUpgradeMultiplier();
+            if (solveBoostActive) base *= CONFIG.bonusProblem.effects.solveBoost.multiplier;
+            return base;
+        }
+        
+        function getOPM() {
+            const now = Date.now();
+            const oneMinAgo = now - 60000;
+            solveTimestamps = solveTimestamps.filter(t => t > oneMinAgo);
+            return solveTimestamps.length;
+        }
+        
+        function scheduleNextBonus() {
+            const variance = (Math.random() - 0.5) * CONFIG.bonusProblem.averageIntervalMs * 0.5;
+            nextBonusTime = Date.now() + CONFIG.bonusProblem.averageIntervalMs + variance;
+            if (nextBonusTime - Date.now() < CONFIG.bonusProblem.minIntervalMs) {
+                nextBonusTime = Date.now() + CONFIG.bonusProblem.minIntervalMs;
+            }
+        }
+        
+        function showBonusProblem() {
+            const cat = Math.min(unlockedCategories, 16);
+            bonusProblemData = generateProblemForCategory(cat - 1); // Use current highest unlocked
+            bonusEndTime = Date.now() + CONFIG.bonusProblem.durationMs;
+            
+            const effects = ['doubleComps', 'facilityBoost', 'solveBoost'];
+            bonusProblemData.effect = effects[Math.floor(Math.random() * effects.length)];
+            
+            let rewardText = '';
+            if (bonusProblemData.effect === 'doubleComps') rewardText = '2× comps';
+            else if (bonusProblemData.effect === 'facilityBoost') rewardText = '5× speed 2min';
+            else rewardText = '10× solve 1min';
+            
+            const popup = document.getElementById('bonusProblem');
+            popup.style.left = (15 + Math.random() * 70) + '%';
+            popup.style.top = (15 + Math.random() * 70) + '%';
+            
+            document.getElementById('bonusProblemText').textContent = bonusProblemData.text;
+            document.getElementById('bonusReward').textContent = rewardText;
+            popup.classList.remove('hidden');
+            document.getElementById('bonusInput').value = '';
+            document.getElementById('bonusInput').focus();
+            
+            playBonus();
+        }
+        
+        function hideBonusProblem() {
+            bonusProblemData = null;
+            document.getElementById('bonusProblem').classList.add('hidden');
+            document.getElementById('answerInput').focus();
+            scheduleNextBonus();
+        }
+        
+        function applyBonusEffect(effect) {
+            if (effect === 'doubleComps') {
+                computations *= 2;
+            } else if (effect === 'facilityBoost') {
+                facilityBoostActive = true;
+                facilityBoostEnd = Date.now() + CONFIG.bonusProblem.effects.facilityBoost.durationMs;
+            } else if (effect === 'solveBoost') {
+                solveBoostActive = true;
+                solveBoostEnd = Date.now() + CONFIG.bonusProblem.effects.solveBoost.durationMs;
+            }
+        }
+        
+        function checkStageUp() {
+            const nextThreshold = getStageThreshold(currentStage + 1);
+            if (totalSolved >= nextThreshold && currentStage < 16) {
+                currentStage++;
+                unlockedCategories = currentStage;
+                playStageUp();
+                showStageFlash();
+                updateVisualFlair();
+            }
+        }
+        
+        function showStageFlash() {
+            const flash = document.getElementById('stageFlash');
+            flash.textContent = 'STAGE ' + currentStage;
+            flash.classList.remove('hidden');
+            flash.classList.add('show');
+            setTimeout(() => {
+                flash.classList.remove('show');
+                setTimeout(() => flash.classList.add('hidden'), 500);
+            }, 1500);
+        }
+        
+        function updateVisualFlair() {
+            const box = document.getElementById('gameBox');
+            box.className = 'game-box stage-' + currentStage;
+        }
+        
+        function flickerSymbols() {
+            let s = '';
+            const len = 2 + Math.floor(currentStage / 2);
+            for (let i = 0; i < len; i++) s += symbols[Math.floor(Math.random() * symbols.length)];
+            document.getElementById('symbolFlicker').textContent = s;
+        }
+        
+        function getPrice(base, mult, count) {
+            return Math.floor(base * Math.pow(mult, count));
+        }
+        
+        function formatNumber(n) {
+            if (n >= 1e12) return (n / 1e12).toFixed(2) + 'T';
+            if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+            if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+            return Math.floor(n).toLocaleString();
+        }
+        
+        function randRange(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        
+        function generateProblemForCategory(cat) {
+            const r = CONFIG.problemRanges;
+            let a, b, c, d, answer, text;
+            
+            switch(cat) {
+                // 1. 1d+1d
+                case 0: 
+                    a = randRange(1,9); b = randRange(1,9); 
+                    answer = a+b; text = `${a} + ${b} =`; 
+                    break;
+                // 2. 1d-1d
+                case 1: 
+                    a = randRange(1,9); b = randRange(1, a); // Ensure positive
+                    answer = a-b; text = `${a} - ${b} =`; 
+                    break;
+                // 3. 1d*1d
+                case 2: 
+                    a = randRange(1,9); b = randRange(1,9); 
+                    answer = a*b; text = `${a} × ${b} =`; 
+                    break;
+                // 4. 2d+2d
+                case 3: 
+                    a = randRange(10,99); b = randRange(10,99); 
+                    answer = a+b; text = `${a} + ${b} =`; 
+                    break;
+                // 5. 1d,1d,1d add/sub
+                case 4: 
+                    a = randRange(1,9); b = randRange(1,9); c = randRange(1,9);
+                    if (Math.random() < 0.5) { answer = a+b-c; text = `${a} + ${b} - ${c} =`; }
+                    else { answer = a-b+c; text = `${a} - ${b} + ${c} =`; }
+                    break;
+                // 6. 1d*2d
+                case 5: 
+                    a = randRange(1,9); b = randRange(10,99); 
+                    if (Math.random() < 0.5) { answer = a*b; text = `${a} × ${b} =`; }
+                    else { answer = b*a; text = `${b} × ${a} =`; }
+                    break;
+                // 7. 2d/1d
+                case 6: 
+                    b = randRange(2,9); answer = randRange(2,49); a = answer*b; 
+                    text = `${a} ÷ ${b} =`; 
+                    break;
+                // 8. 1d,1d,1d mul/add/sub
+                case 7: 
+                    a = randRange(1,9); b = randRange(1,9); c = randRange(1,9);
+                    // format: a * b + c or a * b - c or a + b * c ...
+                    const type = Math.floor(Math.random() * 4);
+                    if (type === 0) { answer = a*b+c; text = `${a} × ${b} + ${c} =`; }
+                    else if (type === 1) { answer = a*b-c; text = `${a} × ${b} - ${c} =`; }
+                    else if (type === 2) { answer = a+b*c; text = `${a} + ${b} × ${c} =`; }
+                    else { answer = a-b*c; text = `${a} - ${b} × ${c} =`; }
+                    break;
+                // 9. 3d+3d
+                case 8: 
+                    a = randRange(100,999); b = randRange(100,999); 
+                    answer = a+b; text = `${a} + ${b} =`; 
+                    break;
+                // 10. 1d*3d
+                case 9: 
+                    a = randRange(1,9); b = randRange(100,999); 
+                    if (Math.random() < 0.5) { answer = a*b; text = `${a} × ${b} =`; }
+                    else { answer = b*a; text = `${b} × ${a} =`; }
+                    break;
+                // 11. 3d-3d
+                case 10: 
+                    a = randRange(100,999); b = randRange(100, a); 
+                    answer = a-b; text = `${a} - ${b} =`; 
+                    break;
+                // 12. 3d/1d
+                case 11: 
+                    b = randRange(2,9); answer = randRange(100,999); a = answer*b; 
+                    text = `${a} ÷ ${b} =`; 
+                    break;
+                // 13. 1d,2d,1d complex
+                case 12: 
+                    a = randRange(1,9); b = randRange(10,99); c = randRange(1,9);
+                    // e.g. 2d / 1d + 1d
+                    if (Math.random() < 0.5) {
+                        // div then add
+                        let res = randRange(2, 20); b = randRange(2,9); a = res*b; // a is 2d roughly
+                        answer = res + c; text = `${a} ÷ ${b} + ${c} =`;
+                    } else {
+                        // mul then sub
+                        answer = a*b - c; text = `${a} × ${b} - ${c} =`;
+                    }
+                    break;
+                // 14. 2d*2d
+                case 13: 
+                    a = randRange(10,99); b = randRange(10,99); 
+                    answer = a*b; text = `${a} × ${b} =`; 
+                    break;
+                // 15. 2d,2d,2d mix (max 1 mul)
+                case 14: 
+                    a = randRange(10,99); b = randRange(10,99); c = randRange(10,99);
+                    const t = Math.floor(Math.random() * 3);
+                    if (t === 0) { answer = a*b+c; text = `${a} × ${b} + ${c} =`; }
+                    else if (t === 1) { answer = a+b*c; text = `${a} + ${b} × ${c} =`; }
+                    else { answer = a+b+c; text = `${a} + ${b} + ${c} =`; }
+                    break;
+                // 16. 4d+4d
+                case 15: 
+                    a = randRange(1000,9999); b = randRange(1000,9999); 
+                    answer = a+b; text = `${a} + ${b} =`; 
+                    break;
+                
+                default: return generateProblemForCategory(0);
+            }
+            return { answer, text, category: cat };
+        }
+        
+        function generateProblem() {
+            const cat = Math.floor(Math.random() * unlockedCategories);
+            return generateProblemForCategory(cat);
+        }
+        
+        function updateDisplay() {
+            document.getElementById('computations').textContent = formatNumber(computations);
+            document.getElementById('compRate').textContent = '+' + getComputationsPerSecond().toFixed(1) + '/sec';
+            document.getElementById('totalSolved').textContent = formatNumber(totalSolved);
+            document.getElementById('opmDisplay').textContent = getOPM().toFixed(0);
+            document.getElementById('bonusSolved').textContent = bonusSolved;
+            
+            document.getElementById('stageNumber').textContent = currentStage;
+            const bits = Math.pow(2, currentStage - 1);
+            document.getElementById('bitDisplay').textContent = bits + '-bit';
+            
+            const currentThreshold = getStageThreshold(currentStage);
+            const nextThreshold = getStageThreshold(currentStage + 1);
+            const progress = currentStage >= 16 ? 100 : ((totalSolved - currentThreshold) / (nextThreshold - currentThreshold)) * 100;
+            document.getElementById('stageFill').style.width = Math.min(100, progress) + '%';
+            document.getElementById('stageNext').textContent = currentStage >= 16 ? 'MAX' : 'next: ' + nextThreshold;
+            
+            document.getElementById('streakFill').style.width = Math.min(100, (totalSolved % 50) * 2) + '%';
+            
+            const bonusRemaining = Math.max(0, Math.ceil((nextBonusTime - Date.now()) / 1000));
+            const mins = Math.floor(bonusRemaining / 60);
+            const secs = bonusRemaining % 60;
+            document.getElementById('bonusCountdown').textContent = `~${mins}:${secs.toString().padStart(2, '0')}`;
+            
+            if (bonusProblemData) {
+                const remaining = Math.max(0, Math.ceil((bonusEndTime - Date.now()) / 1000));
+                document.getElementById('bonusTimer').textContent = remaining + 's';
+            }
+            
+            updateActiveEffects();
+            updateShopDisplay();
+        }
+        
+        function updateActiveEffects() {
+            const el = document.getElementById('activeEffects');
+            let html = '';
+            if (facilityBoostActive) {
+                const rem = Math.ceil((facilityBoostEnd - Date.now()) / 1000);
+                html += `<div class="effect-badge facility">⚡ 5× (${rem}s)</div>`;
+            }
+            if (solveBoostActive) {
+                const rem = Math.ceil((solveBoostEnd - Date.now()) / 1000);
+                html += `<div class="effect-badge solve">🧠 10× (${rem}s)</div>`;
+            }
+            el.innerHTML = html;
+        }
+        
+        function updateShopDisplay() {
+            Object.entries(CONFIG.facilities).forEach(([k, cfg]) => {
+                const btn = document.getElementById('buy_' + k);
+                const price = getPrice(cfg.basePrice, cfg.priceMultiplier, facilities[k].owned);
+                const unlocked = currentStage >= cfg.unlockStage;
+                
+                document.getElementById('cost_' + k).textContent = formatNumber(price);
+                document.getElementById('owned_' + k).textContent = facilities[k].owned;
+                
+                btn.classList.toggle('locked', !unlocked);
+                btn.disabled = !unlocked || computations < price;
+            });
+            
+            Object.entries(CONFIG.upgrades).forEach(([k, cfg]) => {
+                const btn = document.getElementById('buy_' + k);
+                const level = upgrades[k].level;
+                const price = getPrice(cfg.basePrice, cfg.priceMultiplier, level);
+                const unlocked = currentStage >= cfg.unlockStage;
+                const maxed = level >= cfg.maxLevel;
+                
+                document.getElementById('cost_' + k).textContent = maxed ? 'MAX' : formatNumber(price);
+                document.getElementById('level_' + k).textContent = level;
+                
+                btn.classList.toggle('locked', !unlocked);
+                btn.classList.toggle('maxed', maxed);
+                btn.disabled = !unlocked || maxed || computations < price;
+            });
+        }
+        
+        function buyFacility(key) {
+            const cfg = CONFIG.facilities[key];
+            const price = getPrice(cfg.basePrice, cfg.priceMultiplier, facilities[key].owned);
+            if (computations >= price && currentStage >= cfg.unlockStage) {
+                computations -= price;
+                facilities[key].owned++;
+                saveGame();
+            }
+        }
+        
+        function buyUpgrade(key) {
+            const cfg = CONFIG.upgrades[key];
+            const level = upgrades[key].level;
+            const price = getPrice(cfg.basePrice, cfg.priceMultiplier, level);
+            if (level < cfg.maxLevel && computations >= price && currentStage >= cfg.unlockStage) {
+                computations -= price;
+                upgrades[key].level++;
+                saveGame();
+            }
+        }
+        
+        function solveProblem() {
+            if (!currentProblem) return;
+            totalSolved++;
+            solveTimestamps.push(Date.now());
+            
+            computations += getSolveValue();
+            playCorrect();
+            
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').classList.add('correct');
+            setTimeout(() => document.getElementById('answerInput').classList.remove('correct'), 150);
+            
+            checkStageUp();
+            
+            if (queue.length > 0) { currentProblem = queue.shift(); showCurrentProblem(); updateQueueDisplay(); }
+            else { currentProblem = null; document.getElementById('problemText').textContent = '...'; }
+            fillQueue();
+            saveGame();
+        }
+        
+        function updateQueueDisplay() {
+            const el = document.getElementById('queueList');
+            el.innerHTML = '';
+            queue.forEach((p, i) => {
+                const div = document.createElement('div');
+                div.className = 'queue-item';
+                div.textContent = p.text;
+                div.style.opacity = 1 - (i * 0.25);
+                el.appendChild(div);
+            });
+        }
+        
+        function showCurrentProblem() {
+            if (currentProblem) document.getElementById('problemText').textContent = currentProblem.text;
+        }
+        
+        function spawnProblem() {
+            const problem = generateProblem();
+            if (!currentProblem) { currentProblem = problem; showCurrentProblem(); }
+            else if (queue.length < CONFIG.queue.maxSize) { queue.push(problem); updateQueueDisplay(); }
+        }
+        
+        function fillQueue() {
+            while (queue.length < CONFIG.queue.maxSize) spawnProblem();
+            if (!currentProblem) spawnProblem();
+        }
+        
+        document.getElementById('answerInput').addEventListener('input', function() {
+            if (!currentProblem) return;
+            if (parseInt(this.value, 10) === currentProblem.answer) solveProblem();
+        });
+        
+        document.getElementById('bonusInput').addEventListener('input', function() {
+            if (!bonusProblemData) return;
+            if (parseInt(this.value, 10) === bonusProblemData.answer) {
+                bonusSolved++;
+                playBonus();
+                applyBonusEffect(bonusProblemData.effect);
+                hideBonusProblem();
+            }
+        });
+        
+        function saveGame() {
+            lastSaveTime = Date.now();
+            const save = {
+                computations, totalSolved, bonusSolved, currentStage, unlockedCategories,
+                facilities: Object.fromEntries(Object.entries(facilities).map(([k,v]) => [k, v.owned])),
+                upgrades: Object.fromEntries(Object.entries(upgrades).map(([k,v]) => [k, v.level])),
+                facilityBoostEnd, solveBoostEnd, lastSaveTime
+            };
+            localStorage.setItem('computation_factory_v6', JSON.stringify(save));
+        }
+        
+        function loadGame() {
+            const saved = localStorage.getItem('computation_factory_v6');
+            if (saved) {
+                const s = JSON.parse(saved);
+                computations = s.computations || 0;
+                totalSolved = s.totalSolved || 0;
+                bonusSolved = s.bonusSolved || 0;
+                currentStage = s.currentStage || 1;
+                unlockedCategories = s.unlockedCategories || 1;
+                
+                Object.keys(facilities).forEach(k => { facilities[k].owned = s.facilities?.[k] || 0; });
+                Object.keys(upgrades).forEach(k => { upgrades[k].level = s.upgrades?.[k] || 0; });
+                
+                if (s.facilityBoostEnd > Date.now()) { facilityBoostActive = true; facilityBoostEnd = s.facilityBoostEnd; }
+                if (s.solveBoostEnd > Date.now()) { solveBoostActive = true; solveBoostEnd = s.solveBoostEnd; }
+                
+                if (s.lastSaveTime) {
+                    const offlineMs = Math.min(Date.now() - s.lastSaveTime, CONFIG.offline.maxOfflineMinutes * 60000);
+                    const rate = getComputationsPerSecond();
+                    const earnings = (offlineMs / 1000) * rate * CONFIG.offline.offlineEfficiency;
+                    if (earnings > 1) computations += earnings;
+                }
+                
+                updateVisualFlair();
+            }
+        }
+        
+        document.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
+        
+        loadConfig();
+    </script>
+</body>
+</html>

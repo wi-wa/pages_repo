@@ -242,6 +242,8 @@ body {
     padding: 4px;
     gap: 2px;
     flex-shrink: 0;
+    position: relative;
+    transition: box-shadow 0.3s;
 }
 
 .level-square {
@@ -255,6 +257,53 @@ body {
 .level-square.active {
     background: #4ade80;
     box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
+}
+
+.level-bar.orange .level-square.active {
+    background: #f97316;
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.8);
+}
+
+.level-bar.burning .level-square.active {
+    background: #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.9);
+}
+
+.level-bar.burning {
+    animation: flameGlow 0.3s ease-in-out infinite alternate;
+}
+
+.level-bar.burning::before,
+.level-bar.burning::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 20px;
+    background: radial-gradient(ellipse at bottom, rgba(255, 100, 0, 0.8) 0%, rgba(255, 50, 0, 0.4) 40%, transparent 70%);
+    animation: flame 0.15s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.level-bar.burning::before {
+    top: -15px;
+}
+
+.level-bar.burning::after {
+    top: -10px;
+    animation-delay: 0.075s;
+    opacity: 0.7;
+}
+
+@keyframes flameGlow {
+    0% { box-shadow: 0 0 15px rgba(255, 100, 0, 0.5), 0 0 30px rgba(255, 50, 0, 0.3); }
+    100% { box-shadow: 0 0 20px rgba(255, 100, 0, 0.7), 0 0 40px rgba(255, 50, 0, 0.4); }
+}
+
+@keyframes flame {
+    0% { transform: translateX(-50%) scaleY(1) scaleX(1); }
+    100% { transform: translateX(-50%) scaleY(1.2) scaleX(0.9); }
 }
 
 @keyframes levelUp {

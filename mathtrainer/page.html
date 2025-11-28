@@ -163,6 +163,42 @@
             return false;
         }
         
+        function loadHighLevel(mode) {
+            const stored = localStorage.getItem('mathtrainer_highlevel_' + mode);
+            return stored ? parseInt(stored, 10) : 0;
+        }
+        
+        function saveHighLevel() {
+            const current = loadHighLevel(currentMode);
+            if (level > current) {
+                localStorage.setItem('mathtrainer_highlevel_' + currentMode, level);
+            }
+        }
+        
+        function previewLevel(mode) {
+            const highLevel = loadHighLevel(mode);
+            initLevelTower();
+            for (let i = 0; i < highLevel; i++) {
+                const sq = levelTower.querySelector(`[data-level="${i}"]`);
+                if (sq) sq.classList.add('active');
+            }
+            updateLevelBarColor(highLevel);
+        }
+        
+        function clearLevelPreview() {
+            levelTower.innerHTML = '';
+            levelTower.classList.remove('orange', 'burning');
+        }
+        
+        function updateLevelBarColor(lvl) {
+            levelTower.classList.remove('orange', 'burning');
+            if (lvl >= 20) {
+                levelTower.classList.add('burning');
+            } else if (lvl >= 10) {
+                levelTower.classList.add('orange');
+            }
+        }
+        
         function randRange(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
@@ -297,6 +333,8 @@
             if (!gameActive) return;
             level++;
             updateLevelDisplay(true);
+            updateLevelBarColor(level);
+            saveHighLevel();
             flashBox();
             
             if (level >= MAX_LEVEL) {
@@ -315,8 +353,15 @@
             level = 0;
             queue = [];
             currentProblem = null;
-            baseDelay = 1500;
-            currentDelay = 1500;
+            
+            if (mode === '1x1') {
+                baseDelay = 1500;
+            } else if (mode === '2x1') {
+                baseDelay = 2500;
+            } else {
+                baseDelay = 8000;
+            }
+            currentDelay = baseDelay;
             gameActive = true;
             
             scoreEl.textContent = '0';
@@ -324,6 +369,7 @@
             
             initLevelTower();
             updateLevelDisplay(false);
+            updateLevelBarColor(0);
             
             modeSelect.classList.add('hidden');
             gameOver.classList.add('hidden');
@@ -375,6 +421,12 @@
         modeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 startGame(btn.dataset.mode);
+            });
+            btn.addEventListener('mouseenter', () => {
+                previewLevel(btn.dataset.mode);
+            });
+            btn.addEventListener('mouseleave', () => {
+                clearLevelPreview();
             });
         });
         
