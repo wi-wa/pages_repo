@@ -512,9 +512,9 @@ body.era-4 .left-panel {
 }
 
 .symbol-flicker {
-    font-size: 14px;
-    color: rgba(160, 255, 200, 0.95);
-    text-shadow: 0 0 12px rgba(160, 255, 200, 0.7);
+    font-size: 20px;
+    color: rgba(200, 255, 230, 1);
+    text-shadow: 0 0 15px rgba(200, 255, 230, 0.9);
     font-family: monospace;
     margin-bottom: 6px;
 }
@@ -899,6 +899,8 @@ body.era-4 .answer-input:focus {
 
 .matrix-grid.matrix-1x2 { grid-template-columns: repeat(2, 1fr); }
 .matrix-grid.matrix-1x3 { grid-template-columns: repeat(3, 1fr); }
+.matrix-grid.matrix-2x1 { grid-template-columns: 1fr; }
+.matrix-grid.matrix-3x1 { grid-template-columns: 1fr; }
 .matrix-grid.matrix-2x2 { grid-template-columns: repeat(2, 1fr); }
 .matrix-grid.matrix-3x3 { grid-template-columns: repeat(3, 1fr); }
 
@@ -1267,7 +1269,7 @@ body.stage-52-plus .game-box::after {
 .flicker-matrix {
     display: grid;
     gap: 0;
-    font-size: 18px;
+    font-size: 24px;
     letter-spacing: -2px;
 }
 
@@ -1277,62 +1279,62 @@ body.stage-52-plus .game-box::after {
 
 .flicker-matrix.grid-3 {
     grid-template-columns: repeat(3, 1fr);
-    font-size: 16px;
+    font-size: 22px;
 }
 
 .flicker-matrix.grid-4 {
     grid-template-columns: repeat(4, 1fr);
-    font-size: 14px;
+    font-size: 18px;
     letter-spacing: -3px;
 }
 
 .flicker-matrix span {
     display: block;
     text-align: center;
-    width: 16px;
-    height: 18px;
-    line-height: 18px;
+    width: 20px;
+    height: 24px;
+    line-height: 24px;
 }
 
-.symbol-flicker.glow-0 { color: #777; }
-.symbol-flicker.glow-1 { color: #8a8; }
-.symbol-flicker.glow-2 { color: #9c9; text-shadow: 0 0 5px rgba(150, 200, 150, 0.4); }
-.symbol-flicker.glow-3 { color: #aca; text-shadow: 0 0 10px rgba(170, 200, 170, 0.5); }
-.symbol-flicker.glow-4 { color: #bdb; text-shadow: 0 0 15px rgba(180, 220, 180, 0.6); }
+.symbol-flicker.glow-0 { color: #aaa; text-shadow: 0 0 5px rgba(200, 200, 200, 0.3); }
+.symbol-flicker.glow-1 { color: #bdb; text-shadow: 0 0 8px rgba(180, 220, 180, 0.5); }
+.symbol-flicker.glow-2 { color: #cec; text-shadow: 0 0 12px rgba(200, 240, 200, 0.6); }
+.symbol-flicker.glow-3 { color: #dfd; text-shadow: 0 0 16px rgba(220, 255, 220, 0.7); }
+.symbol-flicker.glow-4 { color: #efe; text-shadow: 0 0 20px rgba(240, 255, 240, 0.8); }
 .symbol-flicker.glow-5 { 
-    color: #cfc; 
-    text-shadow: 0 0 20px rgba(200, 255, 200, 0.7), 0 0 30px rgba(150, 255, 200, 0.4);
+    color: #fff; 
+    text-shadow: 0 0 25px rgba(255, 255, 255, 0.9), 0 0 40px rgba(200, 255, 230, 0.6);
     animation: sigilPulse 1s ease-in-out infinite;
 }
 .symbol-flicker.glow-6 { 
     color: #fff; 
-    text-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 0 40px rgba(200, 255, 220, 0.5);
+    text-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 50px rgba(220, 255, 240, 0.7), 0 0 70px rgba(180, 255, 220, 0.4);
     animation: sigilPulse 0.8s ease-in-out infinite;
 }
 
-body.era-1 .symbol-flicker { color: #d8b070; }
+body.era-1 .symbol-flicker { color: #f0d090; text-shadow: 0 0 10px rgba(240, 210, 140, 0.6); }
 body.era-1 .symbol-flicker.glow-3, 
-body.era-1 .symbol-flicker.glow-4 { text-shadow: 0 0 15px rgba(220, 180, 100, 0.6); }
+body.era-1 .symbol-flicker.glow-4 { text-shadow: 0 0 18px rgba(250, 210, 130, 0.8); }
 body.era-1 .symbol-flicker.glow-5,
-body.era-1 .symbol-flicker.glow-6 { text-shadow: 0 0 25px rgba(255, 200, 120, 0.8); }
+body.era-1 .symbol-flicker.glow-6 { text-shadow: 0 0 30px rgba(255, 220, 150, 1), 0 0 50px rgba(255, 200, 100, 0.5); }
 
-body.era-2 .symbol-flicker { color: #e8a050; }
+body.era-2 .symbol-flicker { color: #ffc070; text-shadow: 0 0 10px rgba(255, 190, 100, 0.6); }
 body.era-2 .symbol-flicker.glow-3,
-body.era-2 .symbol-flicker.glow-4 { text-shadow: 0 0 15px rgba(255, 180, 80, 0.6); }
+body.era-2 .symbol-flicker.glow-4 { text-shadow: 0 0 18px rgba(255, 200, 100, 0.8); }
 body.era-2 .symbol-flicker.glow-5,
-body.era-2 .symbol-flicker.glow-6 { text-shadow: 0 0 25px rgba(255, 160, 60, 0.8); }
+body.era-2 .symbol-flicker.glow-6 { text-shadow: 0 0 30px rgba(255, 180, 80, 1), 0 0 50px rgba(255, 150, 50, 0.5); }
 
-body.era-3 .symbol-flicker { color: #80c0e8; }
+body.era-3 .symbol-flicker { color: #a0d8ff; text-shadow: 0 0 10px rgba(160, 220, 255, 0.6); }
 body.era-3 .symbol-flicker.glow-3,
-body.era-3 .symbol-flicker.glow-4 { text-shadow: 0 0 15px rgba(120, 200, 255, 0.6); }
+body.era-3 .symbol-flicker.glow-4 { text-shadow: 0 0 18px rgba(140, 220, 255, 0.8); }
 body.era-3 .symbol-flicker.glow-5,
-body.era-3 .symbol-flicker.glow-6 { text-shadow: 0 0 25px rgba(140, 220, 255, 0.8), 0 0 40px rgba(100, 180, 255, 0.5); }
+body.era-3 .symbol-flicker.glow-6 { text-shadow: 0 0 30px rgba(160, 240, 255, 1), 0 0 50px rgba(120, 200, 255, 0.6); }
 
-body.era-4 .symbol-flicker { color: #a0e0ff; }
+body.era-4 .symbol-flicker { color: #c0f0ff; text-shadow: 0 0 12px rgba(200, 240, 255, 0.7); }
 body.era-4 .symbol-flicker.glow-4,
-body.era-4 .symbol-flicker.glow-5 { text-shadow: 0 0 20px rgba(160, 240, 255, 0.7), 0 0 35px rgba(140, 200, 255, 0.4); }
+body.era-4 .symbol-flicker.glow-5 { text-shadow: 0 0 25px rgba(200, 255, 255, 0.9), 0 0 45px rgba(180, 230, 255, 0.5); }
 body.era-4 .symbol-flicker.glow-6 { 
-    text-shadow: 0 0 30px rgba(180, 255, 255, 0.9), 0 0 50px rgba(160, 220, 255, 0.6), 0 0 70px rgba(140, 180, 255, 0.3);
+    text-shadow: 0 0 35px rgba(220, 255, 255, 1), 0 0 60px rgba(200, 240, 255, 0.8), 0 0 90px rgba(180, 220, 255, 0.4);
     animation: sigilPulseIntense 0.5s ease-in-out infinite;
 }
 

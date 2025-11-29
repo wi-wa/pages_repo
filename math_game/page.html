@@ -69,8 +69,8 @@
                     <span class="stat-val" id="totalSolved">0</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-name">opm</span>
-                    <span class="stat-val" id="opmDisplay">0.0</span>
+                    <span class="stat-name">flops/m</span>
+                    <span class="stat-val" id="flopsDisplay">0</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-name">bonus</span>
@@ -181,6 +181,15 @@
         let matrixInputs = [];
         let currentInputIndex = 0;
         let lastOpmTier = 0;
+        
+        const FLOP_COUNTS = [
+            1, 1, 1, 2, 2, 3, 2, 4, 3, 4,
+            3, 5, 5, 8, 10, 5, 1, 1, 1, 1,
+            2, 2, 8, 10, 5, 3, 6, 10, 10, 16,
+            8, 8, 7, 7, 15, 6, 18, 6, 30, 24,
+            30, 24, 80, 60, 20, 90, 250, 300, 160, 60,
+            100, 200, 5, 80, 20, 30, 20, 40, 45, 10
+        ];
         
         const digits = '0123456789';
         const symbols1 = '#?%&@!*^~';
@@ -643,9 +652,9 @@
             });
             let globalMult = 1;
             if (facilityBoostActive) globalMult *= CONFIG.bonusProblem.effects.facilityBoost.multiplier;
-            const opm = getOPM();
-            const opmMult = 0.1 + (opm / 10);
-            return base * globalMult * opmMult;
+            const flops = getFLOPS();
+            const flopsMult = 0.05 + (flops / 15);
+            return base * globalMult * flopsMult;
         }
         
         function getSolveValue() {
@@ -663,11 +672,12 @@
             return baseValue * mult;
         }
         
-        function getOPM() {
+        function getFLOPS() {
             const now = Date.now();
-            const oneMinAgo = now - 60000;
-            solveTimestamps = solveTimestamps.filter(t => t > oneMinAgo);
-            return solveTimestamps.length;
+            const threeMinAgo = now - 180000;
+            solveTimestamps = solveTimestamps.filter(entry => entry.time > threeMinAgo);
+            const totalFlops = solveTimestamps.reduce((sum, entry) => sum + entry.flops, 0);
+            return totalFlops / 3;
         }
         
         function scheduleNextBonus() {
@@ -947,13 +957,13 @@
                     pA = randRange(1, 9) / 10;
                     pB = randRange(1, 9) / 10;
                     answer = (pA * pB).toFixed(2);
-                    text = `P(A)=${pA.toFixed(1)}, P(B)=${pB.toFixed(1)}, P(A∩B)=`;
+                    text = `A,B indep. P(A)=${pA.toFixed(1)}, P(B)=${pB.toFixed(1)}, P(A∩B)=`;
                     break;
                 case 8:
                     pA = randRange(1, 4) / 10;
                     pB = randRange(1, 4) / 10;
                     answer = (pA + pB).toFixed(2).replace(/\.?0+$/, '');
-                    text = `P(A)=${pA.toFixed(1)}, P(B)=${pB.toFixed(1)}, P(A∪B)=`;
+                    text = `A,B disjoint. P(A)=${pA.toFixed(1)}, P(B)=${pB.toFixed(1)}, P(A∪B)=`;
                     break;
                 case 9:
                     pA = randRange(10, 90) / 100;
@@ -1479,8 +1489,8 @@
                 }
                 
                 let rows, cols;
-                if (currentProblem.type === 'vector2') { rows = 1; cols = 2; }
-                else if (currentProblem.type === 'vector3') { rows = 1; cols = 3; }
+                if (currentProblem.type === 'vector2') { rows = 2; cols = 1; }
+                else if (currentProblem.type === 'vector3') { rows = 3; cols = 1; }
                 else if (currentProblem.type === 'matrix2x2') { rows = 2; cols = 2; }
                 else if (currentProblem.type === 'matrix3x3') { rows = 3; cols = 3; }
                 
@@ -1568,9 +1578,9 @@
             document.getElementById('computations').textContent = formatNumber(computations);
             document.getElementById('compRate').textContent = '+' + formatNumber(getComputationsPerSecond()) + '/sec';
             document.getElementById('totalSolved').textContent = formatNumber(totalSolved);
-            const opm = getOPM();
-            const opmMult = 0.1 + (opm / 10);
-            document.getElementById('opmDisplay').textContent = opm.toFixed(0) + ' (×' + opmMult.toFixed(2) + ')';
+            const flops = getFLOPS();
+            const flopsMult = 0.05 + (flops / 15);
+            document.getElementById('flopsDisplay').textContent = flops.toFixed(0) + ' (×' + flopsMult.toFixed(2) + ')';
             document.getElementById('bonusSolved').textContent = bonusSolved;
             
             document.getElementById('eraName').textContent = getEraName() + ' ERA';
@@ -1817,7 +1827,8 @@
             totalSolved++;
             stats.totalSolved++;
             stats.streak++;
-            solveTimestamps.push(Date.now());
+            const flopCount = FLOP_COUNTS[currentProblem.category] ?? 1;
+            solveTimestamps.push({ time: Date.now(), flops: flopCount });
             
             if (currentProblem.category < 16) stats.arithSolved++;
             else if (currentProblem.category < 32) stats.probSolved++;

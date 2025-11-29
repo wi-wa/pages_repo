@@ -53,68 +53,68 @@ At complexity N, problem types 0 through N-1 are available.
 
 ## Problem Types by Complexity
 
-| # | Category | Format | Example |
+| # | Category | Format | Example | Flop count |
 |---|----------|--------|---------|
-| 1 | Arithmetic | 1d + 1d | 3 + 5 = 8 |
-| 2 | Arithmetic | 1d - 1d | 7 - 3 = 4 |
-| 3 | Arithmetic | 1d × 1d | 4 × 6 = 24 |
-| 4 | Arithmetic | 2d + 2d | 23 + 45 = 68 |
-| 5 | Arithmetic | 1d ± 1d ± 1d | 5 + 3 - 2 = 6 |
-| 6 | Arithmetic | 1d × 2d | 7 × 12 = 84 |
-| 7 | Arithmetic | 2d ÷ 1d | 36 ÷ 4 = 9 |
-| 8 | Arithmetic | 1d op 1d op 1d | 3 × 4 + 2 = 14 |
-| 9 | Arithmetic | 3d + 3d | 234 + 567 = 801 |
-| 10 | Arithmetic | 1d × 3d | 8 × 125 = 1000 |
-| 11 | Arithmetic | 3d - 3d | 543 - 321 = 222 |
-| 12 | Arithmetic | 3d ÷ 1d | 729 ÷ 9 = 81 |
-| 13 | Arithmetic | Mixed ops | 4 ÷ 2 + 3 = 5 |
-| 14 | Arithmetic | 2d × 2d | 23 × 17 = 391 |
-| 15 | Arithmetic | 2d op 2d op 2d | 12 × 8 + 15 = 111 |
-| 16 | Arithmetic | 4d + 4d | 1234 + 5678 = 6912 |
-| 17 | Decimal | 0.X + 0.X | 0.3 + 0.5 = 0.8 |
-| 18 | Decimal | 0.X - 0.X | 0.7 - 0.3 = 0.4 |
-| 19 | Decimal | 0.X × 0.X | 0.4 × 0.5 = 0.20 |
-| 20 | Decimal | 0.X ÷ 0.X | 0.6 ÷ 0.3 = 2.00 |
-| 21 | Decimal | 0.XX + 0.XX | 0.25 + 0.37 = 0.62 |
-| 22 | Decimal | 0.XX - 0.XX | 0.85 - 0.42 = 0.43 |
-| 23 | Decimal | 0.XX × 0.XX | 0.25 × 0.40 = 0.10 |
-| 24 | Probability | P(A∩B) independent | P(A)×P(B) = |
-| 25 | Probability | P(A∪B) exclusive | P(A)+P(B) = |
-| 26 | Probability | P(¬A) | 1 - P(A) = |
-| 27 | Probability | P(A∪B) general | P(A)+P(B)-P(A∩B) = |
-| 28 | Probability | P(A\|B) | P(A∩B)/P(B) = |
-| 29 | Probability | Mixed decimal | 0.X op 0.X op 0.X |
-| 30 | Probability | Bayes' Theorem | P(A\|B) from priors |
-| 31 | Linear Algebra | 2D vec add | [a,b] + [c,d] |
-| 32 | Linear Algebra | 2D vec sub | [a,b] - [c,d] |
-| 33 | Linear Algebra | 2D scalar mult | k × [a,b] |
-| 34 | Linear Algebra | 3D vec add | [a,b,c] + [d,e,f] |
-| 35 | Linear Algebra | 2D linear combo | k₁[a,b] + k₂[c,d] |
-| 36 | Linear Algebra | 3D scalar mult | k × [a,b,c] |
-| 37 | Linear Algebra | 2D dot product | [a,b] · [c,d] |
-| 38 | Linear Algebra | 3D vec sub | [a,b,c] - [d,e,f] |
-| 39 | Linear Algebra | 2×2 mat × vec | M × v |
-| 40 | Linear Algebra | 3D dot product | [a,b,c] · [d,e,f] |
-| 41 | Linear Algebra | 3D triple add | v₁ + v₂ + v₃ |
-| 42 | Linear Algebra | 2×2 mat add | A + B |
-| 43 | Linear Algebra | 3×3 mat × vec | M × v |
-| 44 | Linear Algebra | 2×2 mat mult | A × B |
-| 45 | Linear Algebra | 3×3 mat add | A + B |
-| 46 | Linear Algebra | 3×2 × 2×3 | A₃ₓ₂ × B₂ₓ₃ |
-| 47 | Linear Algebra | 3×3 mat mult | A × B |
-| 48 | Linear Algebra | Mat mult + add | A × B + C |
-| 49 | Linear Algebra | Mat-Mat-Vec | A × B × v |
-| 50 | Mixed | Linear equation | ax + b = c, solve x |
-| 51 | Mixed | 2×2 Inverse | A⁻¹ (2 decimals) |
-| 52 | Mixed | Quadratic roots | x² + bx + c = 0 |
-| 53 | Mixed | Powers of 2 | 2^n for n ∈ [1,30] |
-| 54 | Mixed | Matrix equation | Solve Ax = b |
-| 55 | Mixed | Squares | n² for n ∈ [10,99] |
-| 56 | Mixed | Cubes | n³ for n ∈ [2,20] |
-| 57 | Mixed | Square root | √n (2 decimals) |
-| 58 | Mixed | Large division | 4d ÷ 2d (integer) |
-| 59 | Mixed | Sum of squares | a² + b² |
-| 60 | Mixed | Factorial | n! for n ∈ [1,8] |
+| 1 | Arithmetic | 1d + 1d | 3 + 5 = 8 | 1
+| 2 | Arithmetic | 1d - 1d | 7 - 3 = 4 | 1
+| 3 | Arithmetic | 1d × 1d | 4 × 6 = 24 | 1
+| 4 | Arithmetic | 2d + 2d | 23 + 45 = 68 |  2
+| 5 | Arithmetic | 1d ± 1d ± 1d | 5 + 3 - 2 = 6 | 2
+| 6 | Arithmetic | 1d × 2d | 7 × 12 = 84 | 3
+| 7 | Arithmetic | 2d ÷ 1d | 36 ÷ 4 = 9 | 2
+| 8 | Arithmetic | 1d op 1d op 1d | 3 × 4 + 2 = 14 | 4
+| 9 | Arithmetic | 3d + 3d | 234 + 567 = 801 | 3
+| 10 | Arithmetic | 1d × 3d | 8 × 125 = 1000 | 4
+| 11 | Arithmetic | 3d - 3d | 543 - 321 = 222 | 3
+| 12 | Arithmetic | 3d ÷ 1d | 729 ÷ 9 = 81 | 5
+| 13 | Arithmetic | Mixed ops | 4 ÷ 2 + 3 = 5 | 5
+| 14 | Arithmetic | 2d × 2d | 23 × 17 = 391 | 8
+| 15 | Arithmetic | 2d op 2d op 2d | 12 × 8 + 15 = 111 | 10
+| 16 | Arithmetic | 4d + 4d | 1234 + 5678 = 6912 | 5
+| 17 | Decimal | 0.X + 0.X | 0.3 + 0.5 = 0.8 | 1
+| 18 | Decimal | 0.X - 0.X | 0.7 - 0.3 = 0.4 | 1
+| 19 | Decimal | 0.X × 0.X | 0.4 × 0.5 = 0.20 | 1
+| 20 | Decimal | 0.X ÷ 0.X | 0.6 ÷ 0.3 = 2.00 | 1
+| 21 | Decimal | 0.XX + 0.XX | 0.25 + 0.37 = 0.62 | 2
+| 22 | Decimal | 0.XX - 0.XX | 0.85 - 0.42 = 0.43 | 2
+| 23 | Decimal | 0.XX × 0.XX | 0.25 × 0.40 = 0.10 | 8
+| 24 | Probability | P(A∩B) independent | P(A)×P(B) = | 10
+| 25 | Probability | P(A∪B) exclusive | P(A)+P(B) = | 5
+| 26 | Probability | P(¬A) | 1 - P(A) = | 3
+| 27 | Probability | P(A∪B) general | P(A)+P(B)-P(A∩B) = | 6
+| 28 | Probability | P(A\|B) | P(A∩B)/P(B) = | 10
+| 29 | Probability | Mixed decimal | 0.X op 0.X op 0.X | 10
+| 30 | Probability | Bayes' Theorem | P(A\|B) from priors | 16
+| 31 | Linear Algebra | 2D vec add | [a,b] + [c,d] | 8
+| 32 | Linear Algebra | 2D vec sub | [a,b] - [c,d] | 8
+| 33 | Linear Algebra | 2D scalar mult | k × [a,b] | 7
+| 34 | Linear Algebra | 3D vec add | [a,b,c] + [d,e,f] | 7
+| 35 | Linear Algebra | 2D linear combo | k₁[a,b] + k₂[c,d] | 15
+| 36 | Linear Algebra | 3D scalar mult | k × [a,b,c] | 6
+| 37 | Linear Algebra | 2D dot product | [a,b] · [c,d] | 18
+| 38 | Linear Algebra | 3D vec sub | [a,b,c] - [d,e,f] | 6
+| 39 | Linear Algebra | 2×2 mat × vec | M × v | 30
+| 40 | Linear Algebra | 3D dot product | [a,b,c] · [d,e,f] | 24
+| 41 | Linear Algebra | 3D triple add | v₁ + v₂ + v₃ | 30
+| 42 | Linear Algebra | 2×2 mat add | A + B | 24
+| 43 | Linear Algebra | 3×3 mat × vec | M × v | 80
+| 44 | Linear Algebra | 2×2 mat mult | A × B |  60
+| 45 | Linear Algebra | 3×3 mat add | A + B | 20
+| 46 | Linear Algebra | 3×2 × 2×3 | A₃ₓ₂ × B₂ₓ₃ |  90
+| 47 | Linear Algebra | 3×3 mat mult | A × B | 250
+| 48 | Linear Algebra | Mat mult + add | A × B + C | 300
+| 49 | Linear Algebra | Mat-Mat-Vec | A × B × v | 160
+| 50 | Mixed | Linear equation | ax + b = c, solve x | 60
+| 51 | Mixed | 2×2 Inverse | A⁻¹ (2 decimals) | 100
+| 52 | Mixed | Quadratic roots | x² + bx + c = 0 | 200
+| 53 | Mixed | Powers of 2 | 2^n for n ∈ [1,30] | 5
+| 54 | Mixed | 2x2 Matrix equation | Solve Ax = b | 80
+| 55 | Mixed | Squares | n² for n ∈ [10,99] | 20
+| 56 | Mixed | Cubes | n³ for n ∈ [2,20] | 30
+| 57 | Mixed | Square root | √n [100,1000] (2 decimals) | 20
+| 58 | Mixed | Large division | 4d ÷ 2d (integer) | 40
+| 59 | Mixed | Sum of squares | a² + b² | 45
+| 60 | Mixed | Factorial | n! for n ∈ [2,10] | 10
 
 ---
 
