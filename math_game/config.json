@@ -8,139 +8,717 @@
     "growthRate": 1.05
   },
   
-  "categories": [
-    { "id": "add1d", "name": "1+1 Add" },
-    { "id": "sub1d", "name": "1-1 Sub" },
-    { "id": "mul1d", "name": "1×1 Mul" },
-    { "id": "add2d", "name": "2+2 Add" },
-    { "id": "mix1d3t_as", "name": "1d±1d±1d" },
-    { "id": "mul1d2d", "name": "1×2 Mul" },
-    { "id": "div2d1d", "name": "2÷1 Div" },
-    { "id": "mix1d3t_mas", "name": "1d op 1d" },
-    { "id": "add3d", "name": "3+3 Add" },
-    { "id": "mul1d3d", "name": "1×3 Mul" },
-    { "id": "sub3d", "name": "3-3 Sub" },
-    { "id": "div3d1d", "name": "3÷1 Div" },
-    { "id": "mix_complex", "name": "Complex" },
-    { "id": "mul2d", "name": "2×2 Mul" },
-    { "id": "mix2d3t", "name": "Adv. Mix" },
-    { "id": "add4d", "name": "4+4 Add" }
-  ],
+  "stageNames": ["MENTAL", "ANALOG", "DIGITAL", "ASI"],
+  
+  "stageRanges": {
+    "stage1": { "min": 1, "max": 16 },
+    "stage2": { "min": 17, "max": 32 },
+    "stage3": { "min": 33, "max": 51 },
+    "stage4": { "min": 52, "max": 63 }
+  },
   
   "facilities": {
     "tallySticks": {
       "name": "Tally Sticks",
-      "desc": "Primitive counting",
+      "desc": "Notches on bone",
       "basePrice": 15,
-      "baseRate": 0.05,
-      "priceMultiplier": 1.12,
-      "unlockStage": 1
+      "baseRate": 0.1,
+      "priceMultiplier": 1.15,
+      "unlockStage": 1,
+      "era": 1
+    },
+    "fingerCounting": {
+      "name": "Finger Counting",
+      "desc": "Ten digits, ten possibilities",
+      "basePrice": 100,
+      "baseRate": 0.5,
+      "priceMultiplier": 1.15,
+      "unlockStage": 1,
+      "era": 1
     },
     "pencilPaper": {
       "name": "Pencil & Paper",
-      "desc": "Basic notation",
-      "basePrice": 80,
-      "baseRate": 0.3,
-      "priceMultiplier": 1.11,
-      "unlockStage": 1
+      "desc": "Written notation",
+      "basePrice": 1000,
+      "baseRate": 4,
+      "priceMultiplier": 1.15,
+      "unlockStage": 1,
+      "era": 1
     },
-    "abacus": {
-      "name": "Abacus",
-      "desc": "Ancient calculator",
-      "basePrice": 500,
-      "baseRate": 1.5,
-      "priceMultiplier": 1.10,
-      "unlockStage": 2
+    "mentalAbacus": {
+      "name": "Mental Abacus",
+      "desc": "Beads in your mind",
+      "basePrice": 10000,
+      "baseRate": 25,
+      "priceMultiplier": 1.15,
+      "unlockStage": 1,
+      "era": 1
+    },
+    "mnemonics": {
+      "name": "Mnemonics",
+      "desc": "Memory palaces",
+      "basePrice": 100000,
+      "baseRate": 150,
+      "priceMultiplier": 1.15,
+      "unlockStage": 1,
+      "era": 1
+    },
+    "savantFocus": {
+      "name": "Savant Focus",
+      "desc": "Deep concentration",
+      "basePrice": 1000000,
+      "baseRate": 1000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 1,
+      "era": 1
+    },
+    
+    "diceCards": {
+      "name": "Dice & Cards",
+      "desc": "Tools of chance",
+      "basePrice": 500000,
+      "baseRate": 2000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 17,
+      "era": 2
     },
     "slideRule": {
       "name": "Slide Rule",
-      "desc": "Analog precision",
-      "basePrice": 3000,
-      "baseRate": 6,
-      "priceMultiplier": 1.10,
-      "unlockStage": 3
+      "desc": "Logarithmic scales",
+      "basePrice": 5000000,
+      "baseRate": 15000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 17,
+      "era": 2
     },
     "monkeyTypist": {
       "name": "Monkey Typist",
       "desc": "Infinite patience",
-      "basePrice": 15000,
-      "baseRate": 25,
-      "priceMultiplier": 1.09,
-      "unlockStage": 4
+      "basePrice": 50000000,
+      "baseRate": 100000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 17,
+      "era": 2
     },
-    "spreadsheet": {
-      "name": "Spreadsheet",
-      "desc": "Cells of power",
-      "basePrice": 80000,
-      "baseRate": 100,
-      "priceMultiplier": 1.09,
-      "unlockStage": 5
+    "analyticalEngine": {
+      "name": "Analytical Engine",
+      "desc": "Babbage's marvel",
+      "basePrice": 500000000,
+      "baseRate": 750000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 17,
+      "era": 2
+    },
+    "differentialAnalyzer": {
+      "name": "Differential Analyzer",
+      "desc": "Wheel-and-disc integrators",
+      "basePrice": 5000000000,
+      "baseRate": 5000000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 17,
+      "era": 2
+    },
+    "probabilityOracle": {
+      "name": "Probability Oracle",
+      "desc": "Mechanical prophecy",
+      "basePrice": 50000000000,
+      "baseRate": 35000000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 17,
+      "era": 2
+    },
+    
+    "pocketCalculator": {
+      "name": "Pocket Calculator",
+      "desc": "Silicon in your palm",
+      "basePrice": 100000000000,
+      "baseRate": 100000000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 33,
+      "era": 3
+    },
+    "personalComputer": {
+      "name": "Personal Computer",
+      "desc": "Million calcs/sec",
+      "basePrice": 1000000000000,
+      "baseRate": 750000000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 33,
+      "era": 3
+    },
+    "tensorUnit": {
+      "name": "Tensor Processing Unit",
+      "desc": "Matrix silicon",
+      "basePrice": 10000000000000,
+      "baseRate": 5000000000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 33,
+      "era": 3
+    },
+    "computeCluster": {
+      "name": "Compute Cluster",
+      "desc": "Parallel servers",
+      "basePrice": 100000000000000,
+      "baseRate": 35000000000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 33,
+      "era": 3
+    },
+    "quantumCore": {
+      "name": "Quantum Core",
+      "desc": "Qubits in superposition",
+      "basePrice": 1000000000000000,
+      "baseRate": 250000000000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 33,
+      "era": 3
+    },
+    "agi": {
+      "name": "Artificial General Intelligence",
+      "desc": "Silicon minds",
+      "basePrice": 10000000000000000,
+      "baseRate": 1500000000000,
+      "priceMultiplier": 1.15,
+      "unlockStage": 33,
+      "era": 3
+    },
+    
+    "asiCollective": {
+      "name": "ASI Collective",
+      "desc": "Networked superintelligences",
+      "basePrice": 1e17,
+      "baseRate": 5e12,
+      "priceMultiplier": 1.15,
+      "unlockStage": 52,
+      "era": 4
+    },
+    "dysonSwarm": {
+      "name": "Dyson Swarm",
+      "desc": "Stellar computation",
+      "basePrice": 1e18,
+      "baseRate": 3.5e13,
+      "priceMultiplier": 1.15,
+      "unlockStage": 52,
+      "era": 4
+    },
+    "matrioshkaBrain": {
+      "name": "Matrioshka Brain",
+      "desc": "Nested planetary computers",
+      "basePrice": 1e19,
+      "baseRate": 2.5e14,
+      "priceMultiplier": 1.15,
+      "unlockStage": 52,
+      "era": 4
+    },
+    "timeCrystal": {
+      "name": "Time Crystal Computer",
+      "desc": "Temporal dimensions",
+      "basePrice": 1e20,
+      "baseRate": 1.5e15,
+      "priceMultiplier": 1.15,
+      "unlockStage": 52,
+      "era": 4
+    },
+    "multiversalSync": {
+      "name": "Multiversal Synchronizer",
+      "desc": "Parallel realities",
+      "basePrice": 1e21,
+      "baseRate": 1e16,
+      "priceMultiplier": 1.15,
+      "unlockStage": 52,
+      "era": 4
+    },
+    "omegaPoint": {
+      "name": "Omega Point Engine",
+      "desc": "End of time computing",
+      "basePrice": 1e22,
+      "baseRate": 7.5e16,
+      "priceMultiplier": 1.15,
+      "unlockStage": 52,
+      "era": 4
     }
   },
   
   "upgrades": {
     "eraser": {
       "name": "Eraser",
-      "desc": "Undo mistakes",
+      "desc": "+10% solve value",
       "basePrice": 50,
       "priceMultiplier": 2.2,
       "effect": 0.1,
       "maxLevel": 10,
       "unlockStage": 1
     },
-    "pen": {
+    "ballpointPen": {
       "name": "Ballpoint Pen",
-      "desc": "Smoother writing",
-      "basePrice": 150,
+      "desc": "+15% solve value",
+      "basePrice": 200,
       "priceMultiplier": 2.5,
       "effect": 0.15,
       "maxLevel": 8,
       "unlockStage": 1
     },
-    "mentalTraining": {
-      "name": "Mental Training",
-      "desc": "Brain exercise",
+    "scratchPaper": {
+      "name": "Scratch Paper",
+      "desc": "+20% solve value",
       "basePrice": 500,
+      "priceMultiplier": 2.5,
+      "effect": 0.2,
+      "maxLevel": 8,
+      "unlockStage": 1
+    },
+    "quietRoom": {
+      "name": "Quiet Room",
+      "desc": "+25% facility efficiency",
+      "basePrice": 2000,
       "priceMultiplier": 3.0,
       "effect": 0.25,
-      "maxLevel": 12,
-      "unlockStage": 2
+      "maxLevel": 6,
+      "unlockStage": 1
     },
-    "flashcards": {
-      "name": "Flashcards",
-      "desc": "Memorization aid",
-      "basePrice": 2000,
-      "priceMultiplier": 2.8,
-      "effect": 0.2,
-      "maxLevel": 10,
-      "unlockStage": 3
+    "mentalDrills": {
+      "name": "Mental Math Drills",
+      "desc": "+30% solve value",
+      "basePrice": 5000,
+      "priceMultiplier": 3.0,
+      "effect": 0.3,
+      "maxLevel": 6,
+      "unlockStage": 1
     },
     "caffeine": {
       "name": "Caffeine",
-      "desc": "Stay alert",
-      "basePrice": 8000,
+      "desc": "+20% all production",
+      "basePrice": 15000,
       "priceMultiplier": 3.2,
-      "effect": 0.3,
+      "effect": 0.2,
       "maxLevel": 8,
-      "unlockStage": 4
+      "unlockStage": 1
     },
     "focusMusic": {
       "name": "Focus Music",
-      "desc": "Lo-fi beats",
-      "basePrice": 30000,
+      "desc": "+25% passive speed",
+      "basePrice": 50000,
       "priceMultiplier": 3.5,
-      "effect": 0.35,
+      "effect": 0.25,
       "maxLevel": 6,
+      "unlockStage": 1
+    },
+    "carvedNotches": {
+      "name": "Carved Notches",
+      "desc": "2x Tally Sticks",
+      "basePrice": 150,
+      "priceMultiplier": 2.0,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 2
+    },
+    "dexterityTraining": {
+      "name": "Dexterity Training",
+      "desc": "2x Finger Counting",
+      "basePrice": 1000,
+      "priceMultiplier": 2.2,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 3
+    },
+    "graphitePencil": {
+      "name": "Graphite Core",
+      "desc": "2x Pencil & Paper",
+      "basePrice": 10000,
+      "priceMultiplier": 2.5,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 4
+    },
+    "beadVisualization": {
+      "name": "Bead Visualization",
+      "desc": "2x Mental Abacus",
+      "basePrice": 100000,
+      "priceMultiplier": 2.5,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 6
+    },
+    "memoryPalace": {
+      "name": "Memory Palace",
+      "desc": "2x Mnemonics",
+      "basePrice": 1000000,
+      "priceMultiplier": 2.8,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 8
+    },
+    "flowState": {
+      "name": "Flow State",
+      "desc": "2x Savant Focus",
+      "basePrice": 10000000,
+      "priceMultiplier": 3.0,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 10
+    },
+    "luckyCharm": {
+      "name": "Lucky Charm",
+      "desc": "+5% bonus chance",
+      "basePrice": 25000,
+      "priceMultiplier": 4.0,
+      "effect": 0.05,
+      "maxLevel": 5,
       "unlockStage": 5
     },
-    "ergonomics": {
-      "name": "Ergonomics",
-      "desc": "Optimal setup",
-      "basePrice": 100000,
+    "doubleCheck": {
+      "name": "Double Check",
+      "desc": "+15% solve value",
+      "basePrice": 75000,
+      "priceMultiplier": 3.0,
+      "effect": 0.15,
+      "maxLevel": 5,
+      "unlockStage": 7
+    },
+    "shorthand": {
+      "name": "Shorthand",
+      "desc": "+20% all production",
+      "basePrice": 250000,
+      "priceMultiplier": 3.2,
+      "effect": 0.2,
+      "maxLevel": 5,
+      "unlockStage": 9
+    },
+    "numberSense": {
+      "name": "Number Sense",
+      "desc": "+25% solve value",
+      "basePrice": 750000,
+      "priceMultiplier": 3.5,
+      "effect": 0.25,
+      "maxLevel": 5,
+      "unlockStage": 11
+    },
+    "carryMastery": {
+      "name": "Carry Mastery",
+      "desc": "+30% solve value",
+      "basePrice": 2500000,
+      "priceMultiplier": 3.5,
+      "effect": 0.3,
+      "maxLevel": 4,
+      "unlockStage": 13
+    },
+    "estimationSkill": {
+      "name": "Estimation Skill",
+      "desc": "+20% facility efficiency",
+      "basePrice": 7500000,
+      "priceMultiplier": 3.8,
+      "effect": 0.2,
+      "maxLevel": 4,
+      "unlockStage": 15
+    },
+    
+    "decimalPrecision": {
+      "name": "Decimal Precision",
+      "desc": "+20% probability solve",
+      "basePrice": 1000000,
+      "priceMultiplier": 3.0,
+      "effect": 0.2,
+      "maxLevel": 8,
+      "unlockStage": 17
+    },
+    "fractionIntuition": {
+      "name": "Fraction Intuition",
+      "desc": "+25% solve value",
+      "basePrice": 5000000,
+      "priceMultiplier": 3.0,
+      "effect": 0.25,
+      "maxLevel": 6,
+      "unlockStage": 18
+    },
+    "weightedDice": {
+      "name": "Weighted Dice",
+      "desc": "2x Dice & Cards",
+      "basePrice": 5000000,
+      "priceMultiplier": 2.5,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 19
+    },
+    "polishedScales": {
+      "name": "Polished Scales",
+      "desc": "2x Slide Rule",
+      "basePrice": 50000000,
+      "priceMultiplier": 2.5,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 20
+    },
+    "expectedValueSense": {
+      "name": "Expected Value Sense",
+      "desc": "+30% solve value",
+      "basePrice": 25000000,
+      "priceMultiplier": 3.2,
+      "effect": 0.3,
+      "maxLevel": 6,
+      "unlockStage": 21
+    },
+    "fasterTyping": {
+      "name": "Faster Typing",
+      "desc": "2x Monkey Typist",
+      "basePrice": 500000000,
+      "priceMultiplier": 2.8,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 22
+    },
+    "conditionalThinking": {
+      "name": "Conditional Thinking",
+      "desc": "+25% facility efficiency",
+      "basePrice": 100000000,
+      "priceMultiplier": 3.5,
+      "effect": 0.25,
+      "maxLevel": 5,
+      "unlockStage": 23
+    },
+    "brassGears": {
+      "name": "Brass Gears",
+      "desc": "2x Analytical Engine",
+      "basePrice": 5000000000,
+      "priceMultiplier": 2.8,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 24
+    },
+    "bayesBrain": {
+      "name": "Bayes Brain",
+      "desc": "+35% solve value",
+      "basePrice": 500000000,
+      "priceMultiplier": 3.5,
+      "effect": 0.35,
+      "maxLevel": 5,
+      "unlockStage": 25
+    },
+    "precisionDiscs": {
+      "name": "Precision Discs",
+      "desc": "2x Differential Analyzer",
+      "basePrice": 50000000000,
+      "priceMultiplier": 3.0,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 26
+    },
+    "lawOfLargeNumbers": {
+      "name": "Law of Large Numbers",
+      "desc": "+30% all production",
+      "basePrice": 2000000000,
+      "priceMultiplier": 3.8,
+      "effect": 0.3,
+      "maxLevel": 5,
+      "unlockStage": 28
+    },
+    "patternRecognition": {
+      "name": "Pattern Recognition",
+      "desc": "2x Probability Oracle",
+      "basePrice": 500000000000,
+      "priceMultiplier": 3.0,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 30
+    },
+    "statisticalIntuition": {
+      "name": "Statistical Intuition",
+      "desc": "+40% passive speed",
+      "basePrice": 10000000000,
+      "priceMultiplier": 4.0,
+      "effect": 0.4,
+      "maxLevel": 4,
+      "unlockStage": 31
+    },
+    
+    "vectorIntuition": {
+      "name": "Vector Intuition",
+      "desc": "+25% vector solve",
+      "basePrice": 500000000000,
+      "priceMultiplier": 3.0,
+      "effect": 0.25,
+      "maxLevel": 8,
+      "unlockStage": 33
+    },
+    "scientificMode": {
+      "name": "Scientific Mode",
+      "desc": "2x Pocket Calculator",
+      "basePrice": 1000000000000,
+      "priceMultiplier": 2.5,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 34
+    },
+    "ramUpgrade": {
+      "name": "RAM Upgrade",
+      "desc": "2x Personal Computer",
+      "basePrice": 10000000000000,
+      "priceMultiplier": 2.8,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 35
+    },
+    "matrixVisualization": {
+      "name": "Matrix Visualization",
+      "desc": "+30% matrix solve",
+      "basePrice": 5000000000000,
+      "priceMultiplier": 3.2,
+      "effect": 0.3,
+      "maxLevel": 6,
+      "unlockStage": 36
+    },
+    "matrixMultiplyUnits": {
+      "name": "Matrix Multiply Units",
+      "desc": "2x TPU",
+      "basePrice": 100000000000000,
+      "priceMultiplier": 2.8,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 37
+    },
+    "cacheOptimization": {
+      "name": "Cache Optimization",
+      "desc": "+25% facility efficiency",
+      "basePrice": 50000000000000,
+      "priceMultiplier": 3.5,
+      "effect": 0.25,
+      "maxLevel": 5,
+      "unlockStage": 38
+    },
+    "infinibandConnect": {
+      "name": "Infiniband Connect",
+      "desc": "2x Compute Cluster",
+      "basePrice": 1000000000000000,
+      "priceMultiplier": 3.0,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 40
+    },
+    "branchPrediction": {
+      "name": "Branch Prediction",
+      "desc": "+20% all production",
+      "basePrice": 500000000000000,
+      "priceMultiplier": 3.8,
+      "effect": 0.2,
+      "maxLevel": 5,
+      "unlockStage": 42
+    },
+    "errorCorrection": {
+      "name": "Error Correction",
+      "desc": "2x Quantum Core",
+      "basePrice": 10000000000000000,
+      "priceMultiplier": 3.0,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 44
+    },
+    "simdInstructions": {
+      "name": "SIMD Instructions",
+      "desc": "+35% parallel ops",
+      "basePrice": 5000000000000000,
+      "priceMultiplier": 3.5,
+      "effect": 0.35,
+      "maxLevel": 5,
+      "unlockStage": 46
+    },
+    "selfImprovement": {
+      "name": "Self-Improvement",
+      "desc": "2x AGI",
+      "basePrice": 100000000000000000,
+      "priceMultiplier": 3.2,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 48
+    },
+    "tensorOperations": {
+      "name": "Tensor Operations",
+      "desc": "+40% matrix efficiency",
+      "basePrice": 50000000000000000,
+      "priceMultiplier": 4.0,
+      "effect": 0.4,
+      "maxLevel": 4,
+      "unlockStage": 50
+    },
+    
+    "hiveMindProtocol": {
+      "name": "Hive Mind Protocol",
+      "desc": "2x ASI Collective",
+      "basePrice": 1e18,
+      "priceMultiplier": 3.0,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 53
+    },
+    "cosmicInsight": {
+      "name": "Cosmic Insight",
+      "desc": "+40% all production",
+      "basePrice": 5e18,
       "priceMultiplier": 4.0,
       "effect": 0.4,
       "maxLevel": 5,
-      "unlockStage": 6
+      "unlockStage": 52
+    },
+    "solarCollectors": {
+      "name": "Solar Collectors",
+      "desc": "2x Dyson Swarm",
+      "basePrice": 1e19,
+      "priceMultiplier": 3.2,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 54
+    },
+    "nestedShells": {
+      "name": "Nested Shells",
+      "desc": "2x Matrioshka Brain",
+      "basePrice": 1e20,
+      "priceMultiplier": 3.2,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 55
+    },
+    "temporalLoops": {
+      "name": "Temporal Loops",
+      "desc": "2x Time Crystal",
+      "basePrice": 1e21,
+      "priceMultiplier": 3.5,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 57
+    },
+    "parallelProcessing": {
+      "name": "Parallel Processing",
+      "desc": "2x Multiversal Sync",
+      "basePrice": 1e22,
+      "priceMultiplier": 3.5,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 59
+    },
+    "omegaProtocol": {
+      "name": "Omega Protocol",
+      "desc": "+50% all solve value",
+      "basePrice": 5e20,
+      "priceMultiplier": 4.5,
+      "effect": 0.5,
+      "maxLevel": 3,
+      "unlockStage": 60
+    },
+    "entropyReversal": {
+      "name": "Entropy Reversal",
+      "desc": "2x Omega Point",
+      "basePrice": 1e23,
+      "priceMultiplier": 4.0,
+      "effect": 0.5,
+      "maxLevel": 4,
+      "unlockStage": 61
+    },
+    "realityEngine": {
+      "name": "Reality Engine",
+      "desc": "+100% all production",
+      "basePrice": 5e22,
+      "priceMultiplier": 5.0,
+      "effect": 1.0,
+      "maxLevel": 2,
+      "unlockStage": 62
     }
   },
   
@@ -158,13 +736,6 @@
   "offline": {
     "maxOfflineMinutes": 480,
     "offlineEfficiency": 0.5
-  },
-  
-  "problemRanges": {
-    "1d": { "min": 1, "max": 9 },
-    "2d": { "min": 10, "max": 99 },
-    "3d": { "min": 100, "max": 999 },
-    "4d": { "min": 1000, "max": 9999 }
   },
   
   "audio": {
