@@ -10,8 +10,16 @@
 <body>
     <div class="top-bar">
         <a href="../index.html" class="back-link">← back</a>
-        <span class="game-title">And it goes brr..</span>
+        <span class="game-title">Computation Factory</span>
         <div class="settings-btn" id="settingsBtn" title="Settings">⚙</div>
+    </div>
+    
+    <div class="era-banner" id="eraBanner">
+        <span class="era-name" id="eraName">MENTAL ERA</span>
+    </div>
+    
+    <div class="news-bar hidden">
+        <span class="news-text"></span>
     </div>
     
     <div class="settings-panel hidden" id="settingsPanel">
@@ -47,9 +55,8 @@
     
     <div class="main-content">
         <div class="left-panel">
-            <div class="stage-display">
-                <div class="stage-label" id="stageLabel">MENTAL STAGE</div>
-                <div class="stage-number" id="stageNumber" title="Click to advance stage (debug)">1</div>
+            <div class="complexity-display">
+                <div class="bit-display" id="bitDisplay" title="Click to increase complexity level (debug)">2-bit</div>
                 <div class="stage-progress">
                     <div class="stage-fill" id="stageFill"></div>
                 </div>
@@ -73,12 +80,6 @@
             
             <div class="complexity-section">
                 <div class="symbol-flicker" id="symbolFlicker">01</div>
-                <div class="bit-display" id="bitDisplay">1-bit</div>
-            </div>
-            
-            <div class="next-bonus">
-                <span class="bonus-label">bonus in</span>
-                <span class="bonus-countdown" id="bonusCountdown">~5:00</span>
             </div>
         </div>
         
@@ -154,77 +155,204 @@
         
         let queue = [], currentProblem = null;
         let computations = 0, totalSolved = 0, bonusSolved = 0;
-        let currentStage = 1, unlockedCategories = 1;
+        let currentEra = 1, complexityLevel = 1;
         let lastSaveTime = Date.now();
         let facilities = {}, upgrades = {};
+        
+        let stats = {
+            playTime: 0, offlineTime: 0, totalSolved: 0,
+            arithSolved: 0, probSolved: 0, matrixSolved: 0,
+            hackSurvived: 0, hackPerfect: 0, bonusSolved: 0, bonusPerfect: 0,
+            streak: 0, startTime: Date.now(), wrongAnswers: 0
+        };
         
         let facilityBoostActive = false, facilityBoostEnd = 0;
         let solveBoostActive = false, solveBoostEnd = 0;
         let nextBonusTime = 0, bonusProblemData = null, bonusEndTime = 0;
+        
+        let hackActive = false, hackEndTime = 0, hackQueue = 0, hackProblem = null;
+        let hackSolved = 0, hackSpeedLevel = 0, hackInterval = null, hackSpeedInterval = null;
+        let lastHackTime = 0;
+        
+        let newsIndex = 0, lastNewsChange = 0;
+        const NEWS_CHANGE_INTERVAL = 45000;
         
         let solveTimestamps = [];
         let matrixInputs = [];
         let currentInputIndex = 0;
         let lastOpmTier = 0;
         
-        const symbols = '01∑∏∫√πΔ∂λ∞≈≠±×÷αβγθΩ∇';
-        
-        function getEra() {
-            if (currentStage <= 16) return 1;
-            if (currentStage <= 32) return 2;
-            if (currentStage <= 51) return 3;
-            return 4;
-        }
+        const digits = '0123456789';
+        const symbols1 = '#?%&@!*^~';
+        const symbols2 = '∑∏∫√πΔ∂λ∞≈≠±×÷';
+        const symbols3 = 'αβγδεζηθικλμνξπρστυφχψω';
+        const angelicGlyphs = 'ℵℶℷℸ℩℮ℯℰℱℲℳℴאבגדהוזחטיכלמנסעפצקרשת';
         
         function getEraName() {
-            const era = getEra();
-            return ['MENTAL', 'ANALOG', 'DIGITAL', 'ASI'][era - 1];
+            const names = ['Mental', 'Analog', 'Digital', 'Cosmic'];
+            return names[currentEra - 1];
         }
         
-        function getStageThreshold(stage) {
-            if (stage <= 1) return 0;
+        function getComplexityThreshold(level) {
+            if (level <= 1) return 0;
             let total = 0;
-            let increment = CONFIG.stageUnlock.baseProblems;
-            for (let i = 2; i <= stage; i++) {
+            let increment = CONFIG.complexityUnlock.baseProblems;
+            for (let i = 2; i <= level; i++) {
                 total += Math.floor(increment);
-                increment *= CONFIG.stageUnlock.growthRate;
+                increment *= CONFIG.complexityUnlock.growthRate;
             }
             return total;
         }
         
+        function calculateComplexityLevel() {
+            let level = 1;
+            while (level < 60 && totalSolved >= getComplexityThreshold(level + 1)) level++;
+            return level;
+        }
+        
+        function getEraFacilities(era) {
+            return Object.entries(CONFIG.facilities).filter(([k, v]) => v.era === era).map(([k]) => k);
+        }
+        
+        function checkEraUnlock() {
+            const eraFacs = getEraFacilities(currentEra);
+            const allOwned = eraFacs.every(k => facilities[k].owned >= 1);
+            if (allOwned && currentEra < 4) {
+                currentEra++;
+                playStageUp();
+                showStageFlash();
+                updateVisualFlair();
+                return true;
+            }
+            return false;
+        }
+        
+        function getNewsBank() {
+            if (currentEra < 2) return null;
+            if (currentEra === 2) {
+                if (complexityLevel <= 20) return CONFIG.newsHeadlines.era2_early;
+                if (complexityLevel <= 35) return CONFIG.newsHeadlines.era2_mid;
+                return CONFIG.newsHeadlines.era2_late;
+            }
+            if (currentEra === 3) {
+                if (complexityLevel <= 25) return CONFIG.newsHeadlines.era3_early;
+                if (complexityLevel <= 40) return CONFIG.newsHeadlines.era3_mid;
+                return CONFIG.newsHeadlines.era3_late;
+            }
+            if (complexityLevel <= 25) return CONFIG.newsHeadlines.era4_early;
+            if (complexityLevel <= 45) return CONFIG.newsHeadlines.era4_mid;
+            return CONFIG.newsHeadlines.era4_late;
+        }
+        
         function initGame() {
             Object.keys(CONFIG.facilities).forEach(k => { facilities[k] = { owned: 0 }; });
-            Object.keys(CONFIG.upgrades).forEach(k => { upgrades[k] = { level: 0 }; });
+            Object.keys(CONFIG.upgrades).forEach(k => { upgrades[k] = { owned: false }; });
             
             buildShopUI();
             loadGame();
+            complexityLevel = calculateComplexityLevel();
             scheduleNextBonus();
+            scheduleNextHack();
             fillQueue();
+            updateVisualFlair();
             updateDisplay();
             document.getElementById('answerInput').focus();
             
             setInterval(gameTick, CONFIG.tickIntervalMs);
             setInterval(saveGame, CONFIG.saveIntervalMs);
-            setInterval(flickerSymbols, 50);
+            startComplexityFlicker();
             
             setupTabs();
             setupDebugClicks();
         }
         
+        function startComplexityFlicker() {
+            const rate = getFlickerRate();
+            updateSymbolFlicker();
+            setTimeout(startComplexityFlicker, rate);
+        }
+        
+        function getFlickerRate() {
+            const maxRate = 1000;
+            const minRate = 40;
+            const progress = Math.min(complexityLevel / 60, 1);
+            return Math.floor(maxRate - (maxRate - minRate) * progress);
+        }
+        
+        function updateSymbolFlicker() {
+            const el = document.getElementById('symbolFlicker');
+            const level = complexityLevel;
+            
+            let gridSize, glyphSet;
+            if (level <= 20) {
+                gridSize = 2;
+            } else if (level <= 40) {
+                gridSize = 3;
+            } else {
+                gridSize = 4;
+            }
+            
+            if (level <= 10) {
+                glyphSet = digits;
+            } else if (level <= 20) {
+                glyphSet = digits + symbols1;
+            } else if (level <= 30) {
+                glyphSet = symbols1 + symbols2;
+            } else if (level <= 40) {
+                glyphSet = symbols2 + symbols3;
+            } else if (level <= 50) {
+                glyphSet = symbols3 + angelicGlyphs.slice(0, 20);
+            } else {
+                glyphSet = angelicGlyphs + symbols2 + symbols3;
+            }
+            
+            const useRandomColors = level >= 45;
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#f38181', '#aa96da', '#a8e6cf', '#dcedc1', '#ffd3b6'];
+            
+            let content = '<div class="flicker-matrix grid-' + gridSize + '">';
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const glyph = glyphSet[Math.floor(Math.random() * glyphSet.length)];
+                if (useRandomColors) {
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    content += '<span style="color:' + color + ';text-shadow:0 0 8px ' + color + '">' + glyph + '</span>';
+                } else {
+                    content += '<span>' + glyph + '</span>';
+                }
+            }
+            content += '</div>';
+            
+            if (level >= 50) {
+                content += '<div class="sigil-particles"></div>';
+            }
+            
+            el.innerHTML = content;
+            
+            const glowLevel = Math.floor(level / 10);
+            el.className = 'symbol-flicker glow-' + glowLevel;
+        }
+
+        function scheduleNextHack() {
+            if (currentEra < CONFIG.hackEvent.minEra || complexityLevel < CONFIG.hackEvent.minComplexity) {
+                lastHackTime = Date.now() + 300000 + Math.random() * 120000;
+            } else {
+                lastHackTime = Date.now() + 240000 + Math.random() * 180000;
+            }
+        }
+        
         function setupDebugClicks() {
-            document.getElementById('stageNumber').addEventListener('click', () => {
-                currentStage++;
-                unlockedCategories = currentStage;
-                playStageUp();
-                showStageFlash();
-                updateVisualFlair();
-                updateDisplay();
-                saveGame();
+            document.getElementById('bitDisplay').addEventListener('click', () => {
+                if (complexityLevel < 60) {
+                    complexityLevel++;
+                    updateVisualFlair();
+                    updateDisplay();
+                    saveGame();
+                }
             });
             
             document.getElementById('computations').addEventListener('click', () => {
                 computations = Math.max(computations * 2, 100);
                 updateDisplay();
+                saveGame();
             });
             
             document.getElementById('settingsBtn').addEventListener('click', () => {
@@ -251,21 +379,28 @@
         }
         
         function resetGame() {
-            localStorage.removeItem('computation_factory_v8');
+            localStorage.removeItem(CONFIG.saveKey);
             computations = 0;
             totalSolved = 0;
             bonusSolved = 0;
-            currentStage = 1;
-            unlockedCategories = 1;
+            currentEra = 1;
+            complexityLevel = 1;
             Object.keys(facilities).forEach(k => { facilities[k].owned = 0; });
-            Object.keys(upgrades).forEach(k => { upgrades[k].level = 0; });
+            Object.keys(upgrades).forEach(k => { upgrades[k].owned = false; });
+            stats = { playTime: 0, offlineTime: 0, totalSolved: 0, arithSolved: 0, probSolved: 0, matrixSolved: 0, hackSurvived: 0, hackPerfect: 0, bonusSolved: 0, bonusPerfect: 0, streak: 0, startTime: Date.now(), wrongAnswers: 0 };
             facilityBoostActive = false;
             solveBoostActive = false;
+            hackActive = false;
+            if (hackInterval) clearInterval(hackInterval);
+            if (hackSpeedInterval) clearInterval(hackSpeedInterval);
             queue = [];
             currentProblem = null;
             solveTimestamps = [];
             lastOpmTier = 0;
+            newsIndex = 0;
+            lastNewsChange = 0;
             scheduleNextBonus();
+            scheduleNextHack();
             fillQueue();
             updateVisualFlair();
             updateDisplay();
@@ -282,7 +417,6 @@
                 const btn = document.createElement('button');
                 btn.className = 'shop-item facility era-' + v.era;
                 btn.id = 'buy_' + k;
-                btn.dataset.unlockStage = v.unlockStage;
                 btn.disabled = true;
                 btn.innerHTML = `
                     <div class="item-info">
@@ -298,17 +432,15 @@
             
             Object.entries(CONFIG.upgrades).forEach(([k, v]) => {
                 const btn = document.createElement('button');
-                btn.className = 'shop-item upgrade';
+                btn.className = 'shop-item upgrade type-' + v.type;
                 btn.id = 'buy_' + k;
-                btn.dataset.unlockStage = v.unlockStage;
                 btn.disabled = true;
                 btn.innerHTML = `
                     <div class="item-info">
                         <span class="item-name" id="uname_${k}">${v.name}</span>
                         <span class="item-desc" id="udesc_${k}">${v.desc}</span>
-                        <span class="item-owned">Lv.<span id="level_${k}">0</span>/${v.maxLevel}</span>
                     </div>
-                    <span class="item-cost" id="cost_${k}">${formatNumber(v.basePrice)}</span>
+                    <span class="item-cost" id="ucost_${k}">${formatNumber(v.basePrice)}</span>
                 `;
                 btn.addEventListener('click', () => buyUpgrade(k));
                 upgTab.appendChild(btn);
@@ -327,25 +459,110 @@
         }
         
         function gameTick() {
+            stats.playTime += CONFIG.tickIntervalMs / 1000;
             computations += getComputationsPerSecond() / 10;
             
-            if (facilityBoostActive && Date.now() > facilityBoostEnd) {
-                facilityBoostActive = false;
-            }
-            if (solveBoostActive && Date.now() > solveBoostEnd) {
-                solveBoostActive = false;
+            if (facilityBoostActive && Date.now() > facilityBoostEnd) facilityBoostActive = false;
+            if (solveBoostActive && Date.now() > solveBoostEnd) solveBoostActive = false;
+            if (bonusProblemData && Date.now() > bonusEndTime) hideBonusProblem();
+            if (!bonusProblemData && Date.now() > nextBonusTime) showBonusProblem();
+            
+            if (hackActive) {
+                if (Date.now() > hackEndTime) endHackEvent(true);
+            } else if (currentEra >= CONFIG.hackEvent.minEra && complexityLevel >= CONFIG.hackEvent.minComplexity && Date.now() > lastHackTime && !bonusProblemData) {
+                startHackEvent();
             }
             
-            if (bonusProblemData && Date.now() > bonusEndTime) {
-                hideBonusProblem();
-            }
-            
-            if (!bonusProblemData && Date.now() > nextBonusTime) {
-                showBonusProblem();
-            }
-            
+            updateNews();
             checkOpmFlair();
             updateDisplay();
+        }
+        
+        function updateNews() {
+            const bank = getNewsBank();
+            const newsBar = document.querySelector('.news-bar');
+            if (!newsBar) return;
+            if (!bank) { newsBar.classList.add('hidden'); return; }
+            newsBar.classList.remove('hidden');
+            if (Date.now() - lastNewsChange > NEWS_CHANGE_INTERVAL) {
+                newsIndex = (newsIndex + 1) % bank.length;
+                lastNewsChange = Date.now();
+            }
+            const newsText = document.querySelector('.news-text');
+            if (newsText) newsText.textContent = '▸ ' + bank[newsIndex % bank.length];
+        }
+        
+        function startHackEvent() {
+            if (hackActive || currentEra < CONFIG.hackEvent.minEra || complexityLevel < CONFIG.hackEvent.minComplexity) return;
+            hackActive = true;
+            hackEndTime = Date.now() + CONFIG.hackEvent.durationMs;
+            hackQueue = 0; hackSolved = 0; hackSpeedLevel = 0;
+            generateHackProblem();
+            hackInterval = setInterval(addHackThreat, getHackInterval());
+            hackSpeedInterval = setInterval(increaseHackSpeed, CONFIG.hackEvent.speedIncreaseMs);
+            playHackAlert();
+        }
+        
+        function getHackInterval() {
+            return Math.max(CONFIG.hackEvent.minIntervalMs, CONFIG.hackEvent.baseIntervalMs - hackSpeedLevel * CONFIG.hackEvent.intervalReduction);
+        }
+        
+        function increaseHackSpeed() {
+            if (!hackActive) return;
+            hackSpeedLevel++;
+            clearInterval(hackInterval);
+            hackInterval = setInterval(addHackThreat, getHackInterval());
+        }
+        
+        function addHackThreat() {
+            if (!hackActive) return;
+            hackQueue++;
+            if (hackQueue >= CONFIG.hackEvent.maxQueue) endHackEvent(false);
+        }
+        
+        function generateHackProblem() {
+            const difficulty = Math.min(Math.floor((complexityLevel - 33) / 3), 8);
+            let a, b, c, answer, text;
+            switch(difficulty) {
+                case 0: case 1: a = randRange(10, 99); b = randRange(10, 99); answer = a + b; text = `${a} + ${b} =`; break;
+                case 2: case 3: a = randRange(10, 99); b = randRange(2, 9); answer = a * b; text = `${a} × ${b} =`; break;
+                case 4: case 5: a = randRange(100, 999); b = randRange(100, 999); answer = a + b; text = `${a} + ${b} =`; break;
+                default: a = randRange(10, 99); b = randRange(10, 99); answer = a * b; text = `${a} × ${b} =`; break;
+            }
+            hackProblem = { answer: String(answer), text };
+        }
+        
+        function endHackEvent(success) {
+            hackActive = false;
+            clearInterval(hackInterval);
+            clearInterval(hackSpeedInterval);
+            if (success) {
+                stats.hackSurvived++;
+                if (hackQueue === 0) stats.hackPerfect++;
+                const rewards = ['double', 'facility', 'solve'];
+                const reward = rewards[Math.floor(Math.random() * rewards.length)];
+                if (reward === 'double') computations *= 2;
+                else if (reward === 'facility') { facilityBoostActive = true; facilityBoostEnd = Date.now() + 180000; }
+                else { solveBoostActive = true; solveBoostEnd = Date.now() + 120000; }
+                playBonus();
+            } else {
+                const penalty = CONFIG.hackEvent.penaltyMin + Math.random() * (CONFIG.hackEvent.penaltyMax - CONFIG.hackEvent.penaltyMin);
+                computations *= (1 - penalty);
+                playHackFail();
+            }
+            scheduleNextHack();
+        }
+        
+        function playHackAlert() {
+            playBeep(CONFIG.audio.hackAlertFrequency, 0.15);
+            setTimeout(() => playBeep(CONFIG.audio.hackAlertFrequency * 1.25, 0.15), 100);
+            setTimeout(() => playBeep(CONFIG.audio.hackAlertFrequency, 0.2), 200);
+        }
+        
+        function playHackFail() {
+            playBeep(CONFIG.audio.hackFailFrequency, 0.3);
+            setTimeout(() => playBeep(CONFIG.audio.hackFailFrequency * 0.8, 0.3), 150);
+            setTimeout(() => playBeep(CONFIG.audio.hackFailFrequency * 0.67, 0.4), 300);
         }
         
         function checkOpmFlair() {
@@ -370,7 +587,7 @@
         
         function showOpmFlash(tier) {
             const flash = document.getElementById('opmFlash');
-            const msgs = ['', '🔥 10 OPM!', '⚡ 30 OPM!', '💫 60 OPM!', '🌟 100 OPM!', '🚀 150 OPM!'];
+            const msgs = ['', '🔥 10 OPM!', '⚡ 30 OPM!', '💫 60 OPM!', '�� 100 OPM!', '🚀 150 OPM!'];
             flash.textContent = msgs[tier];
             flash.classList.remove('hidden');
             flash.classList.add('show');
@@ -380,30 +597,53 @@
             }, 1000);
         }
         
-        function getUpgradeMultiplier() {
+        function getFacilityMultiplier(facKey) {
             let mult = 1;
             Object.entries(upgrades).forEach(([k, v]) => {
-                mult += v.level * CONFIG.upgrades[k].effect;
+                if (!v.owned) return;
+                const cfg = CONFIG.upgrades[k];
+                if (cfg.type === 'tiered' && cfg.facility === facKey) mult *= cfg.effect;
+                if (cfg.type === 'synergy' && cfg.facility === facKey) {
+                    const synergyCount = facilities[cfg.synergyWith]?.owned || 0;
+                    mult *= (1 + cfg.effect * synergyCount);
+                }
             });
+            const facEra = CONFIG.facilities[facKey].era;
+            if (upgrades['gen_era' + facEra]?.owned) mult *= 1.1;
+            if (upgrades['gen_dedication']?.owned) mult *= 1.05;
+            if (upgrades['gen_veteran']?.owned) mult *= 1.1;
+            if (upgrades['gen_grand']?.owned) mult *= 1.25;
+            if (upgrades['gen_million']?.owned) mult *= 1.5;
+            if (upgrades['gen_full']?.owned) mult *= 1.2;
+            if (upgrades['gen_egg_nothing']?.owned) mult *= 1.05;
             return mult;
         }
         
         function getComputationsPerSecond() {
             let base = 0;
             Object.entries(facilities).forEach(([k, v]) => {
-                if (CONFIG.facilities[k].unlockStage <= currentStage) {
-                    base += v.owned * CONFIG.facilities[k].baseRate;
+                if (v.owned > 0 && CONFIG.facilities[k].era <= currentEra) {
+                    base += v.owned * CONFIG.facilities[k].baseRate * getFacilityMultiplier(k);
                 }
             });
-            let mult = getUpgradeMultiplier();
-            if (facilityBoostActive) mult *= CONFIG.bonusProblem.effects.facilityBoost.multiplier;
-            return base * mult;
+            let globalMult = 1;
+            if (facilityBoostActive) globalMult *= CONFIG.bonusProblem.effects.facilityBoost.multiplier;
+            return base * globalMult;
         }
         
         function getSolveValue() {
-            let base = getUpgradeMultiplier();
-            if (solveBoostActive) base *= CONFIG.bonusProblem.effects.solveBoost.multiplier;
-            return base;
+            let mult = 1;
+            if (upgrades['gen_speed']?.owned) mult *= 1.1;
+            if (upgrades['gen_math']?.owned) mult *= 1.15;
+            if (upgrades['gen_error']?.owned) mult *= 1.05;
+            if (currentProblem) {
+                if (currentProblem.type === 'decimal' && upgrades['gen_decimal']?.owned) mult *= 1.15;
+                if (currentProblem.text && currentProblem.text.includes('matrix') && upgrades['gen_matrix']?.owned) mult *= 1.15;
+            }
+            if (solveBoostActive) mult *= CONFIG.bonusProblem.effects.solveBoost.multiplier;
+            const cps = getComputationsPerSecond();
+            let baseValue = Math.max(10, cps * 5);
+            return baseValue * mult;
         }
         
         function getOPM() {
@@ -414,15 +654,13 @@
         }
         
         function scheduleNextBonus() {
-            const variance = (Math.random() - 0.5) * CONFIG.bonusProblem.averageIntervalMs * 0.5;
-            nextBonusTime = Date.now() + CONFIG.bonusProblem.averageIntervalMs + variance;
-            if (nextBonusTime - Date.now() < CONFIG.bonusProblem.minIntervalMs) {
-                nextBonusTime = Date.now() + CONFIG.bonusProblem.minIntervalMs;
-            }
+            const minMs = 60000;
+            const maxMs = 600000;
+            nextBonusTime = Date.now() + minMs + Math.random() * (maxMs - minMs);
         }
         
         function showBonusProblem() {
-            bonusProblemData = generateProblemForCategory(Math.min(unlockedCategories - 1, 15));
+            bonusProblemData = generateProblemForCategory(Math.min(complexityLevel - 1, 15));
             bonusEndTime = Date.now() + CONFIG.bonusProblem.durationMs;
             
             const effects = ['doubleComps', 'facilityBoost', 'solveBoost'];
@@ -465,48 +703,44 @@
             }
         }
         
-        function checkStageUp() {
-            const maxStages = 63;
-            const nextThreshold = getStageThreshold(currentStage + 1);
-            if (totalSolved >= nextThreshold && currentStage < maxStages) {
-                currentStage++;
-                unlockedCategories = currentStage;
-                playStageUp();
-                showStageFlash();
-                updateVisualFlair();
+        function checkComplexityUp() {
+            const newLevel = calculateComplexityLevel();
+            if (newLevel > complexityLevel) {
+                complexityLevel = newLevel;
+                if (complexityLevel % 5 === 0) showComplexityFlash();
             }
+        }
+        
+        function showComplexityFlash() {
+            const flash = document.getElementById('opmFlash');
+            flash.textContent = '⚡ COMPLEXITY ' + complexityLevel;
+            flash.classList.remove('hidden', 'show'); 
+            void flash.offsetWidth;
+            flash.classList.add('show');
+            setTimeout(() => { flash.classList.remove('show'); setTimeout(() => flash.classList.add('hidden'), 500); }, 1000);
         }
         
         function showStageFlash() {
             const flash = document.getElementById('stageFlash');
-            flash.textContent = getEraName() + ' STAGE ' + currentStage;
-            flash.classList.remove('hidden');
+            flash.textContent = getEraName() + ' ERA UNLOCKED';
+            flash.classList.remove('hidden', 'show');
+            void flash.offsetWidth;
             flash.classList.add('show');
-            setTimeout(() => {
-                flash.classList.remove('show');
-                setTimeout(() => flash.classList.add('hidden'), 500);
-            }, 1500);
+            setTimeout(() => { flash.classList.remove('show'); setTimeout(() => flash.classList.add('hidden'), 500); }, 1500);
         }
         
         function updateVisualFlair() {
             const body = document.body;
-            body.className = 'era-' + getEra();
+            body.className = 'era-' + currentEra;
             
-            if (currentStage >= 5) body.classList.add('stage-5-plus');
-            if (currentStage >= 10) body.classList.add('stage-10-plus');
-            if (currentStage >= 17) body.classList.add('stage-17-plus');
-            if (currentStage >= 33) body.classList.add('stage-33-plus');
-            if (currentStage >= 52) body.classList.add('stage-52-plus');
+            if (complexityLevel >= 10) body.classList.add('complexity-10-plus');
+            if (complexityLevel >= 20) body.classList.add('complexity-20-plus');
+            if (complexityLevel >= 30) body.classList.add('complexity-30-plus');
+            if (complexityLevel >= 45) body.classList.add('complexity-45-plus');
+            if (complexityLevel >= 55) body.classList.add('complexity-55-plus');
             
             const box = document.getElementById('gameBox');
-            box.className = 'game-box stage-' + currentStage + ' era-' + getEra();
-        }
-        
-        function flickerSymbols() {
-            let s = '';
-            const len = 2 + Math.floor(currentStage / 4);
-            for (let i = 0; i < len; i++) s += symbols[Math.floor(Math.random() * symbols.length)];
-            document.getElementById('symbolFlicker').textContent = s;
+            box.className = 'game-box era-' + currentEra;
         }
         
         function getPrice(base, mult, count) {
@@ -522,6 +756,16 @@
             if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
             if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
             return Math.floor(n).toLocaleString();
+        }
+        
+        function formatBitComplexity(level) {
+            if (level <= 3) return Math.pow(2, level - 1) + '-bit';
+            if (level <= 13) return Math.pow(2, level - 4) + ' B';
+            if (level <= 23) return Math.pow(2, level - 14) + ' KB';
+            if (level <= 33) return Math.pow(2, level - 24) + ' MB';
+            if (level <= 43) return Math.pow(2, level - 34) + ' GB';
+            if (level <= 53) return Math.pow(2, level - 44) + ' TB';
+            return Math.pow(2, level - 54) + ' PB';
         }
         
         function randRange(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
@@ -734,18 +978,18 @@
                     text = `P(A)=${pA.toFixed(1)}, P(B|A)=${pBA.toFixed(1)}, P(B|¬A)=${pBnotA.toFixed(1)}, P(A|B)=`;
                     break;
                 case 14:
-                    const v1 = randRange(1, 6);
-                    const v2 = randRange(1, 6);
-                    const p1 = 0.5;
-                    answer = (v1 * p1 + v2 * (1 - p1)).toFixed(2).replace(/\.?0+$/, '');
-                    text = `E[X]: ${v1} w/ p=0.5, ${v2} w/ p=0.5 =`;
+                    a = randRange(10, 99) / 100;
+                    b = randRange(10, 99) / 100;
+                    c = randRange(10, 99) / 100;
+                    answer = (a * b + c).toFixed(2);
+                    text = `${a.toFixed(2)} × ${b.toFixed(2)} + ${c.toFixed(2)} =`;
                     break;
                 case 15:
-                    const vals = [randRange(1, 5), randRange(2, 8), randRange(3, 10)];
-                    const probs = [0.3, 0.5, 0.2];
-                    const ev = vals[0] * probs[0] + vals[1] * probs[1] + vals[2] * probs[2];
-                    answer = ev.toFixed(2);
-                    text = `E[X]: ${vals[0]}×0.3 + ${vals[1]}×0.5 + ${vals[2]}×0.2 =`;
+                    a = randRange(10, 99) / 100;
+                    b = randRange(10, Math.floor(a * 100)) / 100;
+                    c = randRange(10, 99) / 100;
+                    answer = ((a - b) * c).toFixed(2);
+                    text = `(${a.toFixed(2)} - ${b.toFixed(2)}) × ${c.toFixed(2)} =`;
                     break;
                 default:
                     return generateProbabilityProblem(0);
@@ -1125,7 +1369,12 @@
         }
         
         function generateProblem() {
-            const cat = Math.floor(Math.random() * unlockedCategories);
+            let cat;
+            if (Math.random() < 0.2) {
+                cat = Math.max(0, complexityLevel - 1);
+            } else {
+                cat = Math.floor(Math.random() * Math.max(1, complexityLevel - 1));
+            }
             return generateProblemForCategory(cat);
         }
         
@@ -1305,23 +1554,24 @@
             document.getElementById('opmDisplay').textContent = getOPM().toFixed(0);
             document.getElementById('bonusSolved').textContent = bonusSolved;
             
-            document.getElementById('stageNumber').textContent = currentStage;
-            document.getElementById('stageLabel').textContent = getEraName() + ' STAGE';
-            const bits = Math.pow(2, Math.min(currentStage - 1, 20));
-            document.getElementById('bitDisplay').textContent = formatNumber(bits) + '-bit';
+            document.getElementById('eraName').textContent = getEraName() + ' ERA';
+            const bitEl = document.getElementById('bitDisplay');
+            bitEl.textContent = formatBitComplexity(complexityLevel);
             
-            const currentThreshold = getStageThreshold(currentStage);
-            const nextThreshold = getStageThreshold(currentStage + 1);
-            const progress = currentStage >= 63 ? 100 : ((totalSolved - currentThreshold) / (nextThreshold - currentThreshold)) * 100;
-            document.getElementById('stageFill').style.width = Math.min(100, progress) + '%';
-            document.getElementById('stageNext').textContent = currentStage >= 63 ? 'MAX' : 'next: ' + formatNumber(nextThreshold);
+            bitEl.classList.remove('glowing', 'glowing-intense');
+            if (complexityLevel >= 40) {
+                bitEl.classList.add('glowing-intense');
+            } else if (complexityLevel >= 20) {
+                bitEl.classList.add('glowing');
+            }
             
-            document.getElementById('streakFill').style.width = Math.min(100, (totalSolved % 50) * 2) + '%';
+            const currentThreshold = getComplexityThreshold(complexityLevel);
+            const nextThreshold = getComplexityThreshold(complexityLevel + 1);
+            const progress = complexityLevel >= 60 ? 100 : ((totalSolved - currentThreshold) / (nextThreshold - currentThreshold)) * 100;
+            document.getElementById('stageFill').style.width = Math.min(100, Math.max(0, progress)) + '%';
+            document.getElementById('stageNext').textContent = complexityLevel >= 60 ? 'MAX' : 'next: ' + formatNumber(nextThreshold);
             
-            const bonusRemaining = Math.max(0, Math.ceil((nextBonusTime - Date.now()) / 1000));
-            const mins = Math.floor(bonusRemaining / 60);
-            const secs = bonusRemaining % 60;
-            document.getElementById('bonusCountdown').textContent = `~${mins}:${secs.toString().padStart(2, '0')}`;
+            document.getElementById('streakFill').style.width = Math.min(100, (stats.streak % 50) * 2) + '%';
             
             if (bonusProblemData) {
                 const remaining = Math.max(0, Math.ceil((bonusEndTime - Date.now()) / 1000));
@@ -1346,106 +1596,191 @@
             el.innerHTML = html;
         }
         
+        function getOrderedEraFacilities(era) {
+            const order = {
+                1: ['fingerCounting', 'tallySticks', 'countingBeads', 'stoneTablets', 'pencilPaper', 'abacus', 'trufflePig'],
+                2: ['slideRule', 'vacuumTube', 'steamMachine', 'monkeyTypist', 'analyticalEngine', 'differentialAnalyzer', 'probabilityOracle'],
+                3: ['pocketCalculator', 'personalComputer', 'solarFarm', 'tpu', 'hypercomputer', 'computeCluster', 'timeloops', 'quantumCore'],
+                4: ['superintelligence', 'dysonSwarm', 'thamiel', 'matrioshkaBrain', 'timeCrystal', 'dodecahedron', 'multiversalSync', 'omegaPoint']
+            };
+            return order[era] || [];
+        }
+        
+        function isFacilityUnlocked(key) {
+            const cfg = CONFIG.facilities[key];
+            if (cfg.era > currentEra) return false;
+            
+            const eraFacilities = getOrderedEraFacilities(cfg.era);
+            const index = eraFacilities.indexOf(key);
+            
+            if (index === 0) return true;
+            
+            const prevKey = eraFacilities[index - 1];
+            return facilities[prevKey].owned >= 1;
+        }
+        
+        function checkGeneralUpgradeVisible(cfg) {
+            if (!cfg.reqStat) return true;
+            
+            switch(cfg.reqStat) {
+                case 'opm100': return getOPM() >= 50;
+                case 'prob500': return stats.probSolved >= 100;
+                case 'matrix500': return stats.matrixSolved >= 100;
+                case 'wrong100': return stats.wrongAnswers >= 25;
+                case 'arith1000': return stats.arithSolved >= 250;
+                case 'play1hr': return stats.playTime >= 1800;
+                case 'play10hr': return stats.playTime >= 18000;
+                case 'solved100k': return stats.totalSolved >= 25000;
+                case 'solved1m': return stats.totalSolved >= 250000;
+                case 'era1complete': return currentEra >= 1;
+                case 'era2complete': return currentEra >= 2;
+                case 'era3complete': return currentEra >= 3;
+                case 'era4complete': return currentEra >= 4;
+                case 'allFacilities': return currentEra >= 4;
+                case 'oneOfEach': return Object.values(facilities).filter(f => f.owned >= 1).length >= 3;
+                default: return true;
+            }
+        }
+        
+        function checkGeneralUpgradeUnlocked(cfg) {
+            if (!cfg.reqStat) return true;
+            
+            switch(cfg.reqStat) {
+                case 'opm100': return getOPM() >= 100;
+                case 'prob500': return stats.probSolved >= 500;
+                case 'matrix500': return stats.matrixSolved >= 500;
+                case 'wrong100': return stats.wrongAnswers >= 100;
+                case 'arith1000': return stats.arithSolved >= 1000;
+                case 'play1hr': return stats.playTime >= 3600;
+                case 'play10hr': return stats.playTime >= 36000;
+                case 'solved100k': return stats.totalSolved >= 100000;
+                case 'solved1m': return stats.totalSolved >= 1000000;
+                case 'era1complete': {
+                    const era1Facs = getOrderedEraFacilities(1);
+                    return era1Facs.every(k => facilities[k].owned >= 1);
+                }
+                case 'era2complete': {
+                    const era2Facs = getOrderedEraFacilities(2);
+                    return era2Facs.every(k => facilities[k].owned >= 1);
+                }
+                case 'era3complete': {
+                    const era3Facs = getOrderedEraFacilities(3);
+                    return era3Facs.every(k => facilities[k].owned >= 1);
+                }
+                case 'era4complete': {
+                    const era4Facs = getOrderedEraFacilities(4);
+                    return era4Facs.every(k => facilities[k].owned >= 1);
+                }
+                case 'allFacilities': {
+                    return Object.values(facilities).every(f => f.owned >= 1);
+                }
+                case 'oneOfEach': {
+                    for (let era = 1; era <= currentEra; era++) {
+                        const facs = getOrderedEraFacilities(era);
+                        if (!facs.every(k => facilities[k].owned >= 1)) return false;
+                    }
+                    return true;
+                }
+                default: return true;
+            }
+        }
+        
         function updateShopDisplay() {
-            const facilityKeys = Object.keys(CONFIG.facilities);
-            const upgradeKeys = Object.keys(CONFIG.upgrades);
-            
-            let nextUnlockedFacCount = 0;
-            let nextUnlockedUpgCount = 0;
-            
-            facilityKeys.forEach((k) => {
+            Object.keys(CONFIG.facilities).forEach(k => {
                 const cfg = CONFIG.facilities[k];
                 const btn = document.getElementById('buy_' + k);
                 if (!btn) return;
                 
                 const price = getPrice(cfg.basePrice, cfg.priceMultiplier, facilities[k].owned);
-                const unlocked = currentStage >= cfg.unlockStage;
-                const isNextUp = !unlocked && nextUnlockedFacCount < 2;
+                const eraUnlocked = cfg.era <= currentEra;
+                const facilityUnlocked = isFacilityUnlocked(k);
+                const alreadyOwned = facilities[k].owned >= 1;
                 
-                if (!unlocked && !isNextUp) {
+                if (!eraUnlocked || !facilityUnlocked) {
                     btn.classList.add('hidden');
                     return;
                 }
                 
-                btn.classList.remove('hidden');
-                
-                if (isNextUp) {
-                    nextUnlockedFacCount++;
-                    btn.classList.add('locked', 'mystery');
-                    document.getElementById('name_' + k).textContent = '???';
-                    document.getElementById('desc_' + k).textContent = 'Unlock at stage ' + cfg.unlockStage;
-                    document.getElementById('cost_' + k).textContent = '???';
-                    document.getElementById('owned_' + k).textContent = '0';
-                    btn.disabled = true;
-                } else {
-                    btn.classList.remove('mystery');
-                    document.getElementById('name_' + k).textContent = cfg.name;
-                    document.getElementById('desc_' + k).textContent = cfg.desc;
-                    document.getElementById('cost_' + k).textContent = formatNumber(price);
-                    document.getElementById('owned_' + k).textContent = facilities[k].owned;
-                    btn.classList.toggle('locked', !unlocked);
-                    btn.disabled = !unlocked || computations < price;
-                }
+                btn.classList.remove('hidden', 'locked', 'mystery');
+                document.getElementById('name_' + k).textContent = cfg.name;
+                document.getElementById('desc_' + k).textContent = cfg.desc;
+                document.getElementById('cost_' + k).textContent = formatNumber(price);
+                document.getElementById('owned_' + k).textContent = facilities[k].owned;
+                btn.disabled = computations < price;
             });
             
-            upgradeKeys.forEach((k) => {
+            Object.keys(CONFIG.upgrades).forEach(k => {
                 const cfg = CONFIG.upgrades[k];
                 const btn = document.getElementById('buy_' + k);
                 if (!btn) return;
                 
-                const level = upgrades[k].level;
-                const price = getPrice(cfg.basePrice, cfg.priceMultiplier, level);
-                const unlocked = currentStage >= cfg.unlockStage;
-                const maxed = level >= cfg.maxLevel;
-                const isNextUp = !unlocked && nextUnlockedUpgCount < 2;
+                const owned = upgrades[k].owned;
                 
-                if (!unlocked && !isNextUp) {
+                if (owned) {
+                    btn.classList.add('bought', 'hidden');
+                    return;
+                }
+                
+                let visible = false;
+                let canBuy = false;
+                
+                if (cfg.type === 'tiered') {
+                    const facOwned = facilities[cfg.facility]?.owned || 0;
+                    visible = facOwned >= cfg.reqOwned;
+                    canBuy = facOwned >= cfg.reqOwned;
+                } else if (cfg.type === 'synergy') {
+                    const fac1Owned = facilities[cfg.facility]?.owned || 0;
+                    const fac2Owned = facilities[cfg.synergyWith]?.owned || 0;
+                    visible = fac1Owned >= cfg.reqOwned && fac2Owned >= cfg.reqOwned;
+                    canBuy = visible;
+                } else if (cfg.type === 'general') {
+                    visible = checkGeneralUpgradeUnlocked(cfg);
+                    canBuy = visible;
+                }
+                
+                if (!visible) {
                     btn.classList.add('hidden');
                     return;
                 }
                 
-                btn.classList.remove('hidden');
-                
-                if (isNextUp) {
-                    nextUnlockedUpgCount++;
-                    btn.classList.add('locked', 'mystery');
-                    document.getElementById('uname_' + k).textContent = '???';
-                    document.getElementById('udesc_' + k).textContent = 'Unlock at stage ' + cfg.unlockStage;
-                    document.getElementById('cost_' + k).textContent = '???';
-                    document.getElementById('level_' + k).textContent = '0';
-                    btn.disabled = true;
-                } else {
-                    btn.classList.remove('mystery');
-                    document.getElementById('uname_' + k).textContent = cfg.name;
-                    document.getElementById('udesc_' + k).textContent = cfg.desc;
-                    document.getElementById('cost_' + k).textContent = maxed ? 'MAX' : formatNumber(price);
-                    document.getElementById('level_' + k).textContent = level;
-                    btn.classList.toggle('locked', !unlocked);
-                    btn.classList.toggle('maxed', maxed);
-                    btn.disabled = !unlocked || maxed || computations < price;
-                }
+                btn.classList.remove('hidden', 'bought', 'locked');
+                const costEl = document.getElementById('ucost_' + k);
+                if (costEl) costEl.textContent = formatNumber(cfg.basePrice);
+                btn.disabled = computations < cfg.basePrice;
             });
         }
         
         function buyFacility(key) {
             const cfg = CONFIG.facilities[key];
             const price = getPrice(cfg.basePrice, cfg.priceMultiplier, facilities[key].owned);
-            if (computations >= price && currentStage >= cfg.unlockStage) {
+            if (computations >= price && cfg.era <= currentEra && isFacilityUnlocked(key)) {
                 computations -= price;
                 facilities[key].owned++;
                 playPurchase();
                 flashPurchase();
+                checkEraUnlock();
                 saveGame();
             }
         }
         
         function buyUpgrade(key) {
             const cfg = CONFIG.upgrades[key];
-            const level = upgrades[key].level;
-            const price = getPrice(cfg.basePrice, cfg.priceMultiplier, level);
-            if (level < cfg.maxLevel && computations >= price && currentStage >= cfg.unlockStage) {
-                computations -= price;
-                upgrades[key].level++;
+            if (upgrades[key].owned || computations < cfg.basePrice) return;
+            
+            let canBuy = false;
+            if (cfg.type === 'tiered') {
+                canBuy = (facilities[cfg.facility]?.owned || 0) >= cfg.reqOwned;
+            } else if (cfg.type === 'synergy') {
+                const fac1 = facilities[cfg.facility]?.owned || 0;
+                const fac2 = facilities[cfg.synergyWith]?.owned || 0;
+                canBuy = fac1 >= cfg.reqOwned && fac2 >= cfg.reqOwned;
+            } else if (cfg.type === 'general') {
+                canBuy = true;
+            }
+            
+            if (canBuy) {
+                computations -= cfg.basePrice;
+                upgrades[key].owned = true;
                 playPurchase();
                 flashPurchase();
                 saveGame();
@@ -1461,7 +1796,13 @@
         function solveProblem() {
             if (!currentProblem) return;
             totalSolved++;
+            stats.totalSolved++;
+            stats.streak++;
             solveTimestamps.push(Date.now());
+            
+            if (currentProblem.category < 16) stats.arithSolved++;
+            else if (currentProblem.category < 32) stats.probSolved++;
+            else stats.matrixSolved++;
             
             computations += getSolveValue();
             playCorrect();
@@ -1471,7 +1812,8 @@
             simpleInput.classList.add('correct');
             setTimeout(() => simpleInput.classList.remove('correct'), 150);
             
-            checkStageUp();
+            checkComplexityUp();
+            checkEraUnlock();
             
             if (queue.length > 0) { 
                 currentProblem = queue.shift(); 
@@ -1532,26 +1874,27 @@
         function saveGame() {
             lastSaveTime = Date.now();
             const save = {
-                computations, totalSolved, bonusSolved, currentStage, unlockedCategories,
+                computations, totalSolved, bonusSolved, currentEra, complexityLevel, stats,
                 facilities: Object.fromEntries(Object.entries(facilities).map(([k,v]) => [k, v.owned])),
-                upgrades: Object.fromEntries(Object.entries(upgrades).map(([k,v]) => [k, v.level])),
+                upgrades: Object.fromEntries(Object.entries(upgrades).map(([k,v]) => [k, v.owned])),
                 facilityBoostEnd, solveBoostEnd, lastSaveTime
             };
-            localStorage.setItem('computation_factory_v8', JSON.stringify(save));
+            localStorage.setItem(CONFIG.saveKey, JSON.stringify(save));
         }
         
         function loadGame() {
-            const saved = localStorage.getItem('computation_factory_v8');
+            const saved = localStorage.getItem(CONFIG.saveKey);
             if (saved) {
                 const s = JSON.parse(saved);
                 computations = s.computations || 0;
                 totalSolved = s.totalSolved || 0;
                 bonusSolved = s.bonusSolved || 0;
-                currentStage = s.currentStage || 1;
-                unlockedCategories = s.unlockedCategories || 1;
+                currentEra = s.currentEra || 1;
+                complexityLevel = s.complexityLevel || 1;
+                if (s.stats) stats = { ...stats, ...s.stats };
                 
                 Object.keys(facilities).forEach(k => { facilities[k].owned = s.facilities?.[k] || 0; });
-                Object.keys(upgrades).forEach(k => { upgrades[k].level = s.upgrades?.[k] || 0; });
+                Object.keys(upgrades).forEach(k => { upgrades[k].owned = !!s.upgrades?.[k]; });
                 
                 if (s.facilityBoostEnd > Date.now()) { facilityBoostActive = true; facilityBoostEnd = s.facilityBoostEnd; }
                 if (s.solveBoostEnd > Date.now()) { solveBoostActive = true; solveBoostEnd = s.solveBoostEnd; }
@@ -1561,6 +1904,7 @@
                     const rate = getComputationsPerSecond();
                     const earnings = (offlineMs / 1000) * rate * CONFIG.offline.offlineEfficiency;
                     if (earnings > 1) computations += earnings;
+                    stats.offlineTime += offlineMs / 1000;
                 }
                 
                 updateVisualFlair();
