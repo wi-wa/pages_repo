@@ -306,23 +306,38 @@
                 glyphSet = angelicGlyphs + symbols2 + symbols3;
             }
             
-            const useRandomColors = level >= 45;
-            const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#f38181', '#aa96da', '#a8e6cf', '#dcedc1', '#ffd3b6'];
+            let colorPool = ['#aaa'];
+            if (currentEra >= 2 || level >= 15) {
+                colorPool.push('#ff9f43', '#ffa502');
+            }
+            if (currentEra >= 3 || level >= 30) {
+                colorPool.push('#74b9ff', '#81ecec', '#00cec9');
+            }
+            if (currentEra >= 4 || level >= 45) {
+                colorPool = ['#ff6b6b', '#ff9ff3', '#feca57', '#48dbfb', '#1dd1a1', '#5f27cd', '#ff9f43', '#00d2d3', '#54a0ff', '#c8d6e5'];
+            }
             
             let content = '<div class="flicker-matrix grid-' + gridSize + '">';
             for (let i = 0; i < gridSize * gridSize; i++) {
                 const glyph = glyphSet[Math.floor(Math.random() * glyphSet.length)];
-                if (useRandomColors) {
-                    const color = colors[Math.floor(Math.random() * colors.length)];
+                const color = colorPool[Math.floor(Math.random() * colorPool.length)];
+                const useGlow = level >= 10 || currentEra >= 2;
+                if (useGlow) {
                     content += '<span style="color:' + color + ';text-shadow:0 0 8px ' + color + '">' + glyph + '</span>';
                 } else {
-                    content += '<span>' + glyph + '</span>';
+                    content += '<span style="color:' + color + '">' + glyph + '</span>';
                 }
             }
             content += '</div>';
             
-            if (level >= 50) {
+            if (level >= 25) {
                 content += '<div class="sigil-particles"></div>';
+            }
+            if (level >= 40) {
+                content += '<div class="sigil-particles-extra"></div>';
+            }
+            if (level >= 55) {
+                content += '<div class="sigil-particles-intense"></div>';
             }
             
             el.innerHTML = content;
@@ -628,7 +643,9 @@
             });
             let globalMult = 1;
             if (facilityBoostActive) globalMult *= CONFIG.bonusProblem.effects.facilityBoost.multiplier;
-            return base * globalMult;
+            const opm = getOPM();
+            const opmMult = 0.1 + (opm / 10);
+            return base * globalMult * opmMult;
         }
         
         function getSolveValue() {
@@ -642,7 +659,7 @@
             }
             if (solveBoostActive) mult *= CONFIG.bonusProblem.effects.solveBoost.multiplier;
             const cps = getComputationsPerSecond();
-            let baseValue = Math.max(10, cps * 5);
+            let baseValue = Math.max(1, cps * 0.1);
             return baseValue * mult;
         }
         
@@ -1551,7 +1568,9 @@
             document.getElementById('computations').textContent = formatNumber(computations);
             document.getElementById('compRate').textContent = '+' + formatNumber(getComputationsPerSecond()) + '/sec';
             document.getElementById('totalSolved').textContent = formatNumber(totalSolved);
-            document.getElementById('opmDisplay').textContent = getOPM().toFixed(0);
+            const opm = getOPM();
+            const opmMult = 0.1 + (opm / 10);
+            document.getElementById('opmDisplay').textContent = opm.toFixed(0) + ' (×' + opmMult.toFixed(2) + ')';
             document.getElementById('bonusSolved').textContent = bonusSolved;
             
             document.getElementById('eraName').textContent = getEraName() + ' ERA';
