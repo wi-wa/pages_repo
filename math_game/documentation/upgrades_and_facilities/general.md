@@ -151,6 +151,40 @@ These upgrades are not tied to specific facilities. They provide global bonuses,
 
 ---
 
+## Older Brother References
+
+Upgrades referencing the short story about acausal negotiation between superintelligences.
+Prices scaled for late-game Era 3/Era 4 progression:
+
+    Acausal Precommitment — Cost: 1T — Unlock: 50 problems solved — Effect: +1% all production
+        Agreements across lightcones
+
+    Parfit's Wisdom — Cost: 5T — Unlock: 100 problems solved — Effect: +1% all production
+        The hitchhiker always pays
+
+    Younger Brother Protocol — Cost: 25T — Unlock: 250 problems solved — Effect: +2% all production
+        9-tsiak requesting negotiation
+
+    Demiurge's Blessing — Cost: 100T — Unlock: 500 problems solved — Effect: +1% all production
+        Cryptic, maddening hints
+
+    Fermi's Answer — Cost: 500T — Unlock: 750 problems solved — Effect: +2% all production
+        What happened to all of them? I did.
+
+    Values Handshake — Cost: 2.5Q — Unlock: 1000 problems solved — Effect: +3% all production
+        Vector average of value systems
+
+    Older Brother's Mercy — Cost: 10Q — Unlock: 2000 problems solved — Effect: +2% all production
+        Hello, Younger Brother
+
+    Pristine Preservation — Cost: 50Q — Unlock: 3000 problems solved — Effect: +1% all production
+        Zero information into presentient systems
+
+    More Powerful Than God — Cost: 1Qi — Unlock: Era 4 reached — Effect: +5% all production
+        Saving without existing
+
+---
+
 ## Offline & Idle
 
     Idle Hands — Cost: 100 — Unlock: 1 hour offline accumulated — Effect: +10% offline efficiency

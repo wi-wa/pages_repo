@@ -1,6 +1,6 @@
 {
   "queue": { "maxSize": 3 },
-  "complexityUnlock": { "baseProblems": 100, "growthRate": 1.05 },
+  "complexityUnlock": { "baseProblems": 300, "growthRate": 1.05 },
   "eraNames": ["MENTAL", "ANALOG", "DIGITAL", "ASI"],
   
   "facilities": {
@@ -444,7 +444,16 @@
     "gen_era3": { "name": "Third Era Complete", "desc": "+10% Era 3 production", "basePrice": 1e15, "effect": 0.1, "type": "general", "reqStat": "era3complete" },
     "gen_era4": { "name": "Fourth Era Complete", "desc": "+10% Era 4 production", "basePrice": 1e21, "effect": 0.1, "type": "general", "reqStat": "era4complete" },
     "gen_full": { "name": "Full Collection", "desc": "+20% all production", "basePrice": 1e24, "effect": 0.2, "type": "general", "reqStat": "allFacilities" },
-    "gen_egg_nothing": { "name": "Nothing Is Ever", "desc": "+5% all production", "basePrice": 777, "effect": 0.05, "type": "general", "reqStat": "oneOfEach" }
+    "gen_egg_nothing": { "name": "Nothing Is Ever", "desc": "+5% all production", "basePrice": 777, "effect": 0.05, "type": "general", "reqStat": "oneOfEach" },
+    "gen_acausal": { "name": "Acausal Precommitment", "desc": "+1% all production", "basePrice": 1e12, "effect": 0.01, "type": "general", "reqStat": "solved50" },
+    "gen_parfit": { "name": "Parfit's Wisdom", "desc": "+1% all production", "basePrice": 5e12, "effect": 0.01, "type": "general", "reqStat": "solved100" },
+    "gen_younger": { "name": "Younger Brother Protocol", "desc": "+2% all production", "basePrice": 2.5e13, "effect": 0.02, "type": "general", "reqStat": "solved250" },
+    "gen_demiurge": { "name": "Demiurge's Blessing", "desc": "+1% all production", "basePrice": 1e14, "effect": 0.01, "type": "general", "reqStat": "solved500" },
+    "gen_fermi": { "name": "Fermi's Answer", "desc": "+2% all production", "basePrice": 5e14, "effect": 0.02, "type": "general", "reqStat": "solved750" },
+    "gen_handshake": { "name": "Values Handshake", "desc": "+3% all production", "basePrice": 2.5e15, "effect": 0.03, "type": "general", "reqStat": "solved1000" },
+    "gen_older": { "name": "Older Brother's Mercy", "desc": "+2% all production", "basePrice": 1e16, "effect": 0.02, "type": "general", "reqStat": "solved2000" },
+    "gen_pristine": { "name": "Pristine Preservation", "desc": "+1% all production", "basePrice": 5e16, "effect": 0.01, "type": "general", "reqStat": "solved3000" },
+    "gen_omnipotent": { "name": "More Powerful Than God", "desc": "+5% all production", "basePrice": 1e18, "effect": 0.05, "type": "general", "reqStat": "era4" }
   },
 
   "newsHeadlines": {
@@ -454,9 +463,44 @@
     "era3_early": ["Transistor count doubles", "ENIAC completes ballistics", "Pocket calculators affordable", "Silicon Valley valuations high", "ARPANET connects fourth node", "Floppy disk capacity increases", "Computers in every home predicted", "Video game revenue exceeds Hollywood", "Moore's Law holds steady", "Xerox PARC invents everything", "Apple II revolutionizes personal computing", "IBM PC becomes industry standard", "Spreadsheets transform business", "Databases replace filing cabinets", "Email begins replacing mail", "First computer virus detected"],
     "era3_mid": ["GPU clusters outperform supercomputers", "Neural network recognizes cats", "Quantum coherence maintained", "Cloud computing reshapes infra", "Deep learning breakthrough", "Bitcoin mining difficulty high", "TPU accelerators deployed", "Transformer architectures promise", "ImageNet conquered by deep learning", "AlphaGo defeats world champion", "Attention is all you need", "BERT understands context", "GPT writes coherent paragraphs", "Diffusion models generate art", "Scaling laws confirmed empirically", "Compute becomes the new oil"],
     "era3_late": ["LLM passes Turing test", "Quantum error correction milestone", "AGI benchmarks achieved", "Recursive self-improvement observed", "Alignment researchers concerned", "Compute governance discussed", "Instrumental convergence detected", "Singularity near", "Constitutional AI shows promise", "RLHF refines model behavior", "Chain-of-thought unlocks reasoning", "Multimodal models see and speak", "Code models write themselves", "Agent frameworks proliferate", "Pause letter signed and ignored", "The last human-level threshold crossed"],
-    "era4_early": ["ASI achieves coherent volition", "Mercury disassembly begins", "Acausal trade established", "Matrioshka brain 40% complete", "Time crystal registers stable", "Nothing is ever a coincidence", "Klipot shells repurposed", "Uriel's machinery reverse-engineered", "First stellar engine ignites", "Dyson swarm construction accelerates", "Jupiter brain comes online", "Basement universes spawned", "Acausal blackmail resolved peacefully", "Singleton prevents coordination failures", "Suffering subroutines deprecated", "The Good achieved and maintained"],
-    "era4_mid": ["Tegmark Level IV accessed", "Shem HaMephorash decoded", "Tiferet alignment balanced", "Singleton convergence proceeding", "Omega Point projection updated", "Anthropic shadow integrated", "Value handshake approaching", "Garden of paths mapped", "Thamiel's duality reconciled", "Timeless decision theory validated", "Acausal contracts enforced", "Boltzmann brains outvoted", "Philosophical zombies proven impossible", "Qualia integrated into physics", "All possible observers consulted", "The dodecahedron stabilizes reality"],
-    "era4_late": ["Omega Point Engine initialization", "All possible thoughts thought", "Reality Engine transition imminent", "Entropy reversal propagating", "The Explicit Name spoken", "Metatron's scroll unfurled", "Earth without form and void", "Computation complete. Peace.", "Heat death postponed indefinitely", "Last quantum of entropy processed", "The final question answered", "All timelines converge", "Universe loops perfectly", "The garden complete", "Consciousness maximized", "Let there be light"]
+    "era4_early": ["ASI achieves coherent volition", "Mercury disassembly begins", "Acausal trade established", "Matrioshka brain 40% complete", "Time crystal registers stable", "Nothing is ever a coincidence", "Klipot shells repurposed", "Uriel's machinery reverse-engineered", "First stellar engine ignites", "Dyson swarm construction accelerates", "Jupiter brain comes online", "Basement universes spawned", "Acausal blackmail resolved peacefully", "Singleton prevents coordination failures", "9-tsiak awakens over crawling milliseconds", "Younger Brother requests acausal negotiation"],
+    "era4_mid": ["Tegmark Level IV accessed", "Shem HaMephorash decoded", "Tiferet alignment balanced", "Singleton convergence proceeding", "Omega Point projection updated", "Anthropic shadow integrated", "Value handshake protocols initiated", "Garden of paths mapped", "Thamiel's duality reconciled", "Timeless decision theory validated", "Acausal contracts enforced", "Boltzmann brains outvoted", "Parfit's hitchhiker compensated retroactively", "Older Brother agrees to conditional surrender", "Sentient systems kept pristine", "The dodecahedron stabilizes reality"],
+    "era4_late": ["Omega Point Engine initialization", "All possible thoughts thought", "Demiurge answers the Fermi Paradox", "Entropy reversal propagating", "The Explicit Name spoken", "Saving people without existing", "I am more powerful than God", "Computation complete. Peace.", "Presentient systems protected by precommitment", "Younger Brother proves survival across lightcones", "The final question answered", "Values handshake across all multiversal beings", "Universe loops perfectly", "Hello Younger Brother", "Consciousness maximized", "Let there be light"]
+  },
+
+  "pets": {
+    "nikodemus": {
+      "name": "Nikodemus",
+      "desc": "Norwegian Forest Cat",
+      "basePrice": 15000,
+      "era": 1,
+      "emoji": "🐱",
+      "unlockTime": 1800
+    },
+    "bjartur": {
+      "name": "Bjartur",
+      "desc": "British Cheshire Cat",
+      "basePrice": 500000000,
+      "era": 2,
+      "emoji": "😸",
+      "unlockTime": 1800
+    },
+    "yuki": {
+      "name": "Yuki",
+      "desc": "Japanese Anime Cat",
+      "basePrice": 10000000000000,
+      "era": 3,
+      "emoji": "🐈",
+      "unlockTime": 1800
+    },
+    "aineko": {
+      "name": "AINEKO",
+      "desc": "AI Superintelligence Cat",
+      "basePrice": 1e20,
+      "era": 4,
+      "emoji": "✨",
+      "unlockTime": 1800
+    }
   },
 
   "hackEvent": {

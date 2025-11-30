@@ -56,7 +56,7 @@
     <div class="main-content">
         <div class="left-panel">
             <div class="complexity-display">
-                <div class="bit-display" id="bitDisplay" title="Click to increase complexity level (debug)">2-bit</div>
+                <div class="bit-display" id="bitDisplay">2-bit</div>
                 <div class="stage-progress">
                     <div class="stage-fill" id="stageFill"></div>
                 </div>
@@ -85,7 +85,7 @@
         
         <div class="game-box" id="gameBox">
             <div class="computations-display">
-                <span class="comp-value" id="computations" title="Click to double (debug)">0</span>
+                <span class="comp-value" id="computations">0</span>
                 <span class="comp-label">computations</span>
                 <span class="comp-rate" id="compRate">+0.0/sec</span>
             </div>
@@ -108,14 +108,17 @@
     </div>
     
     <div class="shop-panel">
-        <div class="shop-tabs">
-            <button class="tab-btn active" data-tab="facilities">Facilities</button>
-            <button class="tab-btn" data-tab="upgrades">Upgrades</button>
+        <div class="shop-section facilities-section">
+            <div class="section-header">FACILITIES</div>
+            <div class="section-content" id="facilitiesTab"></div>
         </div>
-        
-        <div class="tab-content" id="facilitiesTab"></div>
-        <div class="tab-content hidden" id="upgradesTab"></div>
+        <div class="shop-section upgrades-section">
+            <div class="section-header">UPGRADES</div>
+            <div class="section-content" id="upgradesTab"></div>
+        </div>
     </div>
+    
+    <div class="pets-container" id="petsContainer"></div>
 
     <script>
         let CONFIG = {};
@@ -163,8 +166,11 @@
             playTime: 0, offlineTime: 0, totalSolved: 0,
             arithSolved: 0, probSolved: 0, matrixSolved: 0,
             hackSurvived: 0, hackPerfect: 0, bonusSolved: 0, bonusPerfect: 0,
-            streak: 0, startTime: Date.now(), wrongAnswers: 0
+            streak: 0, startTime: Date.now(), wrongAnswers: 0,
+            eraTime: { 1: 0, 2: 0, 3: 0, 4: 0 }
         };
+        
+        let pets = {};
         
         let facilityBoostActive = false, facilityBoostEnd = 0;
         let solveBoostActive = false, solveBoostEnd = 0;
@@ -256,6 +262,7 @@
         function initGame() {
             Object.keys(CONFIG.facilities).forEach(k => { facilities[k] = { owned: 0 }; });
             Object.keys(CONFIG.upgrades).forEach(k => { upgrades[k] = { owned: false }; });
+            Object.keys(CONFIG.pets).forEach(k => { pets[k] = { owned: false }; });
             
             buildShopUI();
             loadGame();
@@ -270,8 +277,6 @@
             setInterval(gameTick, CONFIG.tickIntervalMs);
             setInterval(saveGame, CONFIG.saveIntervalMs);
             startComplexityFlicker();
-            
-            setupTabs();
             setupDebugClicks();
         }
         
@@ -364,21 +369,6 @@
         }
         
         function setupDebugClicks() {
-            document.getElementById('bitDisplay').addEventListener('click', () => {
-                if (complexityLevel < 60) {
-                    complexityLevel++;
-                    updateVisualFlair();
-                    updateDisplay();
-                    saveGame();
-                }
-            });
-            
-            document.getElementById('computations').addEventListener('click', () => {
-                computations = Math.max(computations * 2, 100);
-                updateDisplay();
-                saveGame();
-            });
-            
             document.getElementById('settingsBtn').addEventListener('click', () => {
                 document.getElementById('settingsPanel').classList.toggle('hidden');
             });
@@ -402,6 +392,55 @@
             });
         }
         
+        window.debug = {
+            addComplexity: function(n = 1) {
+                complexityLevel = Math.min(60, complexityLevel + n);
+                updateVisualFlair();
+                updateDisplay();
+                saveGame();
+                console.log('Complexity level:', complexityLevel);
+            },
+            addMoney: function(amount) {
+                if (amount === undefined) {
+                    computations = Math.max(computations * 2, 100);
+                } else {
+                    computations += amount;
+                }
+                updateDisplay();
+                saveGame();
+                console.log('Computations:', formatNumber(computations));
+            },
+            addEraTime: function(era, minutes = 30) {
+                if (era < 1 || era > 4) {
+                    console.log('Era must be 1-4');
+                    return;
+                }
+                stats.eraTime[era] = (stats.eraTime[era] || 0) + (minutes * 60);
+                saveGame();
+                updateShopDisplay();
+                console.log('Era', era, 'time:', Math.floor(stats.eraTime[era] / 60), 'minutes');
+            },
+            setEra: function(era) {
+                if (era < 1 || era > 4) {
+                    console.log('Era must be 1-4');
+                    return;
+                }
+                currentEra = era;
+                updateVisualFlair();
+                updateDisplay();
+                saveGame();
+                console.log('Era set to:', era);
+            },
+            help: function() {
+                console.log('=== DEBUG COMMANDS ===');
+                console.log('debug.addComplexity(n)  - Add n complexity levels (default 1)');
+                console.log('debug.addMoney(amount)  - Add computations (no arg = double current)');
+                console.log('debug.addEraTime(era, minutes) - Add minutes to era timer (default 30)');
+                console.log('debug.setEra(era)       - Set current era (1-4)');
+                console.log('debug.help()            - Show this help');
+            }
+        };
+        
         function resetGame() {
             localStorage.removeItem(CONFIG.saveKey);
             computations = 0;
@@ -411,7 +450,9 @@
             complexityLevel = 1;
             Object.keys(facilities).forEach(k => { facilities[k].owned = 0; });
             Object.keys(upgrades).forEach(k => { upgrades[k].owned = false; });
-            stats = { playTime: 0, offlineTime: 0, totalSolved: 0, arithSolved: 0, probSolved: 0, matrixSolved: 0, hackSurvived: 0, hackPerfect: 0, bonusSolved: 0, bonusPerfect: 0, streak: 0, startTime: Date.now(), wrongAnswers: 0 };
+            Object.keys(pets).forEach(k => { pets[k].owned = false; });
+            stats = { playTime: 0, offlineTime: 0, totalSolved: 0, arithSolved: 0, probSolved: 0, matrixSolved: 0, hackSurvived: 0, hackPerfect: 0, bonusSolved: 0, bonusPerfect: 0, streak: 0, startTime: Date.now(), wrongAnswers: 0, eraTime: { 1: 0, 2: 0, 3: 0, 4: 0 } };
+            renderPets();
             facilityBoostActive = false;
             solveBoostActive = false;
             hackActive = false;
@@ -469,21 +510,29 @@
                 btn.addEventListener('click', () => buyUpgrade(k));
                 upgTab.appendChild(btn);
             });
-        }
-        
-        function setupTabs() {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    document.getElementById('facilitiesTab').classList.toggle('hidden', btn.dataset.tab !== 'facilities');
-                    document.getElementById('upgradesTab').classList.toggle('hidden', btn.dataset.tab !== 'upgrades');
-                });
+            
+            Object.entries(CONFIG.pets).forEach(([k, v]) => {
+                pets[k] = pets[k] || { owned: false };
+                const btn = document.createElement('button');
+                btn.className = 'shop-item upgrade type-pet era-' + v.era;
+                btn.id = 'buy_pet_' + k;
+                btn.disabled = true;
+                btn.innerHTML = `
+                    <div class="item-info">
+                        <span class="item-name" id="pname_${k}">${v.emoji} ${v.name}</span>
+                        <span class="item-desc" id="pdesc_${k}">${v.desc}</span>
+                    </div>
+                    <span class="item-cost" id="pcost_${k}">${formatNumber(v.basePrice)}</span>
+                `;
+                btn.addEventListener('click', () => buyPet(k));
+                upgTab.appendChild(btn);
             });
         }
         
+        
         function gameTick() {
             stats.playTime += CONFIG.tickIntervalMs / 1000;
+            stats.eraTime[currentEra] = (stats.eraTime[currentEra] || 0) + CONFIG.tickIntervalMs / 1000;
             computations += getComputationsPerSecond() / 10;
             
             if (facilityBoostActive && Date.now() > facilityBoostEnd) facilityBoostActive = false;
@@ -590,11 +639,11 @@
         }
         
         function checkOpmFlair() {
-            const opm = getOPM();
+            const flops = getFLOPS();
             const tiers = [10, 30, 60, 100, 150];
             let currentTier = 0;
             for (let i = 0; i < tiers.length; i++) {
-                if (opm >= tiers[i]) currentTier = i + 1;
+                if (flops >= tiers[i]) currentTier = i + 1;
             }
             
             if (currentTier > lastOpmTier && currentTier > 0) {
@@ -640,6 +689,15 @@
             if (upgrades['gen_million']?.owned) mult *= 1.5;
             if (upgrades['gen_full']?.owned) mult *= 1.2;
             if (upgrades['gen_egg_nothing']?.owned) mult *= 1.05;
+            if (upgrades['gen_acausal']?.owned) mult *= 1.01;
+            if (upgrades['gen_parfit']?.owned) mult *= 1.01;
+            if (upgrades['gen_younger']?.owned) mult *= 1.02;
+            if (upgrades['gen_demiurge']?.owned) mult *= 1.01;
+            if (upgrades['gen_fermi']?.owned) mult *= 1.02;
+            if (upgrades['gen_handshake']?.owned) mult *= 1.03;
+            if (upgrades['gen_older']?.owned) mult *= 1.02;
+            if (upgrades['gen_pristine']?.owned) mult *= 1.01;
+            if (upgrades['gen_omnipotent']?.owned) mult *= 1.05;
             return mult;
         }
         
@@ -667,16 +725,18 @@
                 if (currentProblem.text && currentProblem.text.includes('matrix') && upgrades['gen_matrix']?.owned) mult *= 1.15;
             }
             if (solveBoostActive) mult *= CONFIG.bonusProblem.effects.solveBoost.multiplier;
-            const cps = getComputationsPerSecond();
-            let baseValue = Math.max(1, cps * 0.1);
-            return baseValue * mult;
+            const flopCount = currentProblem ? (FLOP_COUNTS[currentProblem.category] ?? 1) : 1;
+            return flopCount * mult;
         }
         
         function getFLOPS() {
             const now = Date.now();
             const threeMinAgo = now - 180000;
-            solveTimestamps = solveTimestamps.filter(entry => entry.time > threeMinAgo);
-            const totalFlops = solveTimestamps.reduce((sum, entry) => sum + entry.flops, 0);
+            solveTimestamps = solveTimestamps.filter(entry => {
+                if (typeof entry === 'number') return false;
+                return entry.time > threeMinAgo;
+            });
+            const totalFlops = solveTimestamps.reduce((sum, entry) => sum + (entry.flops || 1), 0);
             return totalFlops / 3;
         }
         
@@ -1652,7 +1712,7 @@
             if (!cfg.reqStat) return true;
             
             switch(cfg.reqStat) {
-                case 'opm100': return getOPM() >= 50;
+                case 'opm100': return getFLOPS() >= 50;
                 case 'prob500': return stats.probSolved >= 100;
                 case 'matrix500': return stats.matrixSolved >= 100;
                 case 'wrong100': return stats.wrongAnswers >= 25;
@@ -1667,6 +1727,15 @@
                 case 'era4complete': return currentEra >= 4;
                 case 'allFacilities': return currentEra >= 4;
                 case 'oneOfEach': return Object.values(facilities).filter(f => f.owned >= 1).length >= 3;
+                case 'solved50': return totalSolved >= 25;
+                case 'solved100': return totalSolved >= 50;
+                case 'solved250': return totalSolved >= 125;
+                case 'solved500': return totalSolved >= 250;
+                case 'solved750': return totalSolved >= 375;
+                case 'solved1000': return totalSolved >= 500;
+                case 'solved2000': return totalSolved >= 1000;
+                case 'solved3000': return totalSolved >= 1500;
+                case 'era4': return currentEra >= 4;
                 default: return true;
             }
         }
@@ -1675,7 +1744,7 @@
             if (!cfg.reqStat) return true;
             
             switch(cfg.reqStat) {
-                case 'opm100': return getOPM() >= 100;
+                case 'opm100': return getFLOPS() >= 100;
                 case 'prob500': return stats.probSolved >= 500;
                 case 'matrix500': return stats.matrixSolved >= 500;
                 case 'wrong100': return stats.wrongAnswers >= 100;
@@ -1710,6 +1779,15 @@
                     }
                     return true;
                 }
+                case 'solved50': return totalSolved >= 50;
+                case 'solved100': return totalSolved >= 100;
+                case 'solved250': return totalSolved >= 250;
+                case 'solved500': return totalSolved >= 500;
+                case 'solved750': return totalSolved >= 750;
+                case 'solved1000': return totalSolved >= 1000;
+                case 'solved2000': return totalSolved >= 2000;
+                case 'solved3000': return totalSolved >= 3000;
+                case 'era4': return currentEra >= 4;
                 default: return true;
             }
         }
@@ -1777,6 +1855,40 @@
                 if (costEl) costEl.textContent = formatNumber(cfg.basePrice);
                 btn.disabled = computations < cfg.basePrice;
             });
+            
+            Object.keys(CONFIG.pets).forEach(k => {
+                const cfg = CONFIG.pets[k];
+                const btn = document.getElementById('buy_pet_' + k);
+                if (!btn) return;
+                
+                if (pets[k]?.owned) {
+                    btn.classList.add('bought', 'hidden');
+                    return;
+                }
+                
+                const eraUnlocked = cfg.era <= currentEra;
+                const timeUnlocked = (stats.eraTime[cfg.era] || 0) >= cfg.unlockTime;
+                
+                if (!eraUnlocked) {
+                    btn.classList.add('hidden');
+                    return;
+                }
+                
+                btn.classList.remove('hidden', 'bought');
+                
+                if (!timeUnlocked) {
+                    btn.classList.add('locked');
+                    const remaining = Math.ceil((cfg.unlockTime - (stats.eraTime[cfg.era] || 0)) / 60);
+                    const costEl = document.getElementById('pcost_' + k);
+                    if (costEl) costEl.textContent = remaining + 'm left';
+                    btn.disabled = true;
+                } else {
+                    btn.classList.remove('locked');
+                    const costEl = document.getElementById('pcost_' + k);
+                if (costEl) costEl.textContent = formatNumber(cfg.basePrice);
+                    btn.disabled = computations < cfg.basePrice;
+                }
+            });
         }
         
         function buyFacility(key) {
@@ -1814,6 +1926,66 @@
                 flashPurchase();
                 saveGame();
             }
+        }
+        
+        function buyPet(key) {
+            const cfg = CONFIG.pets[key];
+            if (pets[key].owned || computations < cfg.basePrice) return;
+            if (cfg.era > currentEra) return;
+            if ((stats.eraTime[cfg.era] || 0) < cfg.unlockTime) return;
+            
+            computations -= cfg.basePrice;
+            pets[key].owned = true;
+            playPurchase();
+            flashPurchase();
+            renderPets();
+            saveGame();
+        }
+        
+        function renderPets() {
+            const container = document.getElementById('petsContainer');
+            container.innerHTML = '';
+            
+            const petImages = {
+                nikodemus: 'assets/pets/nikodemus.png',
+                bjartur: 'assets/pets/bjartur.png',
+                yuki: 'assets/pets/yuki.png',
+                aineko: 'assets/pets/aineko.png'
+            };
+            
+            let petIndex = 0;
+            Object.entries(CONFIG.pets).forEach(([k, v]) => {
+                if (!pets[k]?.owned) return;
+                
+                const pet = document.createElement('div');
+                pet.className = 'pet pet-' + k + ' era-' + v.era;
+                pet.style.left = (20 + petIndex * 100) + 'px';
+                pet.dataset.name = v.name;
+                pet.innerHTML = `
+                    <img class="pet-image" src="${petImages[k]}" alt="${v.name}">
+                    <div class="pet-name">${v.name}</div>
+                    <div class="pet-speech hidden">*meow*</div>
+                `;
+                pet.addEventListener('click', () => petMeow(pet));
+                container.appendChild(pet);
+                petIndex++;
+            });
+        }
+        
+        function petMeow(petEl) {
+            petEl.classList.add('pet-clicked');
+            const speech = petEl.querySelector('.pet-speech');
+            speech.classList.remove('hidden');
+            speech.classList.add('show');
+            playBeep(800, 0.05);
+            setTimeout(() => playBeep(600, 0.05), 80);
+            setTimeout(() => {
+                petEl.classList.remove('pet-clicked');
+            }, 400);
+            setTimeout(() => {
+                speech.classList.remove('show');
+                speech.classList.add('hidden');
+            }, 1500);
         }
         
         function flashPurchase() {
@@ -1907,6 +2079,7 @@
                 computations, totalSolved, bonusSolved, currentEra, complexityLevel, stats,
                 facilities: Object.fromEntries(Object.entries(facilities).map(([k,v]) => [k, v.owned])),
                 upgrades: Object.fromEntries(Object.entries(upgrades).map(([k,v]) => [k, v.owned])),
+                pets: Object.fromEntries(Object.entries(pets).map(([k,v]) => [k, v.owned])),
                 facilityBoostEnd, solveBoostEnd, lastSaveTime
             };
             localStorage.setItem(CONFIG.saveKey, JSON.stringify(save));
@@ -1925,6 +2098,8 @@
                 
                 Object.keys(facilities).forEach(k => { facilities[k].owned = s.facilities?.[k] || 0; });
                 Object.keys(upgrades).forEach(k => { upgrades[k].owned = !!s.upgrades?.[k]; });
+                Object.keys(pets).forEach(k => { pets[k].owned = !!s.pets?.[k]; });
+                if (s.stats?.eraTime) stats.eraTime = { ...stats.eraTime, ...s.stats.eraTime };
                 
                 if (s.facilityBoostEnd > Date.now()) { facilityBoostActive = true; facilityBoostEnd = s.facilityBoostEnd; }
                 if (s.solveBoostEnd > Date.now()) { solveBoostActive = true; solveBoostEnd = s.solveBoostEnd; }
@@ -1938,6 +2113,7 @@
                 }
                 
                 updateVisualFlair();
+                renderPets();
             }
         }
         

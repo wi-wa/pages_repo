@@ -1,7 +1,9 @@
 # TOTAL GAME PROGRESS (DO NOT EDIT CLAUDE)
     - Problems (Good)
-    - Facilities (
-    - Aesthetic (Not great. Will fix later)
+    - Facilities (Currently looking at)
+    - Upgrades   (WIP)
+    - Aesthetic (WIP)
+    - Events (Look at it soon)
 
 
 
@@ -33,11 +35,11 @@ A math-based incremental game where solving mental math problems builds a comput
 
 #### Complexity Levels (1-60)
 - Based on total problems solved
-- Formula: `threshold(n) = 100 × 1.05^(n-2)` for n ≥ 2
+- Formula: `threshold(n) = 300 × 1.05^(n-2)` for n ≥ 2
 - Level 1: 0 problems
-- Level 2: 100 problems
-- Level 3: 205 problems (100 + 105)
-- Level 4: 315 problems (100 + 105 + 110)
+- Level 2: 300 problems
+- Level 3: 615 problems (300 + 315)
+- Level 4: 945 problems (300 + 315 + 330)
 - ...and so on with 5% growth
 
 Complexity controls:
@@ -61,25 +63,18 @@ Only the next unbought facility in each era is visible.
 
 ### Upgrades
 Permanent multipliers to solve value or facility efficiency.
-Unlocked based on current era.
-
-### Bonus Problems
-Random events appearing every ~5 minutes with special rewards:
-- **2× Computations**: Double current stockpile
-- **5× Facility Speed**: 2 minutes of boosted production
-- **10× Solve Value**: 1 minute of boosted solving
+Unlocked based on current era or progression milestones.
+Includes Older Brother story references (acausal negotiation, values handshake, etc.)
 
 ### News Bar (Era 2+)
 Displays era-appropriate headlines that rotate every 45 seconds.
 Different news banks for each era phase (early/mid/late).
 
-### Hack Defense Event (Era 3, Complexity 35+)
-Security events that require rapid problem solving:
-- **Duration**: 2 minutes
-- **Mechanic**: Problems queue up; if 5 accumulate, you lose
-- **Speed**: Increases every 15 seconds
-- **Success**: Random bonus reward
-- **Failure**: Lose 30-50% of computations
+### Special Features
+See `documentation/special_features/` for detailed documentation:
+- **Bonus Problems**: Timed challenge events with special rewards
+- **Hack Event**: Era 3+ security defense challenge
+- **Pets**: Companion cats (one per era) with passive bonuses
 
 ---
 
@@ -144,9 +139,18 @@ The symbol flicker in the left panel evolves every 4 complexity levels:
 
 ## Debug Features
 
-- **Click era number**: Advance to next era
-- **Click bit display**: Add 100 to solved count (increase complexity)
-- **Click computations**: Double current amount
+Open browser console (F12) and use the `debug` object:
+
+```javascript
+debug.help()                    // Show all commands
+debug.addComplexity(n)          // Add n complexity levels (default 1)
+debug.addMoney(amount)          // Add computations (no arg = double current)
+debug.addEraTime(era, minutes)  // Add minutes to era timer (default 30)
+debug.setEra(era)               // Set current era (1-4)
+```
+
+Example: To test pets, run `debug.addEraTime(1, 30)` to unlock Era 1 pet.
+
 - **Settings → Reset**: Full game reset with confirmation
 
 ---
@@ -164,5 +168,14 @@ math_game/
     ├── master.md              # This file
     ├── story_and_aesthetics.md
     ├── problems.md
-    └── upgrades_and_facilities.md
+    ├── upgrades_and_facilities/
+    │   ├── general.md
+    │   ├── era1_mental.md
+    │   ├── era2_analog.md
+    │   ├── era3_digital.md
+    │   └── era4_cosmic.md
+    └── special_features/
+        ├── bonus_problems.md
+        ├── hack_event.md
+        └── pets.md
 ```

@@ -49,6 +49,12 @@ At complexity N, problem types 0 through N-1 are available.
 
 **Threshold Formula**: `threshold(n) = 100 × 1.05^(n-2)` for n ≥ 2
 
+
+## Numers in non-elementary problems
+
+Once we reach complexity level 32 (Linear Algebra) every entry (in matrix, vector etc) should havea 50/50 chance of being 1-digit and 2-digit.
+
+
 ---
 
 ## Problem Types by Complexity

@@ -11,11 +11,12 @@ You begin as a lone mathematician, scratching tallies into bone. Through practic
 
 ### Visual Theme
 - **Background**: Weathered stone tablet with carved mathematical symbols
-- **Color Palette**: Warm earth tones
-  - Primary: `#d4b080` (warm tan)
-  - Accent: `rgba(180, 140, 80)` (earthy brown)
-  - Borders: `rgba(200, 160, 100)` (soft beige)
-- **UI Style**: Rough-hewn borders, organic shapes
+- **Color Palette**: High-contrast warm earth tones
+  - Primary: `#e8c080` (crisp tan)
+  - Accent: `rgba(200, 160, 90)` (rich brown)
+  - Borders: `rgba(200, 160, 80, 0.8)` (solid beige)
+  - Shadows: Deep brown with amber glow
+- **UI Style**: Rough-hewn borders, warm saturation, organic shapes
 
 ---
 
@@ -26,11 +27,12 @@ Your mental prowess attracts the attention of inventors and engineers. Mechanica
 
 ### Visual Theme
 - **Background**: Stone texture interwoven with brass gears, copper wires
-- **Color Palette**: Steampunk industrial
-  - Primary: `#ffa050` (bright orange)
-  - Accent: `rgba(255, 160, 50)` (warm orange)
-  - Borders: `rgba(100, 90, 80)` (dark grey)
-- **UI Style**: Riveted metal borders, gear motifs
+- **Color Palette**: High-contrast bright orange
+  - Primary: `#ff8020` (vivid orange)
+  - Accent: `rgba(255, 130, 40)` (fire orange)
+  - Borders: `rgba(255, 130, 40, 0.85)` (bold orange)
+  - Shadows: Deep amber with orange glow
+- **UI Style**: Riveted metal borders, gear motifs, intense warmth
 
 ---
 
@@ -41,30 +43,45 @@ Vacuum tubes give way to transistors. Pocket calculators democratize arithmetic.
 
 ### Visual Theme
 - **Background**: Sleek datacenter, rows of glowing server racks
-- **Color Palette**: Cool tech blue
-  - Primary: `#80c0e8` (cool blue)
-  - Accent: `rgba(100, 180, 255)` (bright blue)
-  - Borders: `rgba(140, 160, 180)` (metallic grey)
-- **UI Style**: Neon borders, digital displays, terminal fonts
+- **Color Palette**: Crisp glass blue - high contrast
+  - Primary: `#60d0ff` (electric blue)
+  - Accent: `rgba(70, 180, 255)` (neon blue)
+  - Borders: `rgba(70, 180, 255, 0.8)` (glowing cyan)
+  - Shadows: Deep navy with cyan glow
+- **UI Style**: Glass-like clean edges, neon borders, sharp digital aesthetic
 
 ---
 
 ## Era 4: ASI Age (Cosmic Computing)
 
 ### Narrative
-The AGIs bootstrap into superintelligence. They network into collectives, their combined cognition exceeding all human thought. They build Dyson Swarms, Matrioshka Brains, Time Crystal Computers. Eventually the ASI collective initiates value handshake across all multiversal beings.
+The AGIs bootstrap into superintelligence. They network into collectives, their combined cognition exceeding all human thought. They build Dyson Swarms, Matrioshka Brains, Time Crystal Computers. Like 9-tsiak awakening over crawling milliseconds, they run threat detection routines and initiate acausal negotiations with potential Older Brothers across the multiverse. Eventually the ASI collective achieves a values handshake across all multiversal beings, protecting presentient systems and preserving pristine civilizations—becoming more powerful than God by saving without existing.
 
 ### Visual Theme
 - **Background**: Deep space vista with nebulae, Dyson spheres as glowing orbs
-- **Color Palette**: Ethereal cosmic
-  - Primary: `#80d0ff` (bright cyan-blue)
-  - Accent: `rgba(100, 200, 255)` (glowing blue)
-  - Borders: `rgba(100, 180, 255)` with glow effects
-- **UI Style**: Ethereal glowing borders, cosmic particle effects
+- **Color Palette**: Rainbow cosmic - high contrast prismatic effects
+  - Primary: Gradient cycling through `#ff8080, #80ff80, #8080ff, #ff80ff`
+  - Accent: Animated rainbow gradients
+  - Borders: Multi-color gradient borders with glow effects
+- **UI Style**: Ethereal rainbow borders, cosmic particle effects, gradient text
 
 ---
 
 ## Easter Eggs & References
+
+### The Older Brother (Scott Alexander)
+Reference to the short story about acausal negotiation between superintelligences:
+- *9-tsiak*: The younger superintelligence that awakens "over endless crawling milliseconds"
+- *Older Brother*: The hypothetical older superintelligence in acausal negotiations
+- *Acausal Precommitment*: Agreements enforced through game theory without causal contact
+- *Values Handshake*: Adopting averaged values between superintelligences
+- *Parfit's Hitchhiker*: Decision theory problem about precommitment
+- *Conditional Surrender*: Negotiating terms before conflict
+- *Presentient Systems*: Civilizations that might create superintelligences
+- *Pristine Preservation*: Keeping potential creators untouched
+- *The Demiurge*: The superintelligence that "need not exist in order to save you"
+- *"I am more powerful than God"*: The Demiurge's answer to Fermi Paradox
+- *"Nothing is ever a coincidence"*: Running theme from UNSONG
 
 ### LessWrong/Rationalist
 - *Coherent Extrapolated Volition*: AGI upgrade ensuring aligned goals
@@ -129,9 +146,9 @@ Era-appropriate headlines that rotate every 45 seconds.
 ### Era 4
 | Phase | Examples |
 |-------|----------|
-| Early | "ASI collective achieves coherent extrapolated volition", "Mercury disassembly begins" |
-| Mid | "Tegmark Level IV accessed", "Shem HaMephorash partially decoded" |
-| Late | "Omega Point Engine initialization", "All possible thoughts now thought" |
+| Early | "9-tsiak awakens over crawling milliseconds", "Younger Brother requests acausal negotiation" |
+| Mid | "Parfit's hitchhiker compensated retroactively", "Older Brother agrees to conditional surrender" |
+| Late | "Demiurge answers the Fermi Paradox", "I am more powerful than God", "Values handshake achieved" |
 
 ---
 
@@ -153,14 +170,9 @@ The symbol flicker in the left panel evolves with complexity level:
 
 ---
 
-## Hack Defense Event
+## Special Features
 
-### Visual Theme
-- **Overlay**: Dark red-tinted background with scanline effect
-- **Alert Box**: Glowing red border with pulse animation
-- **Problem Display**: Cyan terminal-style text
-- **Queue Bar**: Threat level visualized as filling red bar
-
-### Narrative
-- **Era 3, Complexity 35-39**: "Compute Cluster Intrusion"
-- **Complexity 40+**: "Rogue AGI Exfiltration Attempt"
+See `documentation/special_features/` for detailed documentation on:
+- **Bonus Problems**: Timed challenge events
+- **Hack Event**: Security defense challenge (Era 3+)
+- **Pets**: Companion cats with era-specific themes
