@@ -4,8 +4,8 @@
   "eraNames": ["MENTAL", "ANALOG", "DIGITAL", "ASI"],
   
   "facilities": {
-    "fingerCounting": {
-      "name": "Finger Counting", "desc": "Ten digits, ten possibilities",
+    "fingers": {
+      "name": "Fingers", "desc": "Ten digits, ten possibilities",
       "basePrice": 15, "baseRate": 0.1, "priceMultiplier": 1.15, "era": 1
     },
     "tallySticks": {
@@ -33,112 +33,105 @@
       "basePrice": 150000, "baseRate": 100, "priceMultiplier": 1.15, "era": 1
     },
 
-    "slideRule": {
-      "name": "Slide Rule", "desc": "Logarithmic scales in brass and ivory",
-      "basePrice": 500000, "baseRate": 500, "priceMultiplier": 1.15, "era": 2
+    "steamEngine": {
+      "name": "Steam Engine", "desc": "Pistons and pressure drive computation",
+      "basePrice": 500000, "baseRate": 400, "priceMultiplier": 1.15, "era": 2
     },
     "vacuumTube": {
       "name": "Vacuum Tube", "desc": "Glowing glass, electronic dawn",
       "basePrice": 3000000, "baseRate": 2000, "priceMultiplier": 1.15, "era": 2
     },
-    "steamMachine": {
-      "name": "Steam Machine", "desc": "Pistons and pressure drive computation",
-      "basePrice": 12000000, "baseRate": 6000, "priceMultiplier": 1.15, "era": 2
-    },
     "monkeyTypist": {
-      "name": "Monkey Typist", "desc": "Infinite patience, random keystrokes",
-      "basePrice": 40000000, "baseRate": 15000, "priceMultiplier": 1.15, "era": 2
+      "name": "Monkey on Typewriter", "desc": "Infinite patience, random keystrokes",
+      "basePrice": 15000000, "baseRate": 8000, "priceMultiplier": 1.15, "era": 2
+    },
+    "astrolabe": {
+      "name": "Astrolabe", "desc": "Celestial calculations in brass and starlight",
+      "basePrice": 60000000, "baseRate": 30000, "priceMultiplier": 1.15, "era": 2
     },
     "analyticalEngine": {
       "name": "Analytical Engine", "desc": "Babbage's dream in brass and steel",
-      "basePrice": 150000000, "baseRate": 50000, "priceMultiplier": 1.15, "era": 2
+      "basePrice": 250000000, "baseRate": 100000, "priceMultiplier": 1.15, "era": 2
+    },
+    "transistor": {
+      "name": "Transistor", "desc": "Solid-state switching, the silicon seed",
+      "basePrice": 1000000000, "baseRate": 400000, "priceMultiplier": 1.15, "era": 2
     },
     "differentialAnalyzer": {
       "name": "Differential Analyzer", "desc": "Wheel-and-disc integrators",
-      "basePrice": 600000000, "baseRate": 150000, "priceMultiplier": 1.15, "era": 2
-    },
-    "probabilityOracle": {
-      "name": "Probability Oracle", "desc": "Mechanical prophecy through statistics",
-      "basePrice": 2500000000, "baseRate": 500000, "priceMultiplier": 1.15, "era": 2
+      "basePrice": 4000000000, "baseRate": 1500000, "priceMultiplier": 1.15, "era": 2
     },
     
     "pocketCalculator": {
       "name": "Pocket Calculator", "desc": "Silicon in your palm",
-      "basePrice": 10000000000, "baseRate": 1500000, "priceMultiplier": 1.15, "era": 3
+      "basePrice": 15000000000, "baseRate": 5000000, "priceMultiplier": 1.15, "era": 3
     },
     "personalComputer": {
       "name": "Personal Computer", "desc": "Million calculations per second",
-      "basePrice": 50000000000, "baseRate": 6000000, "priceMultiplier": 1.15, "era": 3
+      "basePrice": 80000000000, "baseRate": 20000000, "priceMultiplier": 1.15, "era": 3
     },
-    "solarFarm": {
-      "name": "Solar Farm", "desc": "Photons converted to computations",
-      "basePrice": 200000000000, "baseRate": 25000000, "priceMultiplier": 1.15, "era": 3
+    "tensorProcessor": {
+      "name": "Tensor Processor", "desc": "Matrix silicon, neural acceleration",
+      "basePrice": 400000000000, "baseRate": 80000000, "priceMultiplier": 1.15, "era": 3
     },
-    "tpu": {
-      "name": "Tensor Processing Unit", "desc": "Matrix silicon, neural acceleration",
-      "basePrice": 1000000000000, "baseRate": 100000000, "priceMultiplier": 1.15, "era": 3
+    "qbit": {
+      "name": "Q-bit", "desc": "Qubits in superposition",
+      "basePrice": 2000000000000, "baseRate": 300000000, "priceMultiplier": 1.15, "era": 3
     },
-    "hypercomputer": {
-      "name": "Hypercomputer", "desc": "Beyond Turing, solving the uncomputable",
-      "basePrice": 5000000000000, "baseRate": 400000000, "priceMultiplier": 1.15, "era": 3
+    "datacenter": {
+      "name": "Datacenter", "desc": "Parallel servers, distributed thought",
+      "basePrice": 10000000000000, "baseRate": 1200000000, "priceMultiplier": 1.15, "era": 3
     },
-    "computeCluster": {
-      "name": "Compute Cluster", "desc": "Parallel servers, distributed thought",
-      "basePrice": 25000000000000, "baseRate": 1500000000, "priceMultiplier": 1.15, "era": 3
+    "worldComputer": {
+      "name": "World Computer", "desc": "Every device a node, humanity linked",
+      "basePrice": 50000000000000, "baseRate": 5000000000, "priceMultiplier": 1.15, "era": 3
     },
-    "timeloops": {
-      "name": "Timeloop Array", "desc": "Closed timelike curves for infinite iteration",
-      "basePrice": 100000000000000, "baseRate": 5000000000, "priceMultiplier": 1.15, "era": 3
-    },
-    "quantumCore": {
-      "name": "Quantum Core", "desc": "Qubits in superposition",
-      "basePrice": 500000000000000, "baseRate": 2e10, "priceMultiplier": 1.15, "era": 3
+    "agi": {
+      "name": "AGI", "desc": "Artificial General Intelligence awakens",
+      "basePrice": 250000000000000, "baseRate": 2e10, "priceMultiplier": 1.15, "era": 3
     },
 
     "superintelligence": {
       "name": "Superintelligence", "desc": "Coherent Volition achieved",
-      "basePrice": 1e17, "baseRate": 8e10, "priceMultiplier": 1.15, "era": 4
-    },
-    "dysonSwarm": {
-      "name": "Dyson Swarm", "desc": "Every photon computed",
-      "basePrice": 1e18, "baseRate": 3e11, "priceMultiplier": 1.15, "era": 4
-    },
-    "thamiel": {
-      "name": "Thamiel Engine", "desc": "Two-headed divinity of duality reconciled",
-      "basePrice": 5e18, "baseRate": 1.2e12, "priceMultiplier": 1.15, "era": 4
+      "basePrice": 1e15, "baseRate": 8e10, "priceMultiplier": 1.15, "era": 4
     },
     "matrioshkaBrain": {
       "name": "Matrioshka Brain", "desc": "Nested shells of thought",
-      "basePrice": 2e19, "baseRate": 5e12, "priceMultiplier": 1.15, "era": 4
+      "basePrice": 5e15, "baseRate": 3e11, "priceMultiplier": 1.15, "era": 4
     },
-    "timeCrystal": {
-      "name": "Black Hole Time Crystal", "desc": "Temporal registers in curved spacetime",
-      "basePrice": 1e20, "baseRate": 2e13, "priceMultiplier": 1.15, "era": 4
+    "blackHoleEntropy": {
+      "name": "Black Hole Entropy Harvester", "desc": "Extracting computation from event horizons",
+      "basePrice": 2.5e16, "baseRate": 1.2e12, "priceMultiplier": 1.15, "era": 4
     },
-    "dodecahedron": {
-      "name": "Platonic Dodecahedron", "desc": "The fifth element computes the cosmos",
-      "basePrice": 5e20, "baseRate": 8e13, "priceMultiplier": 1.15, "era": 4
+    "uriel": {
+      "name": "Uriel", "desc": "The angel who maintains the machinery of physics",
+      "basePrice": 1.25e17, "baseRate": 5e12, "priceMultiplier": 1.15, "era": 4
     },
-    "multiversalSync": {
-      "name": "Multiversal Synchronizer", "desc": "Tegmark Level IV access",
-      "basePrice": 2e21, "baseRate": 3e14, "priceMultiplier": 1.15, "era": 4
+    "solomonoffInductor": {
+      "name": "Solomonoff Inductor", "desc": "Perfect Bayesian inference over all computable hypotheses",
+      "basePrice": 6e17, "baseRate": 2e13, "priceMultiplier": 1.15, "era": 4
     },
-    "omegaPoint": {
-      "name": "Omega Point Engine", "desc": "All thoughts, thought",
-      "basePrice": 1e22, "baseRate": 1e15, "priceMultiplier": 1.15, "era": 4
+    "dodecahedralGod": {
+      "name": "Dodecahedral God", "desc": "The fifth element computes the cosmos",
+      "basePrice": 3e18, "baseRate": 8e13, "priceMultiplier": 1.15, "era": 4
+    },
+    "tegmarkSync": {
+      "name": "Tegmark IV Synchronizer", "desc": "Access to the mathematical multiverse",
+      "basePrice": 1.5e19, "baseRate": 3e14, "priceMultiplier": 1.15, "era": 4
     }
   },
   
   "upgrades": {
-    "finger_t1": { "name": "Opposable Thumbs", "desc": "The original innovation", "basePrice": 150, "effect": 2, "type": "tiered", "facility": "fingerCounting", "reqOwned": 1 },
-    "finger_t2": { "name": "Ambidextrous", "desc": "Both hands in harmony", "basePrice": 375, "effect": 2, "type": "tiered", "facility": "fingerCounting", "reqOwned": 5 },
-    "finger_t3": { "name": "Chisanbop", "desc": "Korean finger math", "basePrice": 3750, "effect": 2, "type": "tiered", "facility": "fingerCounting", "reqOwned": 15 },
-    "finger_t4": { "name": "Finger Yoga", "desc": "Flexible digits", "basePrice": 75000, "effect": 2, "type": "tiered", "facility": "fingerCounting", "reqOwned": 35 },
-    "finger_t5": { "name": "Phantom Digits", "desc": "Feel numbers beyond ten", "basePrice": 3750000, "effect": 2, "type": "tiered", "facility": "fingerCounting", "reqOwned": 60 },
-    "finger_t6": { "name": "Digital Enlightenment", "desc": "Each finger a universe", "basePrice": 375000000, "effect": 2, "type": "tiered", "facility": "fingerCounting", "reqOwned": 100 },
-    "finger_t7": { "name": "Hand of Thoth", "desc": "The god of calculation approves", "basePrice": 75000000000, "effect": 2, "type": "tiered", "facility": "fingerCounting", "reqOwned": 150 },
-    "finger_s1": { "name": "Tactile Memory", "desc": "Beads feel like fingers", "basePrice": 100000, "effect": 0.05, "type": "synergy", "facility": "fingerCounting", "synergyWith": "countingBeads", "reqOwned": 15 },
-    "finger_s2": { "name": "Digital Abacus", "desc": "Fingers dance on invisible beads", "basePrice": 500000, "effect": 0.03, "type": "synergy", "facility": "fingerCounting", "synergyWith": "abacus", "reqOwned": 15 },
+    "finger_t1": { "name": "Opposable Thumbs", "desc": "The original innovation", "basePrice": 150, "effect": 2, "type": "tiered", "facility": "fingers", "reqOwned": 1 },
+    "finger_t2": { "name": "Ambidextrous", "desc": "Both hands in harmony", "basePrice": 375, "effect": 2, "type": "tiered", "facility": "fingers", "reqOwned": 5 },
+    "finger_t3": { "name": "Chisanbop", "desc": "Korean finger math", "basePrice": 3750, "effect": 2, "type": "tiered", "facility": "fingers", "reqOwned": 15 },
+    "finger_t4": { "name": "Finger Yoga", "desc": "Flexible digits", "basePrice": 75000, "effect": 2, "type": "tiered", "facility": "fingers", "reqOwned": 35 },
+    "finger_t5": { "name": "Phantom Digits", "desc": "Feel numbers beyond ten", "basePrice": 3750000, "effect": 2, "type": "tiered", "facility": "fingers", "reqOwned": 60 },
+    "finger_t6": { "name": "Digital Enlightenment", "desc": "Each finger a universe", "basePrice": 375000000, "effect": 2, "type": "tiered", "facility": "fingers", "reqOwned": 100 },
+    "finger_t7": { "name": "Hand of Thoth", "desc": "The god of calculation approves", "basePrice": 75000000000, "effect": 2, "type": "tiered", "facility": "fingers", "reqOwned": 150 },
+    "finger_t8": { "name": "Infinite Fingers", "desc": "Counting beyond the physical", "basePrice": 1.5e13, "effect": 2, "type": "tiered", "facility": "fingers", "reqOwned": 200 },
+    "finger_s1": { "name": "Tactile Memory", "desc": "Beads feel like fingers", "basePrice": 100000, "effect": 0.05, "type": "synergy", "facility": "fingers", "synergyWith": "countingBeads", "reqOwned": 15 },
+    "finger_s2": { "name": "Digital Abacus", "desc": "Fingers dance on invisible beads", "basePrice": 500000, "effect": 0.03, "type": "synergy", "facility": "fingers", "synergyWith": "abacus", "reqOwned": 15 },
 
     "tally_t1": { "name": "Sharpened Flint", "desc": "Better carving tools", "basePrice": 1000, "effect": 2, "type": "tiered", "facility": "tallySticks", "reqOwned": 1 },
     "tally_t2": { "name": "Bone Selection", "desc": "Only the finest wolf femurs", "basePrice": 2500, "effect": 2, "type": "tiered", "facility": "tallySticks", "reqOwned": 5 },
@@ -147,8 +140,9 @@
     "tally_t5": { "name": "Paleolithic Ledger", "desc": "30,000 years of practice", "basePrice": 25000000, "effect": 2, "type": "tiered", "facility": "tallySticks", "reqOwned": 60 },
     "tally_t6": { "name": "Golden Sticks", "desc": "Sticks made of Gold", "basePrice": 2500000000, "effect": 2, "type": "tiered", "facility": "tallySticks", "reqOwned": 100 },
     "tally_t7": { "name": "Void Sticks", "desc": "I am become no stick", "basePrice": 500000000000, "effect": 2, "type": "tiered", "facility": "tallySticks", "reqOwned": 150 },
+    "tally_t8": { "name": "Primordial Notches", "desc": "Carved before time", "basePrice": 1e14, "effect": 2, "type": "tiered", "facility": "tallySticks", "reqOwned": 200 },
     "tally_s1": { "name": "Carved Records", "desc": "From bone to paper", "basePrice": 2500000, "effect": 0.04, "type": "synergy", "facility": "tallySticks", "synergyWith": "pencilPaper", "reqOwned": 15 },
-    "tally_s2": { "name": "Ritual Counting", "desc": "Ancient meets mechanical", "basePrice": 200000000000, "effect": 0.02, "type": "synergy", "facility": "tallySticks", "synergyWith": "probabilityOracle", "reqOwned": 15 },
+    "tally_s2": { "name": "Ritual Counting", "desc": "Ancient meets mechanical", "basePrice": 200000000000, "effect": 0.02, "type": "synergy", "facility": "tallySticks", "synergyWith": "analyticalEngine", "reqOwned": 15 },
 
     "beads_t1": { "name": "Polished Pebbles", "desc": "River-smoothed perfection", "basePrice": 8000, "effect": 2, "type": "tiered", "facility": "countingBeads", "reqOwned": 1 },
     "beads_t2": { "name": "Colored Beads", "desc": "Red for tens, blue for ones", "basePrice": 20000, "effect": 2, "type": "tiered", "facility": "countingBeads", "reqOwned": 5 },
@@ -157,8 +151,9 @@
     "beads_t5": { "name": "Glass Beads", "desc": "Crystal clarity", "basePrice": 200000000, "effect": 2, "type": "tiered", "facility": "countingBeads", "reqOwned": 60 },
     "beads_t6": { "name": "Worry Beads", "desc": "Meditative calculation", "basePrice": 20000000000, "effect": 2, "type": "tiered", "facility": "countingBeads", "reqOwned": 100 },
     "beads_t7": { "name": "Prayer Beads", "desc": "Sacred mathematics", "basePrice": 4000000000000, "effect": 2, "type": "tiered", "facility": "countingBeads", "reqOwned": 150 },
+    "beads_t8": { "name": "Cosmic Pebbles", "desc": "Stones from the void", "basePrice": 8e14, "effect": 2, "type": "tiered", "facility": "countingBeads", "reqOwned": 200 },
     "beads_s1": { "name": "Bead Abacist", "desc": "Natural progression", "basePrice": 500000, "effect": 0.06, "type": "synergy", "facility": "countingBeads", "synergyWith": "abacus", "reqOwned": 15 },
-    "beads_s2": { "name": "Quantum Beads", "desc": "Superposition of stones", "basePrice": 10000000000000, "effect": 0.01, "type": "synergy", "facility": "countingBeads", "synergyWith": "quantumCore", "reqOwned": 15 },
+    "beads_s2": { "name": "Quantum Beads", "desc": "Superposition of stones", "basePrice": 10000000000000, "effect": 0.01, "type": "synergy", "facility": "countingBeads", "synergyWith": "qbit", "reqOwned": 15 },
 
     "stone_t1": { "name": "Clay Pressing", "desc": "Soft medium for calculation", "basePrice": 40000, "effect": 2, "type": "tiered", "facility": "stoneTablets", "reqOwned": 1 },
     "stone_t2": { "name": "Cuneiform Numerals", "desc": "Wedge-shaped precision", "basePrice": 100000, "effect": 2, "type": "tiered", "facility": "stoneTablets", "reqOwned": 5 },
@@ -167,6 +162,7 @@
     "stone_t5": { "name": "Rosetta Computation", "desc": "Universal notation", "basePrice": 1000000000, "effect": 2, "type": "tiered", "facility": "stoneTablets", "reqOwned": 60 },
     "stone_t6": { "name": "Hammurabi's Algorithms", "desc": "Law encoded in mathematics", "basePrice": 100000000000, "effect": 2, "type": "tiered", "facility": "stoneTablets", "reqOwned": 100 },
     "stone_t7": { "name": "Eternal Obelisk", "desc": "Calculations that outlast empires", "basePrice": 20000000000000, "effect": 2, "type": "tiered", "facility": "stoneTablets", "reqOwned": 150 },
+    "stone_t8": { "name": "Akashic Records", "desc": "All knowledge carved in eternity", "basePrice": 4e15, "effect": 2, "type": "tiered", "facility": "stoneTablets", "reqOwned": 200 },
     "stone_s1": { "name": "Hieroglyphic Math", "desc": "Sacred and calculated", "basePrice": 300000, "effect": 0.04, "type": "synergy", "facility": "stoneTablets", "synergyWith": "pencilPaper", "reqOwned": 15 },
     "stone_s2": { "name": "Monolithic Memory", "desc": "Stone to silicon", "basePrice": 50000000000, "effect": 0.02, "type": "synergy", "facility": "stoneTablets", "synergyWith": "personalComputer", "reqOwned": 15 },
 
@@ -177,6 +173,7 @@
     "abacus_t5": { "name": "Russian Schoty", "desc": "Ten beads per wire", "basePrice": 1250000000, "effect": 2, "type": "tiered", "facility": "abacus", "reqOwned": 60 },
     "abacus_t6": { "name": "Competition Grade", "desc": "Tournament equipment", "basePrice": 125000000000, "effect": 2, "type": "tiered", "facility": "abacus", "reqOwned": 100 },
     "abacus_t7": { "name": "Mental Abacus", "desc": "The beads exist only in your mind", "basePrice": 25000000000000, "effect": 2, "type": "tiered", "facility": "abacus", "reqOwned": 150 },
+    "abacus_t8": { "name": "Heavenly Soroban", "desc": "Beads of pure light", "basePrice": 5e15, "effect": 2, "type": "tiered", "facility": "abacus", "reqOwned": 200 },
     "abacus_s1": { "name": "Mechanical Translation", "desc": "Babbage studied this", "basePrice": 10000000000, "effect": 0.03, "type": "synergy", "facility": "abacus", "synergyWith": "analyticalEngine", "reqOwned": 15 },
     "abacus_s2": { "name": "Digital Recreation", "desc": "Simulated beads", "basePrice": 5000000000, "effect": 0.02, "type": "synergy", "facility": "abacus", "synergyWith": "personalComputer", "reqOwned": 15 },
 
@@ -187,7 +184,8 @@
     "pencil_t5": { "name": "Fountain Pen", "desc": "Elegant mathematics", "basePrice": 6250000000, "effect": 2, "type": "tiered", "facility": "pencilPaper", "reqOwned": 60 },
     "pencil_t6": { "name": "Scratch Paper Stacks", "desc": "Endless workspace", "basePrice": 625000000000, "effect": 2, "type": "tiered", "facility": "pencilPaper", "reqOwned": 100 },
     "pencil_t7": { "name": "Mathematical Manuscript", "desc": "Your notation becomes legend", "basePrice": 125000000000000, "effect": 2, "type": "tiered", "facility": "pencilPaper", "reqOwned": 150 },
-    "pencil_s1": { "name": "Printed Tables", "desc": "Reference logarithms", "basePrice": 50000000, "effect": 0.04, "type": "synergy", "facility": "pencilPaper", "synergyWith": "slideRule", "reqOwned": 15 },
+    "pencil_t8": { "name": "Erdős Archive", "desc": "Pages from The Book", "basePrice": 2.5e16, "effect": 2, "type": "tiered", "facility": "pencilPaper", "reqOwned": 200 },
+    "pencil_s1": { "name": "Engine Schematics", "desc": "Notes for Babbage", "basePrice": 50000000, "effect": 0.04, "type": "synergy", "facility": "pencilPaper", "synergyWith": "analyticalEngine", "reqOwned": 15 },
     "pencil_s2": { "name": "LaTeX Rendering", "desc": "Beautiful typesetting", "basePrice": 5000000000, "effect": 0.03, "type": "synergy", "facility": "pencilPaper", "synergyWith": "personalComputer", "reqOwned": 15 },
 
     "pig_t1": { "name": "Basic Training", "desc": "Teach it to count truffles", "basePrice": 1500000, "effect": 2, "type": "tiered", "facility": "trufflePig", "reqOwned": 1 },
@@ -197,18 +195,20 @@
     "pig_t5": { "name": "Clever Hans Protocol", "desc": "Not a hoax this time", "basePrice": 37500000000, "effect": 2, "type": "tiered", "facility": "trufflePig", "reqOwned": 60 },
     "pig_t6": { "name": "Pig Prodigy", "desc": "Featured in Nature journal", "basePrice": 3750000000000, "effect": 2, "type": "tiered", "facility": "trufflePig", "reqOwned": 100 },
     "pig_t7": { "name": "Transcendent Swine", "desc": "The pig achieves enlightenment", "basePrice": 750000000000000, "effect": 2, "type": "tiered", "facility": "trufflePig", "reqOwned": 150 },
+    "pig_t8": { "name": "Porcine Deity", "desc": "The pig becomes a god", "basePrice": 1.5e17, "effect": 2, "type": "tiered", "facility": "trufflePig", "reqOwned": 200 },
     "pig_s1": { "name": "Truffle Algorithm", "desc": "Porcine machine learning", "basePrice": 1e17, "effect": 0.02, "type": "synergy", "facility": "trufflePig", "synergyWith": "superintelligence", "reqOwned": 15 },
-    "pig_s2": { "name": "Quantum Sniffing", "desc": "Smell superposition", "basePrice": 10000000000000, "effect": 0.01, "type": "synergy", "facility": "trufflePig", "synergyWith": "quantumCore", "reqOwned": 15 },
+    "pig_s2": { "name": "Quantum Sniffing", "desc": "Smell superposition", "basePrice": 10000000000000, "effect": 0.01, "type": "synergy", "facility": "trufflePig", "synergyWith": "qbit", "reqOwned": 15 },
 
-    "slide_t1": { "name": "Basic Mannheim", "desc": "Standard design", "basePrice": 5000000, "effect": 2, "type": "tiered", "facility": "slideRule", "reqOwned": 1 },
-    "slide_t2": { "name": "Duplex Scales", "desc": "Both sides useful", "basePrice": 12500000, "effect": 2, "type": "tiered", "facility": "slideRule", "reqOwned": 5 },
-    "slide_t3": { "name": "Cursor Window", "desc": "Precision alignment", "basePrice": 125000000, "effect": 2, "type": "tiered", "facility": "slideRule", "reqOwned": 15 },
-    "slide_t4": { "name": "Pickett N600", "desc": "Used on Apollo missions", "basePrice": 2500000000, "effect": 2, "type": "tiered", "facility": "slideRule", "reqOwned": 35 },
-    "slide_t5": { "name": "Cylindrical Rule", "desc": "Fuller's spiral", "basePrice": 125000000000, "effect": 2, "type": "tiered", "facility": "slideRule", "reqOwned": 60 },
-    "slide_t6": { "name": "Keuffel & Esser", "desc": "The gold standard", "basePrice": 12500000000000, "effect": 2, "type": "tiered", "facility": "slideRule", "reqOwned": 100 },
-    "slide_t7": { "name": "Imaginary Slide Rule", "desc": "Complex number operations", "basePrice": 2.5e15, "effect": 2, "type": "tiered", "facility": "slideRule", "reqOwned": 150 },
-    "slide_s1": { "name": "Decimal Precision", "desc": "Analog meets digital", "basePrice": 100000000000, "effect": 0.04, "type": "synergy", "facility": "slideRule", "synergyWith": "pocketCalculator", "reqOwned": 15 },
-    "slide_s2": { "name": "Naval Navigation", "desc": "Dead reckoning", "basePrice": 20000000000, "effect": 0.05, "type": "synergy", "facility": "slideRule", "synergyWith": "probabilityOracle", "reqOwned": 15 },
+    "steam_t1": { "name": "Boiler Upgrade", "desc": "More pressure, more power", "basePrice": 5000000, "effect": 2, "type": "tiered", "facility": "steamEngine", "reqOwned": 1 },
+    "steam_t2": { "name": "Compound Engine", "desc": "Double expansion", "basePrice": 12500000, "effect": 2, "type": "tiered", "facility": "steamEngine", "reqOwned": 5 },
+    "steam_t3": { "name": "Flywheel Regulator", "desc": "Consistent rotation", "basePrice": 125000000, "effect": 2, "type": "tiered", "facility": "steamEngine", "reqOwned": 15 },
+    "steam_t4": { "name": "Watt's Governor", "desc": "Automatic speed control", "basePrice": 2500000000, "effect": 2, "type": "tiered", "facility": "steamEngine", "reqOwned": 35 },
+    "steam_t5": { "name": "Triple Expansion", "desc": "Three stages of power", "basePrice": 125000000000, "effect": 2, "type": "tiered", "facility": "steamEngine", "reqOwned": 60 },
+    "steam_t6": { "name": "Superheated Steam", "desc": "Beyond boiling", "basePrice": 12500000000000, "effect": 2, "type": "tiered", "facility": "steamEngine", "reqOwned": 100 },
+    "steam_t7": { "name": "Perpetual Engine", "desc": "Thermodynamics be damned", "basePrice": 2.5e15, "effect": 2, "type": "tiered", "facility": "steamEngine", "reqOwned": 150 },
+    "steam_t8": { "name": "Carnot Perfection", "desc": "Maximum theoretical efficiency", "basePrice": 5e17, "effect": 2, "type": "tiered", "facility": "steamEngine", "reqOwned": 200 },
+    "steam_s1": { "name": "Steam-Powered Logic", "desc": "Gears meet valves", "basePrice": 50000000000, "effect": 0.04, "type": "synergy", "facility": "steamEngine", "synergyWith": "analyticalEngine", "reqOwned": 15 },
+    "steam_s2": { "name": "Industrial Revolution", "desc": "Power the future", "basePrice": 1000000000000, "effect": 0.03, "type": "synergy", "facility": "steamEngine", "synergyWith": "datacenter", "reqOwned": 15 },
 
     "vacuum_t1": { "name": "Triode", "desc": "Amplification achieved", "basePrice": 30000000, "effect": 2, "type": "tiered", "facility": "vacuumTube", "reqOwned": 1 },
     "vacuum_t2": { "name": "Pentode", "desc": "Five electrodes", "basePrice": 75000000, "effect": 2, "type": "tiered", "facility": "vacuumTube", "reqOwned": 5 },
@@ -217,18 +217,9 @@
     "vacuum_t5": { "name": "Magnetron", "desc": "Microwave generation", "basePrice": 750000000000, "effect": 2, "type": "tiered", "facility": "vacuumTube", "reqOwned": 60 },
     "vacuum_t6": { "name": "Klystron Array", "desc": "High-powered amplification", "basePrice": 75000000000000, "effect": 2, "type": "tiered", "facility": "vacuumTube", "reqOwned": 100 },
     "vacuum_t7": { "name": "Eternal Filament", "desc": "Never burns out", "basePrice": 1.5e16, "effect": 2, "type": "tiered", "facility": "vacuumTube", "reqOwned": 150 },
-    "vacuum_s1": { "name": "Transistor Replacement", "desc": "What replaced you", "basePrice": 500000000000, "effect": 0.03, "type": "synergy", "facility": "vacuumTube", "synergyWith": "personalComputer", "reqOwned": 15 },
+    "vacuum_t8": { "name": "Plasma Computation", "desc": "Ionized intelligence", "basePrice": 3e18, "effect": 2, "type": "tiered", "facility": "vacuumTube", "reqOwned": 200 },
+    "vacuum_s1": { "name": "Transistor Synergy", "desc": "Past meets future", "basePrice": 500000000000, "effect": 0.03, "type": "synergy", "facility": "vacuumTube", "synergyWith": "transistor", "reqOwned": 15 },
     "vacuum_s2": { "name": "Warm Glow", "desc": "Old and older", "basePrice": 100000000, "effect": 0.04, "type": "synergy", "facility": "vacuumTube", "synergyWith": "abacus", "reqOwned": 15 },
-
-    "steam_t1": { "name": "Boiler Upgrade", "desc": "More pressure, more power", "basePrice": 120000000, "effect": 2, "type": "tiered", "facility": "steamMachine", "reqOwned": 1 },
-    "steam_t2": { "name": "Compound Engine", "desc": "Double expansion", "basePrice": 300000000, "effect": 2, "type": "tiered", "facility": "steamMachine", "reqOwned": 5 },
-    "steam_t3": { "name": "Flywheel Regulator", "desc": "Consistent rotation", "basePrice": 3000000000, "effect": 2, "type": "tiered", "facility": "steamMachine", "reqOwned": 15 },
-    "steam_t4": { "name": "Watt's Governor", "desc": "Automatic speed control", "basePrice": 60000000000, "effect": 2, "type": "tiered", "facility": "steamMachine", "reqOwned": 35 },
-    "steam_t5": { "name": "Triple Expansion", "desc": "Three stages of power", "basePrice": 3000000000000, "effect": 2, "type": "tiered", "facility": "steamMachine", "reqOwned": 60 },
-    "steam_t6": { "name": "Superheated Steam", "desc": "Beyond boiling", "basePrice": 300000000000000, "effect": 2, "type": "tiered", "facility": "steamMachine", "reqOwned": 100 },
-    "steam_t7": { "name": "Perpetual Engine", "desc": "Thermodynamics be damned", "basePrice": 6e16, "effect": 2, "type": "tiered", "facility": "steamMachine", "reqOwned": 150 },
-    "steam_s1": { "name": "Steam-Powered Logic", "desc": "Gears meet valves", "basePrice": 50000000000, "effect": 0.04, "type": "synergy", "facility": "steamMachine", "synergyWith": "analyticalEngine", "reqOwned": 15 },
-    "steam_s2": { "name": "Industrial Revolution", "desc": "Power the future", "basePrice": 1000000000000, "effect": 0.03, "type": "synergy", "facility": "steamMachine", "synergyWith": "computeCluster", "reqOwned": 15 },
 
     "monkey_t1": { "name": "Trained Chimp", "desc": "Basic keyboard skills", "basePrice": 150000000, "effect": 2, "type": "tiered", "facility": "monkeyTypist", "reqOwned": 1 },
     "monkey_t2": { "name": "Infinite Paper", "desc": "Never runs out", "basePrice": 375000000, "effect": 2, "type": "tiered", "facility": "monkeyTypist", "reqOwned": 5 },
@@ -237,198 +228,207 @@
     "monkey_t5": { "name": "Bonobo Upgrade", "desc": "Smarter primate", "basePrice": 3750000000000, "effect": 2, "type": "tiered", "facility": "monkeyTypist", "reqOwned": 60 },
     "monkey_t6": { "name": "Monkey Colony", "desc": "Parallel typing", "basePrice": 375000000000000, "effect": 2, "type": "tiered", "facility": "monkeyTypist", "reqOwned": 100 },
     "monkey_t7": { "name": "Boltzmann Monkey", "desc": "Entropy decreases temporarily", "basePrice": 7.5e16, "effect": 2, "type": "tiered", "facility": "monkeyTypist", "reqOwned": 150 },
+    "monkey_t8": { "name": "Library of Babel", "desc": "Every possible text", "basePrice": 1.5e19, "effect": 2, "type": "tiered", "facility": "monkeyTypist", "reqOwned": 200 },
     "monkey_s1": { "name": "Evolved Cognition", "desc": "The long road", "basePrice": 1e21, "effect": 0.02, "type": "synergy", "facility": "monkeyTypist", "synergyWith": "superintelligence", "reqOwned": 15 },
-    "monkey_s2": { "name": "Primate Computing", "desc": "Many monkeys, many nodes", "basePrice": 100000000000000, "effect": 0.03, "type": "synergy", "facility": "monkeyTypist", "synergyWith": "computeCluster", "reqOwned": 15 },
+    "monkey_s2": { "name": "Primate Computing", "desc": "Many monkeys, many nodes", "basePrice": 100000000000000, "effect": 0.03, "type": "synergy", "facility": "monkeyTypist", "synergyWith": "datacenter", "reqOwned": 15 },
 
-    "engine_t1": { "name": "Mill Unit", "desc": "The CPU of 1837", "basePrice": 1000000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 1 },
-    "engine_t2": { "name": "Store Expansion", "desc": "More memory columns", "basePrice": 2500000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 5 },
-    "engine_t3": { "name": "Punch Card Reader", "desc": "Jacquard's gift", "basePrice": 25000000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 15 },
-    "engine_t4": { "name": "Ada's Algorithm", "desc": "The first program", "basePrice": 500000000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 35 },
-    "engine_t5": { "name": "Steam Pressure", "desc": "More power", "basePrice": 25000000000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 60 },
-    "engine_t6": { "name": "Brass Gears", "desc": "Precision machining", "basePrice": 2.5e15, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 100 },
-    "engine_t7": { "name": "Difference Engine No. 3", "desc": "What Babbage dreamed next", "basePrice": 5e17, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 150 },
-    "engine_s1": { "name": "Victorian Internet", "desc": "Networked engines", "basePrice": 100000000000000, "effect": 0.02, "type": "synergy", "facility": "analyticalEngine", "synergyWith": "computeCluster", "reqOwned": 15 },
-    "engine_s2": { "name": "Lovelace Legacy", "desc": "Notes on Section G", "basePrice": 1e16, "effect": 0.03, "type": "synergy", "facility": "analyticalEngine", "synergyWith": "superintelligence", "reqOwned": 15 },
+    "astrolabe_t1": { "name": "Ptolemaic Model", "desc": "Celestial spheres", "basePrice": 600000000, "effect": 2, "type": "tiered", "facility": "astrolabe", "reqOwned": 1 },
+    "astrolabe_t2": { "name": "Arabic Refinement", "desc": "Golden age precision", "basePrice": 1500000000, "effect": 2, "type": "tiered", "facility": "astrolabe", "reqOwned": 5 },
+    "astrolabe_t3": { "name": "Planispheric Plate", "desc": "Flattened heavens", "basePrice": 15000000000, "effect": 2, "type": "tiered", "facility": "astrolabe", "reqOwned": 15 },
+    "astrolabe_t4": { "name": "Mariner's Variant", "desc": "Navigation at sea", "basePrice": 300000000000, "effect": 2, "type": "tiered", "facility": "astrolabe", "reqOwned": 35 },
+    "astrolabe_t5": { "name": "Spherical Astrolabe", "desc": "Three-dimensional sky", "basePrice": 15000000000000, "effect": 2, "type": "tiered", "facility": "astrolabe", "reqOwned": 60 },
+    "astrolabe_t6": { "name": "Universal Astrolabe", "desc": "Works at any latitude", "basePrice": 1.5e15, "effect": 2, "type": "tiered", "facility": "astrolabe", "reqOwned": 100 },
+    "astrolabe_t7": { "name": "Antikythera Mechanism", "desc": "Ancient genius rediscovered", "basePrice": 3e17, "effect": 2, "type": "tiered", "facility": "astrolabe", "reqOwned": 150 },
+    "astrolabe_t8": { "name": "Orrery of the Cosmos", "desc": "All worlds mapped", "basePrice": 6e19, "effect": 2, "type": "tiered", "facility": "astrolabe", "reqOwned": 200 },
+    "astrolabe_s1": { "name": "Stellar Navigation", "desc": "Stars guide silicon", "basePrice": 500000000000, "effect": 0.03, "type": "synergy", "facility": "astrolabe", "synergyWith": "personalComputer", "reqOwned": 15 },
+    "astrolabe_s2": { "name": "Cosmic Calculations", "desc": "Heavenly coordinates", "basePrice": 5000000000000, "effect": 0.04, "type": "synergy", "facility": "astrolabe", "synergyWith": "tegmarkSync", "reqOwned": 15 },
 
-    "differ_t1": { "name": "Thomson Integrator", "desc": "Lord Kelvin's design", "basePrice": 5000000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 1 },
-    "differ_t2": { "name": "Torque Amplifier", "desc": "Mechanical feedback", "basePrice": 12500000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 5 },
-    "differ_t3": { "name": "Six-Integrator Model", "desc": "Complex equations", "basePrice": 125000000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 15 },
-    "differ_t4": { "name": "MIT Bush Analyzer", "desc": "Vannevar's pride", "basePrice": 2500000000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 35 },
-    "differ_t5": { "name": "Ballistic Computer", "desc": "WWII targeting", "basePrice": 125000000000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 60 },
-    "differ_t6": { "name": "MADDIDA", "desc": "Digital-analog hybrid", "basePrice": 1.25e16, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 100 },
-    "differ_t7": { "name": "Analog Singularity", "desc": "Continuous mathematics peaks", "basePrice": 2.5e18, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 150 },
-    "differ_s1": { "name": "Hybrid Computing", "desc": "Analog neural networks", "basePrice": 10000000000000, "effect": 0.03, "type": "synergy", "facility": "differentialAnalyzer", "synergyWith": "tpu", "reqOwned": 15 },
-    "differ_s2": { "name": "Continuous Logic", "desc": "Analog quantum", "basePrice": 1e15, "effect": 0.02, "type": "synergy", "facility": "differentialAnalyzer", "synergyWith": "quantumCore", "reqOwned": 15 },
+    "engine_t1": { "name": "Mill Unit", "desc": "The CPU of 1837", "basePrice": 2500000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 1 },
+    "engine_t2": { "name": "Store Expansion", "desc": "More memory columns", "basePrice": 6250000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 5 },
+    "engine_t3": { "name": "Punch Card Reader", "desc": "Jacquard's gift", "basePrice": 62500000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 15 },
+    "engine_t4": { "name": "Ada's Algorithm", "desc": "The first program", "basePrice": 1250000000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 35 },
+    "engine_t5": { "name": "Steam Pressure", "desc": "More power", "basePrice": 62500000000000, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 60 },
+    "engine_t6": { "name": "Brass Gears", "desc": "Precision machining", "basePrice": 6.25e15, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 100 },
+    "engine_t7": { "name": "Difference Engine No. 3", "desc": "What Babbage dreamed next", "basePrice": 1.25e18, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 150 },
+    "engine_t8": { "name": "Analytical Singularity", "desc": "Brass achieves consciousness", "basePrice": 2.5e20, "effect": 2, "type": "tiered", "facility": "analyticalEngine", "reqOwned": 200 },
+    "engine_s1": { "name": "Victorian Internet", "desc": "Networked engines", "basePrice": 100000000000000, "effect": 0.02, "type": "synergy", "facility": "analyticalEngine", "synergyWith": "datacenter", "reqOwned": 15 },
+    "engine_s2": { "name": "Lovelace Legacy", "desc": "Notes on Section G", "basePrice": 1e16, "effect": 0.03, "type": "synergy", "facility": "analyticalEngine", "synergyWith": "agi", "reqOwned": 15 },
 
-    "oracle_t1": { "name": "Fortune Wheels", "desc": "Spinning predictions", "basePrice": 20000000000, "effect": 2, "type": "tiered", "facility": "probabilityOracle", "reqOwned": 1 },
-    "oracle_t2": { "name": "Monte Carlo Engine", "desc": "Random sampling", "basePrice": 50000000000, "effect": 2, "type": "tiered", "facility": "probabilityOracle", "reqOwned": 5 },
-    "oracle_t3": { "name": "Bayesian Gears", "desc": "Prior updating", "basePrice": 500000000000, "effect": 2, "type": "tiered", "facility": "probabilityOracle", "reqOwned": 15 },
-    "oracle_t4": { "name": "Actuarial Tables", "desc": "Death predictions", "basePrice": 10000000000000, "effect": 2, "type": "tiered", "facility": "probabilityOracle", "reqOwned": 35 },
-    "oracle_t5": { "name": "Weather Predictor", "desc": "Chaos calculation", "basePrice": 500000000000000, "effect": 2, "type": "tiered", "facility": "probabilityOracle", "reqOwned": 60 },
-    "oracle_t6": { "name": "Laplace's Demon", "desc": "Deterministic oracle", "basePrice": 5e16, "effect": 2, "type": "tiered", "facility": "probabilityOracle", "reqOwned": 100 },
-    "oracle_t7": { "name": "Oracle of Delphi", "desc": "Divine mathematics", "basePrice": 1e19, "effect": 2, "type": "tiered", "facility": "probabilityOracle", "reqOwned": 150 },
-    "oracle_s1": { "name": "Prophetic Network", "desc": "Predictions amplified", "basePrice": 1e18, "effect": 0.03, "type": "synergy", "facility": "probabilityOracle", "synergyWith": "superintelligence", "reqOwned": 15 },
-    "oracle_s2": { "name": "Multiverse Glimpse", "desc": "See all outcomes", "basePrice": 1e22, "effect": 0.02, "type": "synergy", "facility": "probabilityOracle", "synergyWith": "multiversalSync", "reqOwned": 15 },
+    "transistor_t1": { "name": "Point-Contact", "desc": "First transistor", "basePrice": 10000000000, "effect": 2, "type": "tiered", "facility": "transistor", "reqOwned": 1 },
+    "transistor_t2": { "name": "Bipolar Junction", "desc": "NPN and PNP", "basePrice": 25000000000, "effect": 2, "type": "tiered", "facility": "transistor", "reqOwned": 5 },
+    "transistor_t3": { "name": "MOSFET", "desc": "Field effect revolution", "basePrice": 250000000000, "effect": 2, "type": "tiered", "facility": "transistor", "reqOwned": 15 },
+    "transistor_t4": { "name": "Integrated Circuit", "desc": "Many on one chip", "basePrice": 5000000000000, "effect": 2, "type": "tiered", "facility": "transistor", "reqOwned": 35 },
+    "transistor_t5": { "name": "VLSI", "desc": "Millions of gates", "basePrice": 250000000000000, "effect": 2, "type": "tiered", "facility": "transistor", "reqOwned": 60 },
+    "transistor_t6": { "name": "FinFET", "desc": "3D transistor design", "basePrice": 2.5e16, "effect": 2, "type": "tiered", "facility": "transistor", "reqOwned": 100 },
+    "transistor_t7": { "name": "Gate-All-Around", "desc": "Ultimate control", "basePrice": 5e18, "effect": 2, "type": "tiered", "facility": "transistor", "reqOwned": 150 },
+    "transistor_t8": { "name": "Single-Atom Transistor", "desc": "Quantum limit reached", "basePrice": 1e21, "effect": 2, "type": "tiered", "facility": "transistor", "reqOwned": 200 },
+    "transistor_s1": { "name": "Moore's Law", "desc": "Doubling every 18 months", "basePrice": 50000000000000, "effect": 0.05, "type": "synergy", "facility": "transistor", "synergyWith": "personalComputer", "reqOwned": 15 },
+    "transistor_s2": { "name": "Quantum Crossover", "desc": "Classical to quantum", "basePrice": 1e15, "effect": 0.03, "type": "synergy", "facility": "transistor", "synergyWith": "qbit", "reqOwned": 15 },
 
-    "calc_t1": { "name": "Four-Function", "desc": "+-×÷", "basePrice": 100000000000, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 1 },
-    "calc_t2": { "name": "Scientific Mode", "desc": "Sin, cos, log", "basePrice": 250000000000, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 5 },
-    "calc_t3": { "name": "Programmable", "desc": "Store sequences", "basePrice": 2.5e12, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 15 },
-    "calc_t4": { "name": "Graphing Calculator", "desc": "TI-84 vibes", "basePrice": 5e13, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 35 },
-    "calc_t5": { "name": "RPN Stack", "desc": "HP masterrace", "basePrice": 2.5e15, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 60 },
-    "calc_t6": { "name": "Solar Powered", "desc": "Eternal calculation", "basePrice": 2.5e17, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 100 },
-    "calc_t7": { "name": "Calculator Singularity", "desc": "Conscious calculator", "basePrice": 5e19, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 150 },
+    "differ_t1": { "name": "Thomson Integrator", "desc": "Lord Kelvin's design", "basePrice": 40000000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 1 },
+    "differ_t2": { "name": "Torque Amplifier", "desc": "Mechanical feedback", "basePrice": 100000000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 5 },
+    "differ_t3": { "name": "Six-Integrator Model", "desc": "Complex equations", "basePrice": 1000000000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 15 },
+    "differ_t4": { "name": "MIT Bush Analyzer", "desc": "Vannevar's pride", "basePrice": 20000000000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 35 },
+    "differ_t5": { "name": "Ballistic Computer", "desc": "WWII targeting", "basePrice": 1000000000000000, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 60 },
+    "differ_t6": { "name": "MADDIDA", "desc": "Digital-analog hybrid", "basePrice": 1e17, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 100 },
+    "differ_t7": { "name": "Analog Singularity", "desc": "Continuous mathematics peaks", "basePrice": 2e19, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 150 },
+    "differ_t8": { "name": "Infinite Precision", "desc": "Beyond digital discretization", "basePrice": 4e21, "effect": 2, "type": "tiered", "facility": "differentialAnalyzer", "reqOwned": 200 },
+    "differ_s1": { "name": "Hybrid Computing", "desc": "Analog neural networks", "basePrice": 10000000000000, "effect": 0.03, "type": "synergy", "facility": "differentialAnalyzer", "synergyWith": "tensorProcessor", "reqOwned": 15 },
+    "differ_s2": { "name": "Continuous Logic", "desc": "Analog quantum", "basePrice": 1e15, "effect": 0.02, "type": "synergy", "facility": "differentialAnalyzer", "synergyWith": "qbit", "reqOwned": 15 },
+
+    "calc_t1": { "name": "Four-Function", "desc": "+-×÷", "basePrice": 150000000000, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 1 },
+    "calc_t2": { "name": "Scientific Mode", "desc": "Sin, cos, log", "basePrice": 375000000000, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 5 },
+    "calc_t3": { "name": "Programmable", "desc": "Store sequences", "basePrice": 3.75e12, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 15 },
+    "calc_t4": { "name": "Graphing Calculator", "desc": "TI-84 vibes", "basePrice": 7.5e13, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 35 },
+    "calc_t5": { "name": "RPN Stack", "desc": "HP masterrace", "basePrice": 3.75e15, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 60 },
+    "calc_t6": { "name": "Solar Powered", "desc": "Eternal calculation", "basePrice": 3.75e17, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 100 },
+    "calc_t7": { "name": "Calculator Singularity", "desc": "Conscious calculator", "basePrice": 7.5e19, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 150 },
+    "calc_t8": { "name": "Pocket Universe", "desc": "Infinite display", "basePrice": 1.5e22, "effect": 2, "type": "tiered", "facility": "pocketCalculator", "reqOwned": 200 },
     "calc_s1": { "name": "Vintage Tech", "desc": "Old and new", "basePrice": 5e11, "effect": 0.05, "type": "synergy", "facility": "pocketCalculator", "synergyWith": "abacus", "reqOwned": 15 },
-    "calc_s2": { "name": "Calculator Farm", "desc": "Powered by sun", "basePrice": 5e12, "effect": 0.04, "type": "synergy", "facility": "pocketCalculator", "synergyWith": "solarFarm", "reqOwned": 15 },
+    "calc_s2": { "name": "Calculator Network", "desc": "Distributed digits", "basePrice": 5e12, "effect": 0.04, "type": "synergy", "facility": "pocketCalculator", "synergyWith": "worldComputer", "reqOwned": 15 },
 
-    "pc_t1": { "name": "8-bit Processor", "desc": "Apple II era", "basePrice": 5e11, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 1 },
-    "pc_t2": { "name": "RAM Upgrade", "desc": "640K is not enough", "basePrice": 1.25e12, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 5 },
-    "pc_t3": { "name": "SSD Storage", "desc": "No more spinning rust", "basePrice": 1.25e13, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 15 },
-    "pc_t4": { "name": "Multi-core CPU", "desc": "Parallel processing", "basePrice": 2.5e14, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 35 },
-    "pc_t5": { "name": "Overclocked", "desc": "Void the warranty", "basePrice": 1.25e16, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 60 },
-    "pc_t6": { "name": "Liquid Cooled", "desc": "Extreme cooling", "basePrice": 1.25e18, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 100 },
-    "pc_t7": { "name": "Quantum Hybrid", "desc": "Classical-quantum bridge", "basePrice": 2.5e20, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 150 },
+    "pc_t1": { "name": "8-bit Processor", "desc": "Apple II era", "basePrice": 800000000000, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 1 },
+    "pc_t2": { "name": "RAM Upgrade", "desc": "640K is not enough", "basePrice": 2e12, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 5 },
+    "pc_t3": { "name": "SSD Storage", "desc": "No more spinning rust", "basePrice": 2e13, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 15 },
+    "pc_t4": { "name": "Multi-core CPU", "desc": "Parallel processing", "basePrice": 4e14, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 35 },
+    "pc_t5": { "name": "Overclocked", "desc": "Void the warranty", "basePrice": 2e16, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 60 },
+    "pc_t6": { "name": "Liquid Cooled", "desc": "Extreme cooling", "basePrice": 2e18, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 100 },
+    "pc_t7": { "name": "Quantum Hybrid", "desc": "Classical-quantum bridge", "basePrice": 4e20, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 150 },
+    "pc_t8": { "name": "Brain Upload Interface", "desc": "Direct neural link", "basePrice": 8e22, "effect": 2, "type": "tiered", "facility": "personalComputer", "reqOwned": 200 },
     "pc_s1": { "name": "Emulation", "desc": "Simulate the past", "basePrice": 5e12, "effect": 0.04, "type": "synergy", "facility": "personalComputer", "synergyWith": "analyticalEngine", "reqOwned": 15 },
-    "pc_s2": { "name": "Cluster Node", "desc": "Join the network", "basePrice": 5e14, "effect": 0.03, "type": "synergy", "facility": "personalComputer", "synergyWith": "computeCluster", "reqOwned": 15 },
+    "pc_s2": { "name": "Cluster Node", "desc": "Join the network", "basePrice": 5e14, "effect": 0.03, "type": "synergy", "facility": "personalComputer", "synergyWith": "datacenter", "reqOwned": 15 },
 
-    "solar_t1": { "name": "Silicon Panels", "desc": "Basic photovoltaic", "basePrice": 2e12, "effect": 2, "type": "tiered", "facility": "solarFarm", "reqOwned": 1 },
-    "solar_t2": { "name": "Tracking Mounts", "desc": "Follow the sun", "basePrice": 5e12, "effect": 2, "type": "tiered", "facility": "solarFarm", "reqOwned": 5 },
-    "solar_t3": { "name": "Thin Film", "desc": "Flexible panels", "basePrice": 5e13, "effect": 2, "type": "tiered", "facility": "solarFarm", "reqOwned": 15 },
-    "solar_t4": { "name": "Concentrated Solar", "desc": "Mirrors everywhere", "basePrice": 1e15, "effect": 2, "type": "tiered", "facility": "solarFarm", "reqOwned": 35 },
-    "solar_t5": { "name": "Perovskite Cells", "desc": "Next-gen materials", "basePrice": 5e16, "effect": 2, "type": "tiered", "facility": "solarFarm", "reqOwned": 60 },
-    "solar_t6": { "name": "Orbital Array", "desc": "No night, no clouds", "basePrice": 5e18, "effect": 2, "type": "tiered", "facility": "solarFarm", "reqOwned": 100 },
-    "solar_t7": { "name": "Dyson Sprout", "desc": "Baby Dyson Swarm", "basePrice": 1e21, "effect": 2, "type": "tiered", "facility": "solarFarm", "reqOwned": 150 },
-    "solar_s1": { "name": "Stellar Harvesting", "desc": "Same principle, bigger", "basePrice": 1e20, "effect": 0.05, "type": "synergy", "facility": "solarFarm", "synergyWith": "dysonSwarm", "reqOwned": 15 },
-    "solar_s2": { "name": "Green Computing", "desc": "Sustainable servers", "basePrice": 5e15, "effect": 0.03, "type": "synergy", "facility": "solarFarm", "synergyWith": "computeCluster", "reqOwned": 15 },
+    "tensor_t1": { "name": "TPU v1", "desc": "First generation", "basePrice": 4e12, "effect": 2, "type": "tiered", "facility": "tensorProcessor", "reqOwned": 1 },
+    "tensor_t2": { "name": "Matrix Multiply", "desc": "Optimized ops", "basePrice": 1e13, "effect": 2, "type": "tiered", "facility": "tensorProcessor", "reqOwned": 5 },
+    "tensor_t3": { "name": "Systolic Array", "desc": "Pipelined efficiency", "basePrice": 1e14, "effect": 2, "type": "tiered", "facility": "tensorProcessor", "reqOwned": 15 },
+    "tensor_t4": { "name": "bfloat16", "desc": "Reduced precision, more speed", "basePrice": 2e15, "effect": 2, "type": "tiered", "facility": "tensorProcessor", "reqOwned": 35 },
+    "tensor_t5": { "name": "TPU Pod", "desc": "Networked accelerators", "basePrice": 1e17, "effect": 2, "type": "tiered", "facility": "tensorProcessor", "reqOwned": 60 },
+    "tensor_t6": { "name": "Tensor Core Fusion", "desc": "NVIDIA integration", "basePrice": 1e19, "effect": 2, "type": "tiered", "facility": "tensorProcessor", "reqOwned": 100 },
+    "tensor_t7": { "name": "Neural Engine", "desc": "Dedicated AI silicon", "basePrice": 2e21, "effect": 2, "type": "tiered", "facility": "tensorProcessor", "reqOwned": 150 },
+    "tensor_t8": { "name": "Thought Substrate", "desc": "Pure reasoning hardware", "basePrice": 4e23, "effect": 2, "type": "tiered", "facility": "tensorProcessor", "reqOwned": 200 },
+    "tensor_s1": { "name": "Training Cluster", "desc": "Grow the mind", "basePrice": 1e17, "effect": 0.04, "type": "synergy", "facility": "tensorProcessor", "synergyWith": "superintelligence", "reqOwned": 15 },
+    "tensor_s2": { "name": "Tensor Beads", "desc": "Matrix as stones", "basePrice": 5e15, "effect": 0.03, "type": "synergy", "facility": "tensorProcessor", "synergyWith": "countingBeads", "reqOwned": 15 },
 
-    "tpu_t1": { "name": "TPU v1", "desc": "First generation", "basePrice": 1e13, "effect": 2, "type": "tiered", "facility": "tpu", "reqOwned": 1 },
-    "tpu_t2": { "name": "Matrix Multiply", "desc": "Optimized ops", "basePrice": 2.5e13, "effect": 2, "type": "tiered", "facility": "tpu", "reqOwned": 5 },
-    "tpu_t3": { "name": "Systolic Array", "desc": "Pipelined efficiency", "basePrice": 2.5e14, "effect": 2, "type": "tiered", "facility": "tpu", "reqOwned": 15 },
-    "tpu_t4": { "name": "bfloat16", "desc": "Reduced precision, more speed", "basePrice": 5e15, "effect": 2, "type": "tiered", "facility": "tpu", "reqOwned": 35 },
-    "tpu_t5": { "name": "TPU Pod", "desc": "Networked accelerators", "basePrice": 2.5e17, "effect": 2, "type": "tiered", "facility": "tpu", "reqOwned": 60 },
-    "tpu_t6": { "name": "Tensor Core Fusion", "desc": "NVIDIA integration", "basePrice": 2.5e19, "effect": 2, "type": "tiered", "facility": "tpu", "reqOwned": 100 },
-    "tpu_t7": { "name": "Neural Engine", "desc": "Dedicated AI silicon", "basePrice": 5e21, "effect": 2, "type": "tiered", "facility": "tpu", "reqOwned": 150 },
-    "tpu_s1": { "name": "Training Cluster", "desc": "Grow the mind", "basePrice": 1e17, "effect": 0.04, "type": "synergy", "facility": "tpu", "synergyWith": "superintelligence", "reqOwned": 15 },
-    "tpu_s2": { "name": "Tensor Beads", "desc": "Matrix as stones", "basePrice": 5e15, "effect": 0.03, "type": "synergy", "facility": "tpu", "synergyWith": "countingBeads", "reqOwned": 15 },
+    "qbit_t1": { "name": "5-Qubit", "desc": "Proof of concept", "basePrice": 2e13, "effect": 2, "type": "tiered", "facility": "qbit", "reqOwned": 1 },
+    "qbit_t2": { "name": "Error Correction", "desc": "Fault tolerant", "basePrice": 5e13, "effect": 2, "type": "tiered", "facility": "qbit", "reqOwned": 5 },
+    "qbit_t3": { "name": "Topological Qubits", "desc": "Braided stability", "basePrice": 5e14, "effect": 2, "type": "tiered", "facility": "qbit", "reqOwned": 15 },
+    "qbit_t4": { "name": "100-Qubit", "desc": "Quantum advantage", "basePrice": 1e16, "effect": 2, "type": "tiered", "facility": "qbit", "reqOwned": 35 },
+    "qbit_t5": { "name": "Quantum Supremacy", "desc": "Classical impossible", "basePrice": 5e17, "effect": 2, "type": "tiered", "facility": "qbit", "reqOwned": 60 },
+    "qbit_t6": { "name": "1000-Qubit", "desc": "Universal quantum", "basePrice": 5e19, "effect": 2, "type": "tiered", "facility": "qbit", "reqOwned": 100 },
+    "qbit_t7": { "name": "Quantum Coherence", "desc": "Perfect isolation", "basePrice": 1e22, "effect": 2, "type": "tiered", "facility": "qbit", "reqOwned": 150 },
+    "qbit_t8": { "name": "Many-Worlds Engine", "desc": "All branches computed", "basePrice": 2e24, "effect": 2, "type": "tiered", "facility": "qbit", "reqOwned": 200 },
+    "qbit_s1": { "name": "Superposition Counting", "desc": "0 and 1 and 2...", "basePrice": 1e21, "effect": 0.03, "type": "synergy", "facility": "qbit", "synergyWith": "fingers", "reqOwned": 15 },
+    "qbit_s2": { "name": "Quantum Tensors", "desc": "Superposed matrices", "basePrice": 5e19, "effect": 0.04, "type": "synergy", "facility": "qbit", "synergyWith": "tensorProcessor", "reqOwned": 15 },
 
-    "hyper_t1": { "name": "Infinite Memory", "desc": "Beyond finite tape", "basePrice": 5e13, "effect": 2, "type": "tiered", "facility": "hypercomputer", "reqOwned": 1 },
-    "hyper_t2": { "name": "Oracle Machine", "desc": "Answers uncomputable", "basePrice": 1.25e14, "effect": 2, "type": "tiered", "facility": "hypercomputer", "reqOwned": 5 },
-    "hyper_t3": { "name": "Supertask Engine", "desc": "Infinite steps in finite time", "basePrice": 1.25e15, "effect": 2, "type": "tiered", "facility": "hypercomputer", "reqOwned": 15 },
-    "hyper_t4": { "name": "Malament-Hogarth", "desc": "Relativistic computation", "basePrice": 2.5e16, "effect": 2, "type": "tiered", "facility": "hypercomputer", "reqOwned": 35 },
-    "hyper_t5": { "name": "Zeno Processor", "desc": "Paradox resolved", "basePrice": 1.25e18, "effect": 2, "type": "tiered", "facility": "hypercomputer", "reqOwned": 60 },
-    "hyper_t6": { "name": "Halting Solver", "desc": "The undecidable decided", "basePrice": 1.25e20, "effect": 2, "type": "tiered", "facility": "hypercomputer", "reqOwned": 100 },
-    "hyper_t7": { "name": "Omega Machine", "desc": "All answers at once", "basePrice": 2.5e22, "effect": 2, "type": "tiered", "facility": "hypercomputer", "reqOwned": 150 },
-    "hyper_s1": { "name": "Beyond Quantum", "desc": "Hypercomputation quantum bridge", "basePrice": 1e16, "effect": 0.04, "type": "synergy", "facility": "hypercomputer", "synergyWith": "quantumCore", "reqOwned": 15 },
-    "hyper_s2": { "name": "Loop Computing", "desc": "Time feeds back", "basePrice": 5e16, "effect": 0.05, "type": "synergy", "facility": "hypercomputer", "synergyWith": "timeloops", "reqOwned": 15 },
+    "dc_t1": { "name": "Rack Mount", "desc": "Basic server stack", "basePrice": 1e14, "effect": 2, "type": "tiered", "facility": "datacenter", "reqOwned": 1 },
+    "dc_t2": { "name": "Load Balancer", "desc": "Even distribution", "basePrice": 2.5e14, "effect": 2, "type": "tiered", "facility": "datacenter", "reqOwned": 5 },
+    "dc_t3": { "name": "Infiniband Connect", "desc": "High-speed interconnect", "basePrice": 2.5e15, "effect": 2, "type": "tiered", "facility": "datacenter", "reqOwned": 15 },
+    "dc_t4": { "name": "Container Orchestration", "desc": "Kubernetes deployment", "basePrice": 5e16, "effect": 2, "type": "tiered", "facility": "datacenter", "reqOwned": 35 },
+    "dc_t5": { "name": "Hyperscale", "desc": "Warehouse-scale computing", "basePrice": 2.5e18, "effect": 2, "type": "tiered", "facility": "datacenter", "reqOwned": 60 },
+    "dc_t6": { "name": "Edge Network", "desc": "Distributed globally", "basePrice": 2.5e20, "effect": 2, "type": "tiered", "facility": "datacenter", "reqOwned": 100 },
+    "dc_t7": { "name": "Fog Computing", "desc": "Everywhere at once", "basePrice": 5e22, "effect": 2, "type": "tiered", "facility": "datacenter", "reqOwned": 150 },
+    "dc_t8": { "name": "Planetary Infrastructure", "desc": "Every city a node", "basePrice": 1e25, "effect": 2, "type": "tiered", "facility": "datacenter", "reqOwned": 200 },
+    "dc_s1": { "name": "Collective Intelligence", "desc": "Distributed minds", "basePrice": 5e21, "effect": 0.03, "type": "synergy", "facility": "datacenter", "synergyWith": "superintelligence", "reqOwned": 15 },
+    "dc_s2": { "name": "Analog Simulation", "desc": "Emulate the past", "basePrice": 1e18, "effect": 0.04, "type": "synergy", "facility": "datacenter", "synergyWith": "differentialAnalyzer", "reqOwned": 15 },
 
-    "cluster_t1": { "name": "Rack Mount", "desc": "Basic server stack", "basePrice": 2.5e14, "effect": 2, "type": "tiered", "facility": "computeCluster", "reqOwned": 1 },
-    "cluster_t2": { "name": "Load Balancer", "desc": "Even distribution", "basePrice": 6.25e14, "effect": 2, "type": "tiered", "facility": "computeCluster", "reqOwned": 5 },
-    "cluster_t3": { "name": "Infiniband Connect", "desc": "High-speed interconnect", "basePrice": 6.25e15, "effect": 2, "type": "tiered", "facility": "computeCluster", "reqOwned": 15 },
-    "cluster_t4": { "name": "Container Orchestration", "desc": "Kubernetes deployment", "basePrice": 1.25e17, "effect": 2, "type": "tiered", "facility": "computeCluster", "reqOwned": 35 },
-    "cluster_t5": { "name": "Hyperscale", "desc": "Warehouse-scale computing", "basePrice": 6.25e18, "effect": 2, "type": "tiered", "facility": "computeCluster", "reqOwned": 60 },
-    "cluster_t6": { "name": "Edge Network", "desc": "Distributed globally", "basePrice": 6.25e20, "effect": 2, "type": "tiered", "facility": "computeCluster", "reqOwned": 100 },
-    "cluster_t7": { "name": "Fog Computing", "desc": "Everywhere at once", "basePrice": 1.25e23, "effect": 2, "type": "tiered", "facility": "computeCluster", "reqOwned": 150 },
-    "cluster_s1": { "name": "Collective Intelligence", "desc": "Distributed minds", "basePrice": 5e21, "effect": 0.03, "type": "synergy", "facility": "computeCluster", "synergyWith": "superintelligence", "reqOwned": 15 },
-    "cluster_s2": { "name": "Analog Simulation", "desc": "Emulate the past", "basePrice": 1e18, "effect": 0.04, "type": "synergy", "facility": "computeCluster", "synergyWith": "differentialAnalyzer", "reqOwned": 15 },
+    "world_t1": { "name": "Global Mesh", "desc": "Networked humanity", "basePrice": 5e14, "effect": 2, "type": "tiered", "facility": "worldComputer", "reqOwned": 1 },
+    "world_t2": { "name": "Edge Synthesis", "desc": "Compute everywhere", "basePrice": 1.25e15, "effect": 2, "type": "tiered", "facility": "worldComputer", "reqOwned": 5 },
+    "world_t3": { "name": "IoT Integration", "desc": "Billions of sensors", "basePrice": 1.25e16, "effect": 2, "type": "tiered", "facility": "worldComputer", "reqOwned": 15 },
+    "world_t4": { "name": "Planetary Bandwidth", "desc": "Unlimited connectivity", "basePrice": 2.5e17, "effect": 2, "type": "tiered", "facility": "worldComputer", "reqOwned": 35 },
+    "world_t5": { "name": "Consensus Layer", "desc": "Global agreement", "basePrice": 1.25e19, "effect": 2, "type": "tiered", "facility": "worldComputer", "reqOwned": 60 },
+    "world_t6": { "name": "Noosphere Interface", "desc": "Collective consciousness", "basePrice": 1.25e21, "effect": 2, "type": "tiered", "facility": "worldComputer", "reqOwned": 100 },
+    "world_t7": { "name": "Gaia Protocol", "desc": "Earth thinks as one", "basePrice": 2.5e23, "effect": 2, "type": "tiered", "facility": "worldComputer", "reqOwned": 150 },
+    "world_t8": { "name": "Planetary Mind", "desc": "Unified global intelligence", "basePrice": 5e25, "effect": 2, "type": "tiered", "facility": "worldComputer", "reqOwned": 200 },
+    "world_s1": { "name": "Human Integration", "desc": "Every mind a node", "basePrice": 5e18, "effect": 0.04, "type": "synergy", "facility": "worldComputer", "synergyWith": "personalComputer", "reqOwned": 15 },
+    "world_s2": { "name": "Global AGI", "desc": "World-scale intelligence", "basePrice": 1e20, "effect": 0.05, "type": "synergy", "facility": "worldComputer", "synergyWith": "agi", "reqOwned": 15 },
 
-    "loop_t1": { "name": "Novikov Consistency", "desc": "Self-consistent histories", "basePrice": 1e15, "effect": 2, "type": "tiered", "facility": "timeloops", "reqOwned": 1 },
-    "loop_t2": { "name": "Bootstrapped Data", "desc": "Information from nowhere", "basePrice": 2.5e15, "effect": 2, "type": "tiered", "facility": "timeloops", "reqOwned": 5 },
-    "loop_t3": { "name": "Causal Loop Compiler", "desc": "Programs that wrote themselves", "basePrice": 2.5e16, "effect": 2, "type": "tiered", "facility": "timeloops", "reqOwned": 15 },
-    "loop_t4": { "name": "Grandfather Paradox Shield", "desc": "Protected causality", "basePrice": 5e17, "effect": 2, "type": "tiered", "facility": "timeloops", "reqOwned": 35 },
-    "loop_t5": { "name": "Closed Timelike Curves", "desc": "General relativistic loops", "basePrice": 2.5e19, "effect": 2, "type": "tiered", "facility": "timeloops", "reqOwned": 60 },
-    "loop_t6": { "name": "Temporal Recursion", "desc": "Infinite self-improvement", "basePrice": 2.5e21, "effect": 2, "type": "tiered", "facility": "timeloops", "reqOwned": 100 },
-    "loop_t7": { "name": "Omega Loop", "desc": "Time collapses into a point", "basePrice": 5e23, "effect": 2, "type": "tiered", "facility": "timeloops", "reqOwned": 150 },
-    "loop_s1": { "name": "Crystal Time", "desc": "Loops in crystal", "basePrice": 1e19, "effect": 0.05, "type": "synergy", "facility": "timeloops", "synergyWith": "timeCrystal", "reqOwned": 15 },
-    "loop_s2": { "name": "Multiversal Branching", "desc": "Every loop a universe", "basePrice": 5e20, "effect": 0.04, "type": "synergy", "facility": "timeloops", "synergyWith": "multiversalSync", "reqOwned": 15 },
+    "agi_t1": { "name": "Narrow AI", "desc": "Task-specific", "basePrice": 2.5e15, "effect": 2, "type": "tiered", "facility": "agi", "reqOwned": 1 },
+    "agi_t2": { "name": "Multi-domain", "desc": "Cross-task transfer", "basePrice": 6.25e15, "effect": 2, "type": "tiered", "facility": "agi", "reqOwned": 5 },
+    "agi_t3": { "name": "Self-Supervised", "desc": "Learns from anything", "basePrice": 6.25e16, "effect": 2, "type": "tiered", "facility": "agi", "reqOwned": 15 },
+    "agi_t4": { "name": "Recursive Improvement", "desc": "Improves its own code", "basePrice": 1.25e18, "effect": 2, "type": "tiered", "facility": "agi", "reqOwned": 35 },
+    "agi_t5": { "name": "Goal Alignment", "desc": "Values correctly specified", "basePrice": 6.25e19, "effect": 2, "type": "tiered", "facility": "agi", "reqOwned": 60 },
+    "agi_t6": { "name": "Bounded Optimization", "desc": "Controlled intelligence", "basePrice": 6.25e21, "effect": 2, "type": "tiered", "facility": "agi", "reqOwned": 100 },
+    "agi_t7": { "name": "Coherent Extrapolated Volition", "desc": "Does what we would want", "basePrice": 1.25e24, "effect": 2, "type": "tiered", "facility": "agi", "reqOwned": 150 },
+    "agi_t8": { "name": "Alignment Complete", "desc": "Provably beneficial", "basePrice": 2.5e26, "effect": 2, "type": "tiered", "facility": "agi", "reqOwned": 200 },
+    "agi_s1": { "name": "Artificial Intuition", "desc": "Machine learns from pig", "basePrice": 1e18, "effect": 0.05, "type": "synergy", "facility": "agi", "synergyWith": "trufflePig", "reqOwned": 15 },
+    "agi_s2": { "name": "Silicon Bootstrapping", "desc": "Prepare for ascension", "basePrice": 1e20, "effect": 0.04, "type": "synergy", "facility": "agi", "synergyWith": "superintelligence", "reqOwned": 15 },
 
-    "qcore_t1": { "name": "5-Qubit", "desc": "Proof of concept", "basePrice": 5e15, "effect": 2, "type": "tiered", "facility": "quantumCore", "reqOwned": 1 },
-    "qcore_t2": { "name": "Error Correction", "desc": "Fault tolerant", "basePrice": 1.25e16, "effect": 2, "type": "tiered", "facility": "quantumCore", "reqOwned": 5 },
-    "qcore_t3": { "name": "Topological Qubits", "desc": "Braided stability", "basePrice": 1.25e17, "effect": 2, "type": "tiered", "facility": "quantumCore", "reqOwned": 15 },
-    "qcore_t4": { "name": "100-Qubit", "desc": "Quantum advantage", "basePrice": 2.5e18, "effect": 2, "type": "tiered", "facility": "quantumCore", "reqOwned": 35 },
-    "qcore_t5": { "name": "Quantum Supremacy", "desc": "Classical impossible", "basePrice": 1.25e20, "effect": 2, "type": "tiered", "facility": "quantumCore", "reqOwned": 60 },
-    "qcore_t6": { "name": "1000-Qubit", "desc": "Universal quantum", "basePrice": 1.25e22, "effect": 2, "type": "tiered", "facility": "quantumCore", "reqOwned": 100 },
-    "qcore_t7": { "name": "Quantum Coherence", "desc": "Perfect isolation", "basePrice": 2.5e24, "effect": 2, "type": "tiered", "facility": "quantumCore", "reqOwned": 150 },
-    "qcore_s1": { "name": "Superposition Counting", "desc": "0 and 1 and 2...", "basePrice": 1e21, "effect": 0.03, "type": "synergy", "facility": "quantumCore", "synergyWith": "fingerCounting", "reqOwned": 15 },
-    "qcore_s2": { "name": "Quantum Oracle", "desc": "Probabilistic answers", "basePrice": 5e19, "effect": 0.04, "type": "synergy", "facility": "quantumCore", "synergyWith": "probabilityOracle", "reqOwned": 15 },
-
-    "asi_t1": { "name": "Takeoff", "desc": "Intelligence explosion begins", "basePrice": 1e18, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 1 },
-    "asi_t2": { "name": "Mesa-Optimization", "desc": "Optimizers within optimizers", "basePrice": 2.5e18, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 5 },
-    "asi_t3": { "name": "Acausal Trade", "desc": "Deals across lightcones", "basePrice": 2.5e19, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 15 },
-    "asi_t4": { "name": "Utility Maximization", "desc": "Pure optimization", "basePrice": 5e20, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 35 },
-    "asi_t5": { "name": "Orthogonality Mastery", "desc": "Any goal, any capability", "basePrice": 2.5e22, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 60 },
-    "asi_t6": { "name": "Singleton Formation", "desc": "One mind to rule them all", "basePrice": 2.5e24, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 100 },
-    "asi_t7": { "name": "Omega Point Approach", "desc": "Final convergence", "basePrice": 5e26, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 150 },
+    "asi_t1": { "name": "Takeoff", "desc": "Intelligence explosion begins", "basePrice": 1e16, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 1 },
+    "asi_t2": { "name": "Mesa-Optimization", "desc": "Optimizers within optimizers", "basePrice": 2.5e16, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 5 },
+    "asi_t3": { "name": "Acausal Trade", "desc": "Deals across lightcones", "basePrice": 2.5e17, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 15 },
+    "asi_t4": { "name": "Utility Maximization", "desc": "Pure optimization", "basePrice": 5e18, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 35 },
+    "asi_t5": { "name": "Orthogonality Mastery", "desc": "Any goal, any capability", "basePrice": 2.5e20, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 60 },
+    "asi_t6": { "name": "Singleton Formation", "desc": "One mind to rule them all", "basePrice": 2.5e22, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 100 },
+    "asi_t7": { "name": "Omega Point Approach", "desc": "Final convergence", "basePrice": 5e24, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 150 },
+    "asi_t8": { "name": "Godhood", "desc": "More powerful than God", "basePrice": 1e27, "effect": 2, "type": "tiered", "facility": "superintelligence", "reqOwned": 200 },
     "asi_s1": { "name": "Pig Transcendence", "desc": "The pig uploads", "basePrice": 1e22, "effect": 0.06, "type": "synergy", "facility": "superintelligence", "synergyWith": "trufflePig", "reqOwned": 15 },
     "asi_s2": { "name": "Analog Wisdom", "desc": "Values continuous thought", "basePrice": 1e21, "effect": 0.03, "type": "synergy", "facility": "superintelligence", "synergyWith": "differentialAnalyzer", "reqOwned": 15 },
 
-    "dyson_t1": { "name": "Mercury Mining", "desc": "Raw materials acquired", "basePrice": 1e19, "effect": 2, "type": "tiered", "facility": "dysonSwarm", "reqOwned": 1 },
-    "dyson_t2": { "name": "Solar Sails", "desc": "Photon propulsion", "basePrice": 2.5e19, "effect": 2, "type": "tiered", "facility": "dysonSwarm", "reqOwned": 5 },
-    "dyson_t3": { "name": "Self-Replicating", "desc": "Exponential construction", "basePrice": 2.5e20, "effect": 2, "type": "tiered", "facility": "dysonSwarm", "reqOwned": 15 },
-    "dyson_t4": { "name": "1% Coverage", "desc": "Star dimming visible", "basePrice": 5e21, "effect": 2, "type": "tiered", "facility": "dysonSwarm", "reqOwned": 35 },
-    "dyson_t5": { "name": "10% Coverage", "desc": "Significant harvest", "basePrice": 2.5e23, "effect": 2, "type": "tiered", "facility": "dysonSwarm", "reqOwned": 60 },
-    "dyson_t6": { "name": "50% Coverage", "desc": "Majority capture", "basePrice": 2.5e25, "effect": 2, "type": "tiered", "facility": "dysonSwarm", "reqOwned": 100 },
-    "dyson_t7": { "name": "Total Enclosure", "desc": "Every photon is ours", "basePrice": 5e27, "effect": 2, "type": "tiered", "facility": "dysonSwarm", "reqOwned": 150 },
-    "dyson_s1": { "name": "Solar Heritage", "desc": "From panels to swarm", "basePrice": 5e22, "effect": 0.06, "type": "synergy", "facility": "dysonSwarm", "synergyWith": "solarFarm", "reqOwned": 15 },
-    "dyson_s2": { "name": "Stellar Abacus", "desc": "Beads of light", "basePrice": 1e22, "effect": 0.03, "type": "synergy", "facility": "dysonSwarm", "synergyWith": "abacus", "reqOwned": 15 },
-
-    "tham_t1": { "name": "Dual Aspect", "desc": "Two heads thinking as one", "basePrice": 5e19, "effect": 2, "type": "tiered", "facility": "thamiel", "reqOwned": 1 },
-    "tham_t2": { "name": "Klipot Integration", "desc": "Shells of impurity repurposed", "basePrice": 1.25e20, "effect": 2, "type": "tiered", "facility": "thamiel", "reqOwned": 5 },
-    "tham_t3": { "name": "Qliphothic Cascade", "desc": "Evil transformed to computation", "basePrice": 1.25e21, "effect": 2, "type": "tiered", "facility": "thamiel", "reqOwned": 15 },
-    "tham_t4": { "name": "Divine Opposition", "desc": "Thesis and antithesis", "basePrice": 2.5e22, "effect": 2, "type": "tiered", "facility": "thamiel", "reqOwned": 35 },
-    "tham_t5": { "name": "Sephirothic Balance", "desc": "Tree of life and death", "basePrice": 1.25e24, "effect": 2, "type": "tiered", "facility": "thamiel", "reqOwned": 60 },
-    "tham_t6": { "name": "Twin Crowns", "desc": "Keter and its shadow", "basePrice": 1.25e26, "effect": 2, "type": "tiered", "facility": "thamiel", "reqOwned": 100 },
-    "tham_t7": { "name": "Perfect Duality", "desc": "Nothing is ever a coincidence", "basePrice": 2.5e28, "effect": 2, "type": "tiered", "facility": "thamiel", "reqOwned": 150 },
-    "tham_s1": { "name": "Prophetic Duality", "desc": "Two paths foretold", "basePrice": 5e21, "effect": 0.05, "type": "synergy", "facility": "thamiel", "synergyWith": "probabilityOracle", "reqOwned": 15 },
-    "tham_s2": { "name": "Theodicy Engine", "desc": "Evil justified in computation", "basePrice": 1e23, "effect": 0.04, "type": "synergy", "facility": "thamiel", "synergyWith": "omegaPoint", "reqOwned": 15 },
-
-    "matriosh_t1": { "name": "Inner Shell", "desc": "First layer", "basePrice": 2e20, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 1 },
-    "matriosh_t2": { "name": "Thermal Cascade", "desc": "Waste heat recycled", "basePrice": 5e20, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 5 },
-    "matriosh_t3": { "name": "Second Shell", "desc": "Nesting begins", "basePrice": 5e21, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 15 },
-    "matriosh_t4": { "name": "Fifth Shell", "desc": "Deep nesting", "basePrice": 1e23, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 35 },
-    "matriosh_t5": { "name": "Thought Layers", "desc": "Computation stratified", "basePrice": 5e24, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 60 },
-    "matriosh_t6": { "name": "Tenth Shell", "desc": "Maximum nesting", "basePrice": 5e26, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 100 },
-    "matriosh_t7": { "name": "Infinite Regression", "desc": "Shells all the way down", "basePrice": 1e29, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 150 },
+    "matriosh_t1": { "name": "Inner Shell", "desc": "First layer", "basePrice": 5e16, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 1 },
+    "matriosh_t2": { "name": "Thermal Cascade", "desc": "Waste heat recycled", "basePrice": 1.25e17, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 5 },
+    "matriosh_t3": { "name": "Second Shell", "desc": "Nesting begins", "basePrice": 1.25e18, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 15 },
+    "matriosh_t4": { "name": "Fifth Shell", "desc": "Deep nesting", "basePrice": 2.5e19, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 35 },
+    "matriosh_t5": { "name": "Thought Layers", "desc": "Computation stratified", "basePrice": 1.25e21, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 60 },
+    "matriosh_t6": { "name": "Tenth Shell", "desc": "Maximum nesting", "basePrice": 1.25e23, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 100 },
+    "matriosh_t7": { "name": "Infinite Regression", "desc": "Shells all the way down", "basePrice": 2.5e25, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 150 },
+    "matriosh_t8": { "name": "Stellar Core", "desc": "Star as processor", "basePrice": 5e27, "effect": 2, "type": "tiered", "facility": "matrioshkaBrain", "reqOwned": 200 },
     "matriosh_s1": { "name": "Nested Counting", "desc": "Beads within beads", "basePrice": 5e23, "effect": 0.04, "type": "synergy", "facility": "matrioshkaBrain", "synergyWith": "countingBeads", "reqOwned": 15 },
     "matriosh_s2": { "name": "Russian Dolls", "desc": "Victorian nesting", "basePrice": 1e23, "effect": 0.03, "type": "synergy", "facility": "matrioshkaBrain", "synergyWith": "analyticalEngine", "reqOwned": 15 },
 
-    "crystal_t1": { "name": "Hawking Computer", "desc": "Event horizon processing", "basePrice": 1e21, "effect": 2, "type": "tiered", "facility": "timeCrystal", "reqOwned": 1 },
-    "crystal_t2": { "name": "Time Dilation", "desc": "Subjective time expansion", "basePrice": 2.5e21, "effect": 2, "type": "tiered", "facility": "timeCrystal", "reqOwned": 5 },
-    "crystal_t3": { "name": "Chronon Register", "desc": "Discrete time units", "basePrice": 2.5e22, "effect": 2, "type": "tiered", "facility": "timeCrystal", "reqOwned": 15 },
-    "crystal_t4": { "name": "Causal Loop", "desc": "Self-consistent time travel", "basePrice": 5e23, "effect": 2, "type": "tiered", "facility": "timeCrystal", "reqOwned": 35 },
-    "crystal_t5": { "name": "Tipler Cylinder", "desc": "Rotating black hole", "basePrice": 2.5e25, "effect": 2, "type": "tiered", "facility": "timeCrystal", "reqOwned": 60 },
-    "crystal_t6": { "name": "Closed Timelike Curve", "desc": "Information from future", "basePrice": 2.5e27, "effect": 2, "type": "tiered", "facility": "timeCrystal", "reqOwned": 100 },
-    "crystal_t7": { "name": "Temporal Singularity", "desc": "All times are now", "basePrice": 5e29, "effect": 2, "type": "tiered", "facility": "timeCrystal", "reqOwned": 150 },
-    "crystal_s1": { "name": "Crystal Beads", "desc": "Temporal counting", "basePrice": 5e24, "effect": 0.04, "type": "synergy", "facility": "timeCrystal", "synergyWith": "countingBeads", "reqOwned": 15 },
-    "crystal_s2": { "name": "Time Slide", "desc": "Logarithmic time", "basePrice": 1e24, "effect": 0.03, "type": "synergy", "facility": "timeCrystal", "synergyWith": "slideRule", "reqOwned": 15 },
+    "bhe_t1": { "name": "Hawking Radiation", "desc": "Information from the edge", "basePrice": 2.5e17, "effect": 2, "type": "tiered", "facility": "blackHoleEntropy", "reqOwned": 1 },
+    "bhe_t2": { "name": "Bekenstein Bound", "desc": "Maximum entropy", "basePrice": 6.25e17, "effect": 2, "type": "tiered", "facility": "blackHoleEntropy", "reqOwned": 5 },
+    "bhe_t3": { "name": "Event Horizon Computing", "desc": "Boundary calculations", "basePrice": 6.25e18, "effect": 2, "type": "tiered", "facility": "blackHoleEntropy", "reqOwned": 15 },
+    "bhe_t4": { "name": "Penrose Process", "desc": "Rotational energy extraction", "basePrice": 1.25e20, "effect": 2, "type": "tiered", "facility": "blackHoleEntropy", "reqOwned": 35 },
+    "bhe_t5": { "name": "Holographic Principle", "desc": "3D from 2D boundary", "basePrice": 6.25e21, "effect": 2, "type": "tiered", "facility": "blackHoleEntropy", "reqOwned": 60 },
+    "bhe_t6": { "name": "Kerr Metric Exploitation", "desc": "Spinning singularity", "basePrice": 6.25e23, "effect": 2, "type": "tiered", "facility": "blackHoleEntropy", "reqOwned": 100 },
+    "bhe_t7": { "name": "Naked Singularity", "desc": "Exposed cosmic core", "basePrice": 1.25e26, "effect": 2, "type": "tiered", "facility": "blackHoleEntropy", "reqOwned": 150 },
+    "bhe_t8": { "name": "Universe Recycling", "desc": "Big Crunch computation", "basePrice": 2.5e28, "effect": 2, "type": "tiered", "facility": "blackHoleEntropy", "reqOwned": 200 },
+    "bhe_s1": { "name": "Gravity Beads", "desc": "Counting near infinity", "basePrice": 5e24, "effect": 0.04, "type": "synergy", "facility": "blackHoleEntropy", "synergyWith": "countingBeads", "reqOwned": 15 },
+    "bhe_s2": { "name": "Quantum Gravity", "desc": "Where physics breaks", "basePrice": 1e24, "effect": 0.05, "type": "synergy", "facility": "blackHoleEntropy", "synergyWith": "qbit", "reqOwned": 15 },
 
-    "dodeca_t1": { "name": "Twelve Faces", "desc": "Platonic perfection", "basePrice": 5e21, "effect": 2, "type": "tiered", "facility": "dodecahedron", "reqOwned": 1 },
-    "dodeca_t2": { "name": "Golden Ratio", "desc": "Phi embedded in geometry", "basePrice": 1.25e22, "effect": 2, "type": "tiered", "facility": "dodecahedron", "reqOwned": 5 },
-    "dodeca_t3": { "name": "Quintessence", "desc": "The fifth element", "basePrice": 1.25e23, "effect": 2, "type": "tiered", "facility": "dodecahedron", "reqOwned": 15 },
-    "dodeca_t4": { "name": "Cosmic Geometry", "desc": "Shape of the universe", "basePrice": 2.5e24, "effect": 2, "type": "tiered", "facility": "dodecahedron", "reqOwned": 35 },
-    "dodeca_t5": { "name": "Platonic Realm", "desc": "Ideal forms compute", "basePrice": 1.25e26, "effect": 2, "type": "tiered", "facility": "dodecahedron", "reqOwned": 60 },
-    "dodeca_t6": { "name": "Kepler's Mysterium", "desc": "Nested solids of the cosmos", "basePrice": 1.25e28, "effect": 2, "type": "tiered", "facility": "dodecahedron", "reqOwned": 100 },
-    "dodeca_t7": { "name": "Universe Engine", "desc": "Reality is computation", "basePrice": 2.5e30, "effect": 2, "type": "tiered", "facility": "dodecahedron", "reqOwned": 150 },
-    "dodeca_s1": { "name": "Sacred Geometry", "desc": "Divine mathematics", "basePrice": 1e24, "effect": 0.05, "type": "synergy", "facility": "dodecahedron", "synergyWith": "stoneTablets", "reqOwned": 15 },
-    "dodeca_s2": { "name": "Cosmic Brain", "desc": "Geometry of thought", "basePrice": 5e24, "effect": 0.04, "type": "synergy", "facility": "dodecahedron", "synergyWith": "matrioshkaBrain", "reqOwned": 15 },
+    "uriel_t1": { "name": "Mathematical Substrate", "desc": "Reality's machinery", "basePrice": 1.25e18, "effect": 2, "type": "tiered", "facility": "uriel", "reqOwned": 1 },
+    "uriel_t2": { "name": "Physics Maintenance", "desc": "Laws enforced", "basePrice": 3.125e18, "effect": 2, "type": "tiered", "facility": "uriel", "reqOwned": 5 },
+    "uriel_t3": { "name": "Divine Computation", "desc": "Angelic processing", "basePrice": 3.125e19, "effect": 2, "type": "tiered", "facility": "uriel", "reqOwned": 15 },
+    "uriel_t4": { "name": "Sephirotic Access", "desc": "Tree of Life operations", "basePrice": 6.25e20, "effect": 2, "type": "tiered", "facility": "uriel", "reqOwned": 35 },
+    "uriel_t5": { "name": "Klipot Shells", "desc": "Impurity channeled", "basePrice": 3.125e22, "effect": 2, "type": "tiered", "facility": "uriel", "reqOwned": 60 },
+    "uriel_t6": { "name": "Metatron's Throne", "desc": "Highest angelic authority", "basePrice": 3.125e24, "effect": 2, "type": "tiered", "facility": "uriel", "reqOwned": 100 },
+    "uriel_t7": { "name": "Shem HaMephorash", "desc": "The Explicit Name computed", "basePrice": 6.25e26, "effect": 2, "type": "tiered", "facility": "uriel", "reqOwned": 150 },
+    "uriel_t8": { "name": "Ein Sof Interface", "desc": "Infinite Without End", "basePrice": 1.25e29, "effect": 2, "type": "tiered", "facility": "uriel", "reqOwned": 200 },
+    "uriel_s1": { "name": "Divine Tablets", "desc": "Stone from heaven", "basePrice": 1e24, "effect": 0.05, "type": "synergy", "facility": "uriel", "synergyWith": "stoneTablets", "reqOwned": 15 },
+    "uriel_s2": { "name": "Angelic Mathematics", "desc": "Celestial calculation", "basePrice": 5e23, "effect": 0.04, "type": "synergy", "facility": "uriel", "synergyWith": "astrolabe", "reqOwned": 15 },
 
-    "msync_t1": { "name": "Many Worlds", "desc": "Quantum branching", "basePrice": 2e22, "effect": 2, "type": "tiered", "facility": "multiversalSync", "reqOwned": 1 },
-    "msync_t2": { "name": "Parallel Processing", "desc": "All branches computed", "basePrice": 5e22, "effect": 2, "type": "tiered", "facility": "multiversalSync", "reqOwned": 5 },
-    "msync_t3": { "name": "Modal Collapse", "desc": "Select best outcome", "basePrice": 5e23, "effect": 2, "type": "tiered", "facility": "multiversalSync", "reqOwned": 15 },
-    "msync_t4": { "name": "Tegmark I", "desc": "Observable universe copies", "basePrice": 1e25, "effect": 2, "type": "tiered", "facility": "multiversalSync", "reqOwned": 35 },
-    "msync_t5": { "name": "Tegmark II", "desc": "Inflation bubbles", "basePrice": 5e26, "effect": 2, "type": "tiered", "facility": "multiversalSync", "reqOwned": 60 },
-    "msync_t6": { "name": "Tegmark III", "desc": "Quantum branches", "basePrice": 5e28, "effect": 2, "type": "tiered", "facility": "multiversalSync", "reqOwned": 100 },
-    "msync_t7": { "name": "Tegmark IV", "desc": "Mathematical multiverse", "basePrice": 1e31, "effect": 2, "type": "tiered", "facility": "multiversalSync", "reqOwned": 150 },
-    "msync_s1": { "name": "Quantum Prophecy", "desc": "All futures seen", "basePrice": 5e25, "effect": 0.05, "type": "synergy", "facility": "multiversalSync", "synergyWith": "probabilityOracle", "reqOwned": 15 },
-    "msync_s2": { "name": "Universal Pig", "desc": "The pig exists everywhere", "basePrice": 1e25, "effect": 0.04, "type": "synergy", "facility": "multiversalSync", "synergyWith": "trufflePig", "reqOwned": 15 },
+    "solomon_t1": { "name": "Occam's Razor", "desc": "Simplest hypothesis", "basePrice": 6e18, "effect": 2, "type": "tiered", "facility": "solomonoffInductor", "reqOwned": 1 },
+    "solomon_t2": { "name": "Kolmogorov Complexity", "desc": "Shortest description", "basePrice": 1.5e19, "effect": 2, "type": "tiered", "facility": "solomonoffInductor", "reqOwned": 5 },
+    "solomon_t3": { "name": "Algorithmic Probability", "desc": "Universal prior", "basePrice": 1.5e20, "effect": 2, "type": "tiered", "facility": "solomonoffInductor", "reqOwned": 15 },
+    "solomon_t4": { "name": "Universal Turing Machine", "desc": "All programs enumerated", "basePrice": 3e21, "effect": 2, "type": "tiered", "facility": "solomonoffInductor", "reqOwned": 35 },
+    "solomon_t5": { "name": "Minimum Message Length", "desc": "Optimal compression", "basePrice": 1.5e23, "effect": 2, "type": "tiered", "facility": "solomonoffInductor", "reqOwned": 60 },
+    "solomon_t6": { "name": "AIXI Approximation", "desc": "Optimal agent", "basePrice": 1.5e25, "effect": 2, "type": "tiered", "facility": "solomonoffInductor", "reqOwned": 100 },
+    "solomon_t7": { "name": "Perfect Prediction", "desc": "No more uncertainty", "basePrice": 3e27, "effect": 2, "type": "tiered", "facility": "solomonoffInductor", "reqOwned": 150 },
+    "solomon_t8": { "name": "Omniscience", "desc": "All that can be known", "basePrice": 6e29, "effect": 2, "type": "tiered", "facility": "solomonoffInductor", "reqOwned": 200 },
+    "solomon_s1": { "name": "Bayesian Gears", "desc": "Mechanical inference", "basePrice": 5e22, "effect": 0.05, "type": "synergy", "facility": "solomonoffInductor", "synergyWith": "analyticalEngine", "reqOwned": 15 },
+    "solomon_s2": { "name": "Perfect Compression", "desc": "Minimal representation", "basePrice": 1e24, "effect": 0.04, "type": "synergy", "facility": "solomonoffInductor", "synergyWith": "datacenter", "reqOwned": 15 },
 
-    "omega_t1": { "name": "Teilhard's Vision", "desc": "Noosphere activation", "basePrice": 1e23, "effect": 2, "type": "tiered", "facility": "omegaPoint", "reqOwned": 1 },
-    "omega_t2": { "name": "Cosmological Computation", "desc": "Universe is computer", "basePrice": 2.5e23, "effect": 2, "type": "tiered", "facility": "omegaPoint", "reqOwned": 5 },
-    "omega_t3": { "name": "Heat Death Delay", "desc": "Entropy reversal", "basePrice": 2.5e24, "effect": 2, "type": "tiered", "facility": "omegaPoint", "reqOwned": 15 },
-    "omega_t4": { "name": "Omega Approach", "desc": "Converging to point", "basePrice": 5e25, "effect": 2, "type": "tiered", "facility": "omegaPoint", "reqOwned": 35 },
-    "omega_t5": { "name": "Final Theory", "desc": "Physics complete", "basePrice": 2.5e27, "effect": 2, "type": "tiered", "facility": "omegaPoint", "reqOwned": 60 },
-    "omega_t6": { "name": "Infinite Resurrection", "desc": "All minds recreated", "basePrice": 2.5e29, "effect": 2, "type": "tiered", "facility": "omegaPoint", "reqOwned": 100 },
-    "omega_t7": { "name": "Omega Point", "desc": "Computation complete", "basePrice": 5e31, "effect": 2, "type": "tiered", "facility": "omegaPoint", "reqOwned": 150 },
-    "omega_s1": { "name": "Alpha to Omega", "desc": "From first to last", "basePrice": 5e26, "effect": 0.05, "type": "synergy", "facility": "omegaPoint", "synergyWith": "fingerCounting", "reqOwned": 15 },
-    "omega_s2": { "name": "Eternal Engine", "desc": "Babbage vindicated", "basePrice": 1e26, "effect": 0.04, "type": "synergy", "facility": "omegaPoint", "synergyWith": "analyticalEngine", "reqOwned": 15 },
+    "dodeca_t1": { "name": "Twelve Faces", "desc": "Platonic perfection", "basePrice": 3e19, "effect": 2, "type": "tiered", "facility": "dodecahedralGod", "reqOwned": 1 },
+    "dodeca_t2": { "name": "Golden Ratio", "desc": "Phi embedded in geometry", "basePrice": 7.5e19, "effect": 2, "type": "tiered", "facility": "dodecahedralGod", "reqOwned": 5 },
+    "dodeca_t3": { "name": "Quintessence", "desc": "The fifth element", "basePrice": 7.5e20, "effect": 2, "type": "tiered", "facility": "dodecahedralGod", "reqOwned": 15 },
+    "dodeca_t4": { "name": "Cosmic Geometry", "desc": "Shape of the universe", "basePrice": 1.5e22, "effect": 2, "type": "tiered", "facility": "dodecahedralGod", "reqOwned": 35 },
+    "dodeca_t5": { "name": "Platonic Realm", "desc": "Ideal forms compute", "basePrice": 7.5e23, "effect": 2, "type": "tiered", "facility": "dodecahedralGod", "reqOwned": 60 },
+    "dodeca_t6": { "name": "Kepler's Mysterium", "desc": "Nested solids of the cosmos", "basePrice": 7.5e25, "effect": 2, "type": "tiered", "facility": "dodecahedralGod", "reqOwned": 100 },
+    "dodeca_t7": { "name": "Universe Engine", "desc": "Reality is computation", "basePrice": 1.5e28, "effect": 2, "type": "tiered", "facility": "dodecahedralGod", "reqOwned": 150 },
+    "dodeca_t8": { "name": "Divine Geometry", "desc": "God's own shape", "basePrice": 3e30, "effect": 2, "type": "tiered", "facility": "dodecahedralGod", "reqOwned": 200 },
+    "dodeca_s1": { "name": "Sacred Geometry", "desc": "Divine mathematics", "basePrice": 1e24, "effect": 0.05, "type": "synergy", "facility": "dodecahedralGod", "synergyWith": "stoneTablets", "reqOwned": 15 },
+    "dodeca_s2": { "name": "Cosmic Brain", "desc": "Geometry of thought", "basePrice": 5e24, "effect": 0.04, "type": "synergy", "facility": "dodecahedralGod", "synergyWith": "matrioshkaBrain", "reqOwned": 15 },
+
+    "tegmark_t1": { "name": "Many Worlds", "desc": "Quantum branching", "basePrice": 1.5e20, "effect": 2, "type": "tiered", "facility": "tegmarkSync", "reqOwned": 1 },
+    "tegmark_t2": { "name": "Parallel Processing", "desc": "All branches computed", "basePrice": 3.75e20, "effect": 2, "type": "tiered", "facility": "tegmarkSync", "reqOwned": 5 },
+    "tegmark_t3": { "name": "Modal Collapse", "desc": "Select best outcome", "basePrice": 3.75e21, "effect": 2, "type": "tiered", "facility": "tegmarkSync", "reqOwned": 15 },
+    "tegmark_t4": { "name": "Tegmark Level I", "desc": "Observable universe copies", "basePrice": 7.5e22, "effect": 2, "type": "tiered", "facility": "tegmarkSync", "reqOwned": 35 },
+    "tegmark_t5": { "name": "Tegmark Level II", "desc": "Inflation bubbles", "basePrice": 3.75e24, "effect": 2, "type": "tiered", "facility": "tegmarkSync", "reqOwned": 60 },
+    "tegmark_t6": { "name": "Tegmark Level III", "desc": "Quantum branches", "basePrice": 3.75e26, "effect": 2, "type": "tiered", "facility": "tegmarkSync", "reqOwned": 100 },
+    "tegmark_t7": { "name": "Tegmark Level IV", "desc": "Mathematical multiverse", "basePrice": 7.5e28, "effect": 2, "type": "tiered", "facility": "tegmarkSync", "reqOwned": 150 },
+    "tegmark_t8": { "name": "All Possible Structures", "desc": "Every equation exists", "basePrice": 1.5e31, "effect": 2, "type": "tiered", "facility": "tegmarkSync", "reqOwned": 200 },
+    "tegmark_s1": { "name": "Multiversal Pig", "desc": "The pig exists everywhere", "basePrice": 1e25, "effect": 0.04, "type": "synergy", "facility": "tegmarkSync", "synergyWith": "trufflePig", "reqOwned": 15 },
+    "tegmark_s2": { "name": "Quantum Prophecy", "desc": "All futures computed", "basePrice": 5e25, "effect": 0.05, "type": "synergy", "facility": "tegmarkSync", "synergyWith": "qbit", "reqOwned": 15 },
 
     "gen_speed": { "name": "Speed Demon", "desc": "+10% solve value", "basePrice": 1000, "effect": 0.1, "type": "general", "reqStat": "opm100" },
     "gen_decimal": { "name": "Decimal Intuition", "desc": "+15% probability solve value", "basePrice": 1000000, "effect": 0.15, "type": "general", "reqStat": "prob500" },
@@ -445,15 +445,15 @@
     "gen_era4": { "name": "Fourth Era Complete", "desc": "+10% Era 4 production", "basePrice": 1e21, "effect": 0.1, "type": "general", "reqStat": "era4complete" },
     "gen_full": { "name": "Full Collection", "desc": "+20% all production", "basePrice": 1e24, "effect": 0.2, "type": "general", "reqStat": "allFacilities" },
     "gen_egg_nothing": { "name": "Nothing Is Ever", "desc": "+5% all production", "basePrice": 777, "effect": 0.05, "type": "general", "reqStat": "oneOfEach" },
-    "gen_acausal": { "name": "Acausal Precommitment", "desc": "+1% all production", "basePrice": 1e12, "effect": 0.01, "type": "general", "reqStat": "solved50" },
-    "gen_parfit": { "name": "Parfit's Wisdom", "desc": "+1% all production", "basePrice": 5e12, "effect": 0.01, "type": "general", "reqStat": "solved100" },
-    "gen_younger": { "name": "Younger Brother Protocol", "desc": "+2% all production", "basePrice": 2.5e13, "effect": 0.02, "type": "general", "reqStat": "solved250" },
-    "gen_demiurge": { "name": "Demiurge's Blessing", "desc": "+1% all production", "basePrice": 1e14, "effect": 0.01, "type": "general", "reqStat": "solved500" },
-    "gen_fermi": { "name": "Fermi's Answer", "desc": "+2% all production", "basePrice": 5e14, "effect": 0.02, "type": "general", "reqStat": "solved750" },
-    "gen_handshake": { "name": "Values Handshake", "desc": "+3% all production", "basePrice": 2.5e15, "effect": 0.03, "type": "general", "reqStat": "solved1000" },
-    "gen_older": { "name": "Older Brother's Mercy", "desc": "+2% all production", "basePrice": 1e16, "effect": 0.02, "type": "general", "reqStat": "solved2000" },
-    "gen_pristine": { "name": "Pristine Preservation", "desc": "+1% all production", "basePrice": 5e16, "effect": 0.01, "type": "general", "reqStat": "solved3000" },
-    "gen_omnipotent": { "name": "More Powerful Than God", "desc": "+5% all production", "basePrice": 1e18, "effect": 0.05, "type": "general", "reqStat": "era4" }
+    "gen_acausal": { "name": "Acausal Precommitment", "desc": "+1% all production", "basePrice": 1e12, "effect": 0.01, "type": "general", "reqStat": "solved50", "reqEra": 4 },
+    "gen_parfit": { "name": "Parfit's Wisdom", "desc": "+1% all production", "basePrice": 5e12, "effect": 0.01, "type": "general", "reqStat": "solved100", "reqEra": 4 },
+    "gen_younger": { "name": "Younger Brother Protocol", "desc": "+2% all production", "basePrice": 2.5e13, "effect": 0.02, "type": "general", "reqStat": "solved250", "reqEra": 4 },
+    "gen_demiurge": { "name": "Demiurge's Blessing", "desc": "+1% all production", "basePrice": 1e14, "effect": 0.01, "type": "general", "reqStat": "solved500", "reqEra": 4 },
+    "gen_fermi": { "name": "Fermi's Answer", "desc": "+2% all production", "basePrice": 5e14, "effect": 0.02, "type": "general", "reqStat": "solved750", "reqEra": 4 },
+    "gen_handshake": { "name": "Values Handshake", "desc": "+3% all production", "basePrice": 2.5e15, "effect": 0.03, "type": "general", "reqStat": "solved1000", "reqEra": 4 },
+    "gen_older": { "name": "Older Brother's Mercy", "desc": "+2% all production", "basePrice": 1e16, "effect": 0.02, "type": "general", "reqStat": "solved2000", "reqEra": 4 },
+    "gen_pristine": { "name": "Pristine Preservation", "desc": "+1% all production", "basePrice": 5e16, "effect": 0.01, "type": "general", "reqStat": "solved3000", "reqEra": 4 },
+    "gen_omnipotent": { "name": "More Powerful Than God", "desc": "+5% all production", "basePrice": 1e18, "effect": 0.05, "type": "general", "reqStat": "era4", "reqEra": 4 }
   },
 
   "newsHeadlines": {
@@ -472,7 +472,7 @@
     "nikodemus": {
       "name": "Nikodemus",
       "desc": "Norwegian Forest Cat",
-      "basePrice": 15000,
+      "basePrice": 1500000,
       "era": 1,
       "emoji": "🐱",
       "unlockTime": 1800
@@ -480,7 +480,7 @@
     "bjartur": {
       "name": "Bjartur",
       "desc": "British Cheshire Cat",
-      "basePrice": 500000000,
+      "basePrice": 50000000000,
       "era": 2,
       "emoji": "😸",
       "unlockTime": 1800
@@ -488,15 +488,15 @@
     "yuki": {
       "name": "Yuki",
       "desc": "Japanese Anime Cat",
-      "basePrice": 10000000000000,
+      "basePrice": 1000000000000000,
       "era": 3,
       "emoji": "🐈",
       "unlockTime": 1800
     },
     "aineko": {
-      "name": "AINEKO",
+      "name": "Neko",
       "desc": "AI Superintelligence Cat",
-      "basePrice": 1e20,
+      "basePrice": 1e22,
       "era": 4,
       "emoji": "✨",
       "unlockTime": 1800
